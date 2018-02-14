@@ -34,15 +34,21 @@
   [game-state player modification]
   (update-in game-state [:players player :hand] modification))
 
+(defn remove-card
+  "Remove a card from hand"
+  [game-state player index]
+  (modify-hand game-state player #(vec (concat
+    (subvec % 0 index)
+    (subvec % (inc index)))))
+  )
+
 (defn play-card
   "Plays a card from hand onto a game row"
   [game-state player index row]
   (let [card (get-in game-state [:players player :hand index])]
     (-> game-state
         (add-card-to-row (assoc card :owner player) row)
-        (modify-hand player #(vec (concat
-                                    (subvec % 0 index)
-                                    (subvec % (inc index)))))
+        (remove-card player index)
         ))
   )
 
