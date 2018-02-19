@@ -1,0 +1,14 @@
+version: '3'
+services:
+    backend:
+        build: backend
+        restart: always
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./backend:/usr/src/app
+        links:
+            - redis
+    redis:
+        image: redis:alpine
+        restart: always

@@ -4,33 +4,24 @@ FIXME: description
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Install [Docker](https://store.docker.com/search?type=edition&offering=community).
+
+`git clone https://github.com/kenan-rhoton/card-game`
 
 ## Usage
 
-FIXME: explanation
+`docker-compose build && docker-compose up`
 
-    $ java -jar card-game-0.1.0-standalone.jar [args]
+## Development
 
-## Options
+While working on backend stuff (Clojure), please keep a terminal open at *all* times with the following command running:
 
-FIXME: listing of options this app accepts.
+`docker-compose build; docker-compose run backend lein autoexpect; docker-compose down`
 
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+This will give you instant feedback through the tests.
 
 ## License
 
-Copyright © 2018 FIXME
+Copyright © 2018 Kenan Rhoton
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the MIT License.

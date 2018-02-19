@@ -3,12 +3,10 @@
         card-game.build-card))
 
 (expect
-  1
-  (-> (build-card {:power 1})
-      :power))
+  {:power 1}
+  (in (build-card {:power 1})))
 
 ; default power
 (expect
-  10
-  (-> (build-card)
-      :power))
+  {:power 10}
+  (in (build-card)))

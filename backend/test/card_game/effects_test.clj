@@ -15,12 +15,12 @@
 
 ; Playing altered card goes as expected
 (expect
-  15
-  (-> (new-game)
-      (alter-card [:players 0 :hand 0] {:power 15})
-      (play-card 0 0 0)
-      :rows (get 0) (get 0)
-      :power))
+  {:power 15}
+  (in
+    (-> (new-game)
+        (alter-card [:players 0 :hand 0] {:power 15})
+        (play-card 0 0 0)
+        :rows (get 0) (get 0))))
 (expect
   [10 10 10 10 10 10 10 10 10 10 10]
   (map :power
@@ -33,10 +33,9 @@
 
 ; Altering a card in a row works
 (expect
-  25
-  (-> (new-game)
-      (play-card 0 0 0)
-      (alter-card [:rows 0 0] {:power 25})
-      :rows (get 0) (get 0)
-      :power))
-
+  {:power 25}
+  (in
+    (-> (new-game)
+        (play-card 0 0 0)
+        (alter-card [:rows 0 0] {:power 25})
+        :rows (get 0) (get 0))))

@@ -2,13 +2,6 @@
   (:use expectations
         card-game.core))
 
-; Game contains five rows
-(expect
-  5
-  (-> (new-game)
-      :rows
-      count))
-
 ; Game rows are empty initially
 (expect
   (repeat 5 [])
