@@ -1,40 +1,20 @@
 (ns card-game.api
-  (:require [taoensso.carmine :as car :refer (wcar)])
-  (:use card-game.core))
-
-; See `wcar` docstring for opts
-(def server1-conn
-  {:pool {} :spec {:uri "redis://redis"}})
-
-(defmacro wcar*
-  [& body] 
-  `(car/wcar server1-conn ~@body))
-
-(defn set-game-id
-  "Saves an ID and returns it for convenience"
-  [id] (do
-         (wcar* (car/set "next-game-id" id))
-         id))
-
-(defn next-id
-  "Returns the next available game id"
-  []
-  (let [id (wcar* (car/parse-int (car/get "next-game-id")))]
-    (if (nil? id)
-      (set-game-id 0)
-      (set-game-id (inc id)))))
-
-(defn save-game
-  "Saves a game"
-  [game]
-  (wcar* (car/set {:game (:game-id game)} game))
-  game)
-
-(defn fetch-game
-  [id] (wcar* (car/get {:game id})))
+  (:use card-game.core
+        card-game.victory-conditions
+        card-game.persistence))
 
 (defn player-num
+  "Translates a Player id into an internal player representation"
   [game id] (.indexOf (:player-ids game) id))
+
+(defn translate-player
+  "Translates an internal player to a useful representation"
+  [game internal me]
+  (cond
+    (nil? internal) nil
+    (>= internal 2) :tie
+    (= me (get-in game [:player-ids internal])) :me
+    :else :opponent))
 
 (defn get-game-as-player
   "Returns the part that ought to be visible to the player"
@@ -42,7 +22,12 @@
   {:game-id (:game-id game)
    :player-id player
    :hand (get-in game [:players (player-num game player) :hand])
-   :rows (get-in game [:rows])})
+   :rows (mapv #(mapv (fn [card]
+                        (assoc card :owner
+                          (translate-player game (:owner card) player)))
+                      %)
+               (:rows game))
+   :winner (translate-player game (winner game) player)})
 
 (defn get-game
   "Fetches a game from an ID and returns the visible part as a player"

@@ -18,6 +18,45 @@
   #(= 5 (count (:rows %)))
   (create-game))
 
+; Both stack all cards on one row -> tie
+(expect
+  #(= :tie (:winner %))
+  (loop [game (create-game)
+         opponent (add-player (:game-id game))
+         iteration 12]
+    (if (= 0 iteration)
+      (get-game (:game-id game) (:player-id game))
+      (recur
+        (play-card-as-player (:game-id game) (:player-id game) 0 0)
+        (play-card-as-player (:game-id game) (:player-id opponent) 0 0)
+        (dec iteration)))))
+
+; Opponent stacks all cards on one row and I spread -> I win
+(expect
+  #(= :me (:winner %))
+  (loop [game (create-game)
+         opponent (add-player (:game-id game))
+         iteration 12]
+    (if (= 0 iteration)
+      (get-game (:game-id game) (:player-id game))
+      (recur
+        (play-card-as-player (:game-id game) (:player-id game) 0 (mod iteration 4))
+        (play-card-as-player (:game-id game) (:player-id opponent) 0 0)
+        (dec iteration)))))
+
+; I stack all cards on one row and opponent spreads -> Opponent wins
+(expect
+  #(= :opponent (:winner %))
+  (loop [game (create-game)
+         opponent (add-player (:game-id game))
+         iteration 12]
+    (if (= 0 iteration)
+      (get-game (:game-id game) (:player-id game))
+      (recur
+        (play-card-as-player (:game-id game) (:player-id game) 0 0)
+        (play-card-as-player (:game-id game) (:player-id opponent) 0 (mod iteration 4))
+        (dec iteration)))))
+
 (expect
   #(empty? (filter (fn [e] (nil? (:power e))) %))
   (-> (create-game)
@@ -43,6 +82,19 @@
     (do
       (play-card-as-player (:game-id game) (:player-id game) 0 0)
       (get-game (:game-id game) (:player-id game)))))
+
+(expect
+  #(= :me (get-in % [:rows 0 0 :owner]))
+  (let [game (create-game)]
+    (play-card-as-player (:game-id game) (:player-id game) 0 0)))
+
+(expect
+  #(= :opponent (get-in % [:rows 0 0 :owner]))
+  (let [game (create-game)
+        other (add-player (:game-id game))]
+    (do
+      (play-card-as-player (:game-id game) (:player-id game) 0 0)
+      (get-game (:game-id game) (:player-id other)))))
 
 (expect
   #(contains? % :player-id)
