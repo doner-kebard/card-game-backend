@@ -1,5 +1,12 @@
 version: '3'
 services:
+    frontend:
+        build: frontend
+        restart: always
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./frontend:/usr/src/app
     backend:
         build: backend
         restart: always
