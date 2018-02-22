@@ -40,9 +40,10 @@
       (get-points)))
 
 (expect
-  [[10 0] [0 0] [0 0] [0 0] [0 0]]
+  [[10 0] [0 10] [0 0] [0 0] [0 0]]
   (-> (new-game)
       (play-card 0 0 0)
+      (play-card 1 1 1)
       (get-points)))
 
 (expect
@@ -87,3 +88,83 @@
       (play-card 0 0 0)
       (play-card 1 0 0)
       (winner)))
+
+; Game tracks correctly who still has to play
+(expect
+  [true true]
+  (-> (new-game)
+      :play-wanted))
+
+(expect
+  [false true]
+  (-> (new-game)
+      (play-card 0 0 0)
+      :play-wanted))
+
+(expect
+  [true false]
+  (-> (new-game)
+      (play-card 1 0 0)
+      :play-wanted))
+
+(expect
+  [true true]
+  (-> (new-game)
+      (play-card 0 0 0)
+      (play-card 1 0 0)
+      :play-wanted))
+
+(expect
+  [true true]
+  (-> (new-game)
+      (play-card 1 0 0)
+      (play-card 0 0 0)
+      :play-wanted))
+
+(expect
+  [false true]
+  (-> (new-game)
+      (play-card 1 0 0)
+      (play-card 0 0 0)
+      (play-card 0 0 0)
+      :play-wanted))
+
+; Can't play a card when you were not supposed to
+(expect
+  {:error "Out of turn play"}
+  (-> (new-game)
+      (play-card 0 0 0)
+      (play-card 0 0 0)))
+
+; Stores next-play
+(expect
+  {:player 0 :index 0 :row 0}
+  (-> (new-game)
+      (play-card 0 0 0)
+      (get-in [:next-play 0])))
+(expect
+  {:player 1 :index 2 :row 3}
+  (-> (new-game)
+      (play-card 0 0 0)
+      (play-card 1 1 1)
+      (play-card 1 2 3)
+      (get-in [:next-play 0])))
+(expect
+  [{:player 0 :index 0 :row 0} {:player 1 :index 1 :row 1}]
+  (-> (new-game)
+      (play-card 0 0 0)
+      (play-card 1 1 1)
+      :next-play))
+
+; Doesn't updates game-state until both players played a card
+(expect
+  [[0 0] [0 0] [0 0] [0 0] [0 0]]
+  (-> (new-game)
+      (play-card 0 0 0)
+      (get-points)))
+
+
+
+
+
+

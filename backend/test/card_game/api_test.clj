@@ -62,39 +62,50 @@
   (-> (create-game)
       :hand))
 
+; Cards are removed from hands upon being played
 (expect
   #(= 11 (count (:hand %)))
-  (let [game (create-game)]
+  (let [game (create-game)
+        opponent (add-player (:game-id game))]
+    (play-card-as-player (:game-id game) (:player-id opponent) 0 0)
     (play-card-as-player (:game-id game) (:player-id game) 0 0)))
 
+; Card is not removed if opponent has not yet played
 (expect
   #(= 12 (count (:hand %)))
   (let [game (create-game)
-        other (add-player (:game-id game))]
-    (do
-      (play-card-as-player (:game-id game) (:player-id game) 0 0)
-      (get-game (:game-id game) (:player-id other)))))
-
-(expect
-  #(= 11 (count (:hand %)))
-  (let [game (create-game)
-        other (add-player (:game-id game))]
+        opponent (add-player (:game-id game))]
     (do
       (play-card-as-player (:game-id game) (:player-id game) 0 0)
       (get-game (:game-id game) (:player-id game)))))
 
+; Fetching the game as a player returns one less card after a play
+(expect
+  #(= 11 (count (:hand %)))
+  (let [game (create-game)
+        opponent (add-player (:game-id game))]
+    (do
+      (play-card-as-player (:game-id game) (:player-id opponent) 0 0)
+      (play-card-as-player (:game-id game) (:player-id game) 0 0)
+      (get-game (:game-id game) (:player-id game)))))
+
+; card played is owned by self
 (expect
   #(= :me (get-in % [:rows 0 0 :owner]))
-  (let [game (create-game)]
-    (play-card-as-player (:game-id game) (:player-id game) 0 0)))
-
-(expect
-  #(= :opponent (get-in % [:rows 0 0 :owner]))
   (let [game (create-game)
-        other (add-player (:game-id game))]
+        opponent (add-player (:game-id game))]
     (do
-      (play-card-as-player (:game-id game) (:player-id game) 0 0)
-      (get-game (:game-id game) (:player-id other)))))
+      (play-card-as-player (:game-id game) (:player-id opponent) 1 1)
+      (play-card-as-player (:game-id game) (:player-id game) 0 0))))
+
+; opponent's card is owned by him
+(expect
+  #(= :opponent (get-in % [:rows 1 0 :owner]))
+  (let [game (create-game)
+        opponent (add-player (:game-id game))]
+    (do
+      (play-card-as-player (:game-id game) (:player-id opponent) 1 1)
+      (play-card-as-player (:game-id game) (:player-id game) 0 0))))
 
 (expect
   #(contains? % :player-id)
@@ -125,3 +136,60 @@
 (expect
   #(not (= (:player-id %) (:player-id (add-player (:game-id %)))))
   (create-game))
+
+; Game tracks status correctly
+(expect
+  "Waiting for an opponent"
+  (:status (create-game)))
+(expect
+  "Playing"
+  (-> (create-game)
+      :game-id
+      (add-player)
+      :status))
+(expect
+  "Waiting for an opponent"
+  (let [game (create-game)]
+       (:status (get-game (:game-id game) (:player-id game)))))
+(expect
+  "Waiting for opponent's play"
+  (let [game (create-game)]
+    (-> (:game-id game)
+        (add-player)
+        :game-id
+        (play-card-as-player (:player-id game) 0 0)
+        :status)))
+(expect
+  "Playing"
+  (let [game (create-game)
+        opponent-id (:player-id (add-player (:game-id game)))]
+    (-> (:game-id game)
+        (play-card-as-player (:player-id game) 0 0)
+        :game-id
+        (play-card-as-player opponent-id 0 0)
+        :status)))
+(expect
+  "Playing"
+  (let [game (create-game)
+        opponent-id (:player-id (add-player (:game-id game)))]
+    (-> (:game-id game)
+        (play-card-as-player opponent-id 0 0)
+        :game-id
+        (get-game (:player-id game))
+        :status)))
+
+; Game gives error when playing and shouldn't
+(expect
+  {:error "Out of turn play"}
+  (let [game (create-game)]
+    (-> (:game-id game)
+        (add-player)
+        :game-id
+        (play-card-as-player (:player-id game) 0 0)
+        :game-id
+        (play-card-as-player (:player-id game) 0 0))))
+(expect
+  {:error "Out of turn play"}
+  (let [game (create-game)]
+    (-> (:game-id game)
+        (play-card-as-player (:player-id game) 0 0))))

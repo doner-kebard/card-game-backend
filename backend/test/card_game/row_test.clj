@@ -14,12 +14,14 @@
   (map #(:power (get % 0))
        (-> (new-game)
            (play-card 1 1 3)
+           (play-card 0 1 3)
            :rows)))
 (expect
-  [nil 10 nil nil nil]
+  [10 10 nil nil nil]
   (map #(:power (get % 0))
        (-> (new-game)
            (play-card 1 1 1)
+           (play-card 0 0 0)
            :rows)))
 
 ; Playing a card many times makes it appear that many times in the row
@@ -28,8 +30,12 @@
   (map :power 
        (-> (new-game)
            (play-card 1 1 3)
+           (play-card 0 0 0)
            (play-card 1 1 3)
+           (play-card 0 0 0)
            (play-card 1 1 3)
+           (play-card 0 0 0)
            (play-card 1 1 3)
+           (play-card 0 0 2)
            :rows
            (get 3))))

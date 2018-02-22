@@ -36,14 +36,19 @@
 (expect
   #(= (count (:hand %)) 11)
   (-> (new-game)
+      (play-card 0 2 1)
       (play-card 1 1 1)
       :players
       second))
 
 ; Playing a card does not affect other players' hand
 (expect
-  #(= (count (:hand %)) 12)
-  (-> (new-game)
-      (play-card 1 1 1)
-      :players
-      first))
+  [15 10 10 10 10 10 10 10 10 10 10]
+  (map :power
+       (-> (new-game)
+           (alter-card [:players 1 :hand 0] {:power 15})
+           (play-card 0 0 0)
+           (play-card 1 1 1)
+           :players
+           (nth 1)
+           :hand)))

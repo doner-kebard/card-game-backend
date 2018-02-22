@@ -20,6 +20,7 @@
     (-> (new-game)
         (alter-card [:players 0 :hand 0] {:power 15})
         (play-card 0 0 0)
+        (play-card 1 1 1)
         :rows (get 0) (get 0))))
 (expect
   [10 10 10 10 10 10 10 10 10 10 10]
@@ -27,6 +28,7 @@
        (-> (new-game)
            (alter-card [:players 0 :hand 0] {:power 15})
            (play-card 0 0 0)
+           (play-card 1 1 1)
            :players
            (nth 0)
            :hand)))
@@ -37,5 +39,6 @@
   (in
     (-> (new-game)
         (play-card 0 0 0)
+        (play-card 1 1 1)
         (alter-card [:rows 0 0] {:power 25})
         :rows (get 0) (get 0))))
