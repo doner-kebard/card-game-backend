@@ -1,198 +1,198 @@
 (ns card-game.api-test
   (:require [expectations.clojure.test :refer :all]
-            [card-game.api :refer :all]))
+            [card-game.api :as api]))
 
 (defexpect sanity-check
   (expect
     #(contains? % :game-id)
-    (create-game))
+    (api/create-game))
   (expect
     #(contains? % :player-id)
-    (create-game))
+    (api/create-game))
   (expect
     #(= 12 (count (:hand %)))
-    (create-game))
+    (api/create-game))
   (expect
     #(= 5 (count (:rows %)))
-    (create-game)))
+    (api/create-game)))
 
 (defexpect win-conditions
   ; Both stack all cards on one row -> tie
   (expect
     #(= :tie (:winner %))
-    (loop [game (create-game)
-           opponent (add-player (:game-id game))
+    (loop [game (api/create-game)
+           opponent (api/add-player (:game-id game))
            iteration 12]
       (if (= 0 iteration)
-        (get-game (:game-id game) (:player-id game))
+        (api/get-game (:game-id game) (:player-id game))
         (recur
-          (play-card-as-player (:game-id game) (:player-id game) 0 0)
-          (play-card-as-player (:game-id game) (:player-id opponent) 0 0)
+          (api/play-card-as-player (:game-id game) (:player-id game) 0 0)
+          (api/play-card-as-player (:game-id game) (:player-id opponent) 0 0)
           (dec iteration)))))
 
   ; Opponent stacks all cards on one row and I spread -> I win
   (expect
     #(= :me (:winner %))
-    (loop [game (create-game)
-           opponent (add-player (:game-id game))
+    (loop [game (api/create-game)
+           opponent (api/add-player (:game-id game))
            iteration 12]
       (if (= 0 iteration)
-        (get-game (:game-id game) (:player-id game))
+        (api/get-game (:game-id game) (:player-id game))
         (recur
-          (play-card-as-player (:game-id game) (:player-id game) 0 (mod iteration 4))
-          (play-card-as-player (:game-id game) (:player-id opponent) 0 0)
+          (api/play-card-as-player (:game-id game) (:player-id game) 0 (mod iteration 4))
+          (api/play-card-as-player (:game-id game) (:player-id opponent) 0 0)
           (dec iteration)))))
 
   ; I stack all cards on one row and opponent spreads -> Opponent wins
   (expect
     #(= :opponent (:winner %))
-    (loop [game (create-game)
-           opponent (add-player (:game-id game))
+    (loop [game (api/create-game)
+           opponent (api/add-player (:game-id game))
            iteration 12]
       (if (= 0 iteration)
-        (get-game (:game-id game) (:player-id game))
+        (api/get-game (:game-id game) (:player-id game))
         (recur
-          (play-card-as-player (:game-id game) (:player-id game) 0 0)
-          (play-card-as-player (:game-id game) (:player-id opponent) 0 (mod iteration 4))
+          (api/play-card-as-player (:game-id game) (:player-id game) 0 0)
+          (api/play-card-as-player (:game-id game) (:player-id opponent) 0 (mod iteration 4))
           (dec iteration))))))
 
 (defexpect playing-cards
   (expect
     #(empty? (filter (fn [e] (nil? (:power e))) %))
-    (-> (create-game)
+    (-> (api/create-game)
         :hand))
 
   ; Cards are removed from hands upon being played
   (expect
     #(= 11 (count (:hand %)))
-    (let [game (create-game)
-          opponent (add-player (:game-id game))]
-      (play-card-as-player (:game-id game) (:player-id opponent) 0 0)
-      (play-card-as-player (:game-id game) (:player-id game) 0 0)))
+    (let [game (api/create-game)
+          opponent (api/add-player (:game-id game))]
+      (api/play-card-as-player (:game-id game) (:player-id opponent) 0 0)
+      (api/play-card-as-player (:game-id game) (:player-id game) 0 0)))
 
   ; Card is not removed if opponent has not yet played
   (expect
     #(= 12 (count (:hand %)))
-    (let [game (create-game)
-          opponent (add-player (:game-id game))]
+    (let [game (api/create-game)
+          opponent (api/add-player (:game-id game))]
       (do
-        (play-card-as-player (:game-id game) (:player-id game) 0 0)
-        (get-game (:game-id game) (:player-id game)))))
+        (api/play-card-as-player (:game-id game) (:player-id game) 0 0)
+        (api/get-game (:game-id game) (:player-id game)))))
 
   ; Fetching the game as a player returns one less card after a play
   (expect
     #(= 11 (count (:hand %)))
-    (let [game (create-game)
-          opponent (add-player (:game-id game))]
+    (let [game (api/create-game)
+          opponent (api/add-player (:game-id game))]
       (do
-        (play-card-as-player (:game-id game) (:player-id opponent) 0 0)
-        (play-card-as-player (:game-id game) (:player-id game) 0 0)
-        (get-game (:game-id game) (:player-id game)))))
+        (api/play-card-as-player (:game-id game) (:player-id opponent) 0 0)
+        (api/play-card-as-player (:game-id game) (:player-id game) 0 0)
+        (api/get-game (:game-id game) (:player-id game)))))
 
   ; card played is owned by self
   (expect
     #(= :me (get-in % [:rows 0 0 :owner]))
-    (let [game (create-game)
-          opponent (add-player (:game-id game))]
+    (let [game (api/create-game)
+          opponent (api/add-player (:game-id game))]
       (do
-        (play-card-as-player (:game-id game) (:player-id opponent) 1 1)
-        (play-card-as-player (:game-id game) (:player-id game) 0 0))))
+        (api/play-card-as-player (:game-id game) (:player-id opponent) 1 1)
+        (api/play-card-as-player (:game-id game) (:player-id game) 0 0))))
 
   ; opponent's card is owned by him
   (expect
     #(= :opponent (get-in % [:rows 1 0 :owner]))
-    (let [game (create-game)
-          opponent (add-player (:game-id game))]
+    (let [game (api/create-game)
+          opponent (api/add-player (:game-id game))]
       (do
-        (play-card-as-player (:game-id game) (:player-id opponent) 1 1)
-        (play-card-as-player (:game-id game) (:player-id game) 0 0)))))
+        (api/play-card-as-player (:game-id game) (:player-id opponent) 1 1)
+        (api/play-card-as-player (:game-id game) (:player-id game) 0 0)))))
 
 (defexpect joining-a-game
   (expect
     #(contains? % :player-id)
-    (-> (create-game)
+    (-> (api/create-game)
         :game-id
-        (add-player)))
+        (api/add-player)))
 
   (expect
     #(not (contains? % :error))
-    (-> (create-game)
+    (-> (api/create-game)
         :game-id
-        (add-player)))
+        (api/add-player)))
 
   (expect
-    #(= % (:game-id (add-player %)))
-    (-> (create-game)
+    #(= % (:game-id (api/add-player %)))
+    (-> (api/create-game)
         :game-id))
 
   ; A third player causes an error
   (expect
     {:error "Too many players"}
-    (-> (create-game)
+    (-> (api/create-game)
         :game-id
-        (add-player)
+        (api/add-player)
         :game-id
-        (add-player)))
+        (api/add-player)))
 
   (expect
-    #(not (= (:player-id %) (:player-id (add-player (:game-id %)))))
-    (create-game)))
+    #(not (= (:player-id %) (:player-id (api/add-player (:game-id %)))))
+    (api/create-game)))
 
 (defexpect status-check
   ; Game tracks status correctly
   (expect
     "Waiting for an opponent"
-    (:status (create-game)))
+    (:status (api/create-game)))
   (expect
     "Playing"
-    (-> (create-game)
+    (-> (api/create-game)
         :game-id
-        (add-player)
+        (api/add-player)
         :status))
   (expect
     "Waiting for an opponent"
-    (let [game (create-game)]
-      (:status (get-game (:game-id game) (:player-id game)))))
+    (let [game (api/create-game)]
+      (:status (api/get-game (:game-id game) (:player-id game)))))
   (expect
     "Waiting for opponent's play"
-    (let [game (create-game)]
+    (let [game (api/create-game)]
       (-> (:game-id game)
-          (add-player)
+          (api/add-player)
           :game-id
-          (play-card-as-player (:player-id game) 0 0)
+          (api/play-card-as-player (:player-id game) 0 0)
           :status)))
   (expect
     "Playing"
-    (let [game (create-game)
-          opponent-id (:player-id (add-player (:game-id game)))]
+    (let [game (api/create-game)
+          opponent-id (:player-id (api/add-player (:game-id game)))]
       (-> (:game-id game)
-          (play-card-as-player (:player-id game) 0 0)
+          (api/play-card-as-player (:player-id game) 0 0)
           :game-id
-          (play-card-as-player opponent-id 0 0)
+          (api/play-card-as-player opponent-id 0 0)
           :status)))
   (expect
     "Playing"
-    (let [game (create-game)
-          opponent-id (:player-id (add-player (:game-id game)))]
+    (let [game (api/create-game)
+          opponent-id (:player-id (api/add-player (:game-id game)))]
       (-> (:game-id game)
-          (play-card-as-player opponent-id 0 0)
+          (api/play-card-as-player opponent-id 0 0)
           :game-id
-          (get-game (:player-id game))
+          (api/get-game (:player-id game))
           :status))))
 
 (defexpect out-of-turn
   ; Game gives error when playing and shouldn't
   (expect
     {:error "Out of turn play"}
-    (let [game (create-game)]
+    (let [game (api/create-game)]
       (-> (:game-id game)
-          (add-player)
+          (api/add-player)
           :game-id
-          (play-card-as-player (:player-id game) 0 0)
+          (api/play-card-as-player (:player-id game) 0 0)
           :game-id
-          (play-card-as-player (:player-id game) 0 0))))
+          (api/play-card-as-player (:player-id game) 0 0))))
   (expect
     {:error "Out of turn play"}
-    (let [game (create-game)]
+    (let [game (api/create-game)]
       (-> (:game-id game)
-          (play-card-as-player (:player-id game) 0 0)))))
+          (api/play-card-as-player (:player-id game) 0 0)))))

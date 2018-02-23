@@ -1,7 +1,7 @@
 (ns card-game.api
-  (:use card-game.core
-        card-game.victory-conditions
-        card-game.persistence))
+  (:require [card-game.core :as core]
+            [card-game.victory-conditions :as victory-conditions]
+            [card-game.persistence :as persistence]))
 
 (defn player-num
   "Translates a Player id into an internal player representation"
@@ -27,7 +27,7 @@
                           (translate-player game-state (:owner card) player-id)))
                       %)
                (:rows game-state))
-   :winner (translate-player game-state (winner game-state) player-id)})
+   :winner (translate-player game-state (victory-conditions/winner game-state) player-id)})
 
 (defn define-status
   "Returns the status of the game"
@@ -39,16 +39,16 @@
 (defn get-game
   "Fetches a game from an ID and returns the visible part as a player"
   [game-id player-id]
-  (let [game-state (fetch-game game-id)]
+  (let [game-state (persistence/fetch-game game-id)]
   (assoc (get-game-as-player game-state player-id)
          :status (define-status game-state player-id))))
 
 (defn play-card-as-player
   [game-id player index row]
-  (let [game-state (fetch-game game-id)]
+  (let [game-state (persistence/fetch-game game-id)]
       (if (= (:status (get-game game-id player)) "Playing")
           (do
-            (save-game (play-card game-state (player-num game-state player) index row))
+            (persistence/save-game (core/play-card game-state (player-num game-state player) index row))
             (get-game game-id player))
           {:error "Out of turn play"})))
 
@@ -64,17 +64,17 @@
 (defn add-player
   "Adds a player to a game"
   [game-id]
-  (let [saved-game (fetch-game game-id)
+  (let [saved-game (persistence/fetch-game game-id)
         players-connected (count (:player-ids saved-game))]
     (if (> players-connected 1)
       {:error "Too many players"}
-      (let [game-state (save-game
+      (let [game-state (persistence/save-game
                    (create-player
                      (or
                        saved-game
-                       (assoc (new-game) :game-id game-id))))]
+                       (assoc (core/new-game) :game-id game-id))))]
         (get-game game-id (last (:player-ids game-state)))))))
 
 (defn create-game
   "Creates a new instance of a game"
-  [] (add-player (next-id)))
+  [] (add-player (persistence/next-id)))

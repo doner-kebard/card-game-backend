@@ -1,5 +1,5 @@
 (ns card-game.core
-  (:use card-game.build-card)
+  (:require [card-game.build-card :as build-card])
   (:gen-class))
 
 (defn -main
@@ -12,7 +12,7 @@
   ([] (new-player 12))
   ([cards]
    {
-    :hand (vec (repeat cards (build-card)))
+    :hand (vec (repeat cards (build-card/build-card)))
     }))
 
 (defn new-game
