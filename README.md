@@ -16,7 +16,7 @@ Install [Docker](https://store.docker.com/search?type=edition&offering=community
 
 While working on backend stuff (Clojure), please keep a terminal open at *all* times with the following command running:
 
-`docker-compose build; docker-compose run backend lein autoexpect; docker-compose down`
+`docker-compose build; docker-compose run backend lein test-refresh; docker-compose down`
 
 This will give you instant feedback through the tests.
 
