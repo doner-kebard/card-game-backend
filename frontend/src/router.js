@@ -9,6 +9,10 @@ export default new Router({
     {
       path: "/join-game/:id",
       component: Game
+    },
+    {
+      path: "/game/:gameID",
+      component: Game
     }
   ]
 });
