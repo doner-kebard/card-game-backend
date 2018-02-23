@@ -7,7 +7,7 @@
                  [compojure "1.6.0"]
                  [cheshire "5.8.0"]
                  [javax.servlet/servlet-api "2.5"]
-                 [ring/ring-json "0.1.2"]
+                 [ring/ring-json "0.4.0"]
                  [com.taoensso/carmine "2.17.0"]
                  [expectations "2.2.0-rc3" :scope "test"]]
   :plugins [[com.jakemccrary/lein-test-refresh "0.22.0"]

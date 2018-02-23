@@ -9,6 +9,7 @@ export default class GamePage {
         this.rows = Selector('.game-row');
         this.myScore = Selector('#my-score');
         this.opponentScore = Selector('#opponent-score');
+        this.gameStatus = Selector('#game-status');
     }
 }
 

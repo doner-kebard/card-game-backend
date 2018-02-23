@@ -1,3 +1,4 @@
-FROM python:alpine
+FROM alpine
+RUN apk add --no-cache yarn python3
 WORKDIR /usr/src/app
-CMD python -m http.server 8080
+CMD yarn serve

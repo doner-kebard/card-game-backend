@@ -22,7 +22,20 @@
         (POST "/" {body :body} (play-action id pid body))))))))
   (route/not-found "<h1>Page not found</h1>"))
 
+(def cors-headers 
+  { "Access-Control-Allow-Origin" "*"
+   "Access-Control-Allow-Headers" "Content-Type"
+   "Access-Control-Allow-Methods" "OPTIONS"})
+
+(defn responsify
+  [handler]
+  (fn [request]
+    (update-in (response (handler request))
+               [:headers]
+               merge cors-headers)))
+
 (def entry
-  (-> (handler/api app-routes)
+  (-> (responsify app-routes)
+      (handler/api)
       (middleware/wrap-json-body)
       (middleware/wrap-json-response)))
