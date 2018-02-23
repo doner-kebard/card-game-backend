@@ -10,7 +10,7 @@
                  [ring/ring-json "0.1.2"]
                  [com.taoensso/carmine "2.17.0"]
                  [expectations "2.2.0-rc3" :scope "test"]]
-  :plugins [[lein-autoexpect "1.9.0"]
+  :plugins [[com.jakemccrary/lein-test-refresh "0.22.0"]
             [lein-expectations "0.0.8"]
             [lein-ring "0.12.1"]]
   :ring {:handler card-game.api-handler/entry}

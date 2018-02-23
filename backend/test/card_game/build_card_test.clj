@@ -1,12 +1,13 @@
 (ns card-game.build-card-test
-  (:use expectations
-        card-game.build-card))
+  (:require [expectations.clojure.test :refer :all]
+            [card-game.build-card :refer :all]))
 
-(expect
-  {:power 1}
-  (in (build-card {:power 1})))
+(defexpect card-builder
+  (expect
+    {:power 1}
+    (in (build-card {:power 1})))
 
-; default power
-(expect
-  {:power 10}
-  (in (build-card)))
+  ; default power
+  (expect
+    {:power 10}
+    (in (build-card))))
