@@ -4,7 +4,7 @@ import MainPage from './main_page.js';
 import GamePage from './game_page.js';
 
 fixture("Game creation")
-    .page("http://localhost:8080");
+    .page("http://frontend:8080");
 
 const mainPage = new MainPage();
 const gamePage = new GamePage();

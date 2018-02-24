@@ -4,4 +4,7 @@ services:
 
 script:
   - docker-compose build
+  - docker-compose up -d
   - docker-compose run backend lein test
+  - docker-compose run frontend yarn test
+  - docker-compose run e2e testcafe firefox test.js
