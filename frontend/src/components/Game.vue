@@ -16,8 +16,10 @@
             </div>
         </div>
         <div v-else id="waiting-for-opponent">
-            Waiting for opponent
-            <div id="join-link"></div>
+            <div id="game-status">
+                Waiting for opponent
+            </div>
+            <div v-if="joinLink" id="join-link">{{joinLink}}</div>
         </div>
     </div>
 </template>
@@ -29,6 +31,17 @@ export default {
     var defaultData = {};
     defaultData.status = "waiting";
     return defaultData;
+  },
+  computed: {
+    joinLink: function() {
+      return (
+        window.location.hostname +
+        ":" +
+        window.location.port +
+        "/#/join-game" +
+        this.$route.params.gameID
+      );
+    }
   }
 };
 </script>
