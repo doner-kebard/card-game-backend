@@ -25,7 +25,7 @@ export default new Router({
       component: JoinGame
     },
     {
-      path: "/game/:game-id/player/:player-id",
+      path: "/game/:gameID/player/:playerID",
       name: "Game",
       component: Game
     }

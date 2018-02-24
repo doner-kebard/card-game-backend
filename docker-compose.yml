@@ -22,7 +22,12 @@ services:
     redis:
         image: redis:alpine
         restart: always
-    e2e:
-        build: e2e
+    testcafe:
+        image: testcafe/testcafe
+        volumes:
+            - ./e2e:/tests
+        links:
+            - frontend
+            - backend
 volumes:
     lein-deps:

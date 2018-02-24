@@ -1,6 +1,6 @@
 <template>
     <div id="game">
-        <div id="board" v-if="status === 'playing'">
+        <div v-if="status === 'playing'" id="board">
             <div id="my-score"></div>
             <div id="opponent-score"></div>
             <div v-for="row in rows" :key="row.$index" class="game-row">
@@ -15,8 +15,9 @@
                 </div>
             </div>
         </div>
-        <div>
-
+        <div v-else id="waiting-for-opponent">
+            Waiting for opponent
+            <div id="join-link"></div>
         </div>
     </div>
 </template>
