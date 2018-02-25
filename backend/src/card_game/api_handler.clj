@@ -18,7 +18,7 @@
     (POST "/" [] (api/create-game))
     (context "/:id" [id :<< coerce/as-int] (defroutes game-routes
       (POST "/" [] (api/add-player id))
-      (context "/player/:pid" [pid :<< coerce/as-uuid] (defroutes player-routes
+      (context "/player/:pid" [pid] (defroutes player-routes
         (GET "/" [] (api/get-game id pid))
         (POST "/" {body :body} (play-action id pid body))))))))
   (route/not-found "<h1>Page not found</h1>"))
