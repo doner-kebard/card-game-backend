@@ -1,16 +1,16 @@
 <template>
     <div id="game">
-        <div v-if="status === 'playing'" id="board">
+        <div v-if="response.status !== 'Waiting for an opponent'" id="board">
             <div id="my-score"></div>
             <div id="opponent-score"></div>
-            <div v-for="row in rows" :key="row.$index" class="game-row">
-                <div v-for="card in rows" :key="card.$index" class="card">
+            <div v-for="row in response.rows" :key="row.$index" class="game-row">
+                <div v-for="card in row" :key="card.$index" class="card">
                     Power: {{card.power}}
                     Owner: {{card.owner}}
                 </div>
             </div>
             <div class="hand">
-                <div v-for="card in hand" :key="card.$index" class="card">
+                <div v-for="card in response.hand" :key="card.$index" class="card">
                     Power: {{card.power}}
                 </div>
             </div>
@@ -25,23 +25,56 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "Game",
   data: function() {
     var defaultData = {};
-    defaultData.status = "waiting";
+    defaultData.response = {};
     return defaultData;
+  },
+  methods: {
+    updateGame: async function() {
+      try {
+        const req = (
+          "http://backend:3000/games/" +
+            this.$route.params.gameID +
+            "/player/" +
+            this.$route.params.playerID
+        );
+        console.log(req);
+        const response = await axios.get(
+          req
+        );
+        this.response = response.data;
+        console.log(this.response);
+      } catch (err) {
+        throw err;
+      }
+    }
   },
   computed: {
     joinLink: function() {
+      const loc = window.location;
       return (
-        window.location.hostname +
+        loc.protocol +
+        "//" +
+        loc.hostname +
         ":" +
-        window.location.port +
-        "/#/join-game" +
+        loc.port +
+        "/#/join-game/" +
         this.$route.params.gameID
       );
     }
+  },
+  created: function() {
+    this.updateGame();
+    setInterval(
+      function() {
+        this.updateGame();
+      }.bind(this),
+      3000
+    );
   }
 };
 </script>

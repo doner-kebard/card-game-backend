@@ -5,7 +5,8 @@
         ring.util.response)
   (:require [compojure.handler :as handler]
             [compojure.route :as route]
-            [ring.middleware.json :as middleware]))
+            [ring.middleware.json :as middleware]
+            [compojure.coercions :as coerce]))
 
 (defn play-action
   [game player action]
@@ -15,9 +16,9 @@
 (defroutes app-routes
   (context "/games" [] (defroutes game-list-routes
     (POST "/" [] (api/create-game))
-    (context "/:id" [id] (defroutes game-routes
+    (context "/:id" [id :<< coerce/as-int] (defroutes game-routes
       (POST "/" [] (api/add-player id))
-      (context "/player/:pid" [pid] (defroutes player-routes
+      (context "/player/:pid" [pid :<< coerce/as-uuid] (defroutes player-routes
         (GET "/" [] (api/get-game id pid))
         (POST "/" {body :body} (play-action id pid body))))))))
   (route/not-found "<h1>Page not found</h1>"))

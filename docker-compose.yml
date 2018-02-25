@@ -29,5 +29,6 @@ services:
         links:
             - frontend
             - backend
+        command: "-h 2&> /dev/null"
 volumes:
     lein-deps:

@@ -4,7 +4,7 @@ import Game from "@/components/Game.vue";
 
 describe("Game", () => {
   it("Defaults to waiting for an opponent", () => {
-    const $route = { params: { gameID: "5" } };
+    const $route = { resolve: () => {}, params: { gameID: "5" } };
     const wrapper = shallow(Game, { mocks: { $route } });
     wrapper.setData({
     	status: "waiting"
