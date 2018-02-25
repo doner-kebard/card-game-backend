@@ -24,7 +24,7 @@ If working on frontend stuff, use instead:
 
 This will give you instant feedback through the tests.
 
-For End-to-End testing, use testcafe to run the e2e tests:
+For End-to-End testing, use [testcafe](http://devexpress.github.io/testcafe/documentation/test-api/) to run the e2e tests:
 
 `docker-compose run testcafe firefox /tests/test.js`
 

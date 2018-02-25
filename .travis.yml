@@ -7,7 +7,6 @@ script:
   - docker-compose up -d
   - docker-compose run backend lein test
   - docker-compose run frontend yarn test
-  - docker-compose run testcafe firefox /tests/test.js
 
 notifications:
   email:
