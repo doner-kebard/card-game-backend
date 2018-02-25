@@ -62,27 +62,29 @@ test('Sample Game', async t=> {
         .navigateTo(myGameURL.href)
         .expect(gamePage.cardsInHand.exists).ok();
     var cardsInPlay = 0;
+    var num = 12;
     while (await gamePage.cardsInHand.exists) {
-        let num = await gamePage.cardsInHand.count;
+        await t.expect(gamePage.rows.nth(0).find('.card').count).eql(cardsInPlay)
         await t
-            .expect(gamePage.rows.at(0).find('.card').count).eql(cardsInPlay)
             .dragToElement(
-                gamePage.cardsInHand.at(0),
-                gamePage.rows.at(0))
-            .expect(gamePage.cardsInHand.count).eql(num-1)
-            .expect(gamePage.rows.at(0).find('.card').count).eql(cardsInPlay+1)
+                gamePage.cardsInHand.nth(0),
+                gamePage.rows.nth(0))
+            //.expect(gamePage.cardsInHand.count).eql(num-1)
+            //.expect(gamePage.rows.nth(0).find('.card').count).eql(cardsInPlay+1)
             .navigateTo(opponentURL.href)
-            .expect(gamePage.rows.at(0).find('.card').count).eql(cardsInPlay)
+            .expect(gamePage.rows.nth(0).find('.card').count).eql(cardsInPlay)
             .expect(gamePage.cardsInHand.count).eql(num)
             .dragToElement(
-                gamePage.cardsInHand.at(0),
-                gamePage.rows.at(0))
+                gamePage.cardsInHand.nth(0),
+                gamePage.rows.nth(0))
             .expect(gamePage.cardsInHand.count).eql(num-1)
-            .expect(gamePage.rows.at(0).find('.card').count).eql(cardsInPlay+2)
-            .nagivateTo(myGameURL.href);
+            .expect(gamePage.rows.nth(0).find('.card').count).eql(cardsInPlay+2)
+            .navigateTo(myGameURL.href);
+
         cardsInPlay += 2;
+        num -= 1;
     }
     await t
-        .expect(gamePage.myScore.textContent).eql(0)
-        .expect(gamePage.opponentScore.textContent).eql(0)
+        .expect(gamePage.myScore.textContent).eql("0")
+        .expect(gamePage.opponentScore.textContent).eql("0")
 })

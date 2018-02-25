@@ -8,10 +8,17 @@
             [ring.middleware.json :as middleware]
             [compojure.coercions :as coerce]))
 
+(defn parse-int [number-string]
+  (try (Integer/parseInt number-string)
+       (catch Exception e nil)))
+
 (defn play-action
-  [game player action]
-  (api/play-card-as-player game player (:index action) (:row action))
-  )
+  [game-id player-id action]
+    (api/play-card-as-player
+    game-id
+    player-id
+    (parse-int (:index action))
+    (parse-int (:row action))))
 
 (defroutes app-routes
   (context "/games" [] (defroutes game-list-routes
@@ -38,5 +45,5 @@
 (def entry
   (-> (responsify app-routes)
       (handler/api)
-      (middleware/wrap-json-body)
+      (middleware/wrap-json-body {:keywords? true})
       (middleware/wrap-json-response)))
