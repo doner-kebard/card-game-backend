@@ -16,9 +16,17 @@ Install [Docker](https://store.docker.com/search?type=edition&offering=community
 
 While working on backend stuff (Clojure), please keep a terminal open at *all* times with the following command running:
 
-`docker-compose build; docker-compose run backend lein test-refresh; docker-compose down`
+`docker-compose run backend lein test-refresh`
+
+If working on frontend stuff, use instead:
+
+`docker-compose run frontend yarn test -w`
 
 This will give you instant feedback through the tests.
+
+For End-to-End testing, use [testcafe](http://devexpress.github.io/testcafe/documentation/test-api/) to run the e2e tests:
+
+`docker-compose run testcafe firefox /tests/test.js`
 
 ## License
 

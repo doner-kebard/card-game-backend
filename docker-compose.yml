@@ -1,5 +1,14 @@
 version: '3'
 services:
+    frontend:
+        build: frontend
+        restart: always
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./frontend:/usr/src/app
+        depends_on:
+            - backend
     backend:
         build: backend
         restart: always
@@ -7,8 +16,19 @@ services:
             - "3000:3000"
         volumes:
             - ./backend:/usr/src/app
+            - lein-deps:/root/.m2
         links:
             - redis
     redis:
         image: redis:alpine
         restart: always
+    testcafe:
+        image: testcafe/testcafe
+        volumes:
+            - ./e2e:/tests
+        links:
+            - frontend
+            - backend
+        command: "-h"
+volumes:
+    lein-deps:
