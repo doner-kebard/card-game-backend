@@ -9,6 +9,7 @@ services:
             - ./frontend:/usr/src/app
         depends_on:
             - backend
+        command: "yarn serve"
     backend:
         build: backend
         restart: always
