@@ -22,7 +22,6 @@
    {
     :players (vec (repeat 2 (new-player cards)))
     :rows (vec (repeat 5 []))
-    :play-wanted [true true]
     :next-play [nil nil]
     }))
 
@@ -48,12 +47,6 @@
   [game-state player index]
   (modify-hand game-state player (item-remover index)))
 
-(defn update-play-wanted
-  "Change which players are expected to play"
-  [game-state player]
-  (assoc game-state :play-wanted [(or (not= player 0) (not (get-in game-state [:play-wanted 1]))) 
-                                  (or (not= player 1) (not (get-in game-state [:play-wanted 0])))]))
-
 (defn apply-play-card
   "Plays a card waiting to be played onto the board"
   [game-state play]
@@ -70,18 +63,19 @@
   [game-state]
     (-> game-state
         (apply-play-card (get-in game-state [:next-play 0]))
-        (apply-play-card (get-in game-state [:next-play 1]))))
+        (apply-play-card (get-in game-state [:next-play 1]))
+        (assoc :next-play [nil nil])))
 
 (defn play-card
   "Takes a playing of a card from hand onto a game row and makes it wait until both players had played"
   [game-state player index row]
-  (if (get-in game-state [:play-wanted player])
-      (let [game-state (update-play-wanted game-state player)]
-           (if (every? {true true} (:play-wanted game-state))
-               (-> game-state
-                   (assoc-in [:next-play 1] {:player player :index index :row row})
-                   (apply-all-plays))
-               (assoc-in game-state [:next-play 0] {:player player :index index :row row})))
+  ; Uses stored :next-play to know who is supposed to play
+  (if (nil? (get-in game-state [:next-play player]))
+      (if (every? nil? (:next-play game-state))
+          (assoc-in game-state [:next-play player] {:player player :index index :row row})
+          (-> game-state
+              (assoc-in [:next-play player] {:player player :index index :row row})
+              (apply-all-plays)))
       {:error "Out of turn play"}))
 
 (defn alter-card

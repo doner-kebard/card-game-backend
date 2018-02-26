@@ -93,47 +93,6 @@
         (core/play-card 1 0 0)
         (victory-conditions/winner))))
 
-(defexpect track-player
-  ; Game tracks correctly who still has to play
-  (expect
-    [true true]
-    (-> (core/new-game)
-        :play-wanted))
-
-  (expect
-    [false true]
-    (-> (core/new-game)
-        (core/play-card 0 0 0)
-        :play-wanted))
-
-  (expect
-    [true false]
-    (-> (core/new-game)
-        (core/play-card 1 0 0)
-        :play-wanted))
-
-  (expect
-    [true true]
-    (-> (core/new-game)
-        (core/play-card 0 0 0)
-        (core/play-card 1 0 0)
-        :play-wanted))
-
-  (expect
-    [true true]
-    (-> (core/new-game)
-        (core/play-card 1 0 0)
-        (core/play-card 0 0 0)
-        :play-wanted))
-
-  (expect
-    [false true]
-    (-> (core/new-game)
-        (core/play-card 1 0 0)
-        (core/play-card 0 0 0)
-        (core/play-card 0 0 0)
-        :play-wanted)))
-
 (defexpect ot-of-turn
   ; Can't play a card when you were not supposed to
   (expect
@@ -155,13 +114,31 @@
         (core/play-card 0 0 0)
         (core/play-card 1 1 1)
         (core/play-card 1 2 3)
-        (get-in [:next-play 0])))
+        (get-in [:next-play 1])))
+  ; Stores nil when a play is expected
   (expect
-    [{:player 0 :index 0 :row 0} {:player 1 :index 1 :row 1}]
+    [nil nil]
     (-> (core/new-game)
         (core/play-card 0 0 0)
         (core/play-card 1 1 1)
-        :next-play)))
+        :next-play))
+  (expect
+    [nil nil]
+    (-> (core/new-game)
+        :next-play))
+  (expect
+    nil
+    (-> (core/new-game)
+        (core/play-card 0 0 0)
+        (get-in [:next-play 1])))
+  (expect
+    nil
+    (-> (core/new-game)
+        (core/play-card 0 0 0)
+        (core/play-card 1 1 1)
+        (core/play-card 1 2 3)
+        (get-in [:next-play 0]))))
+
 
 (defexpect update-only-when-both-play
   ; Doesn't updates game-state until both players played a card

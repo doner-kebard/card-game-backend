@@ -33,7 +33,7 @@
   "Returns the status of the game"
   [game-state player-id]
   (cond (= (count (:player-ids game-state)) 1) "Waiting for an opponent"
-        (get-in game-state [:play-wanted (player-num game-state player-id)]) "Playing"
+        (nil? (get-in game-state [:next-play (player-num game-state player-id)])) "Playing"
         :else "Waiting for opponent's play"))
 
 (defn get-game
