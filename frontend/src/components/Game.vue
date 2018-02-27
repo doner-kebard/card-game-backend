@@ -111,8 +111,8 @@ export default {
     );
   },
   beforeRouteLeave: function(to, from, next) {
-      clearInterval(this.intervalID);
-      next();
+    clearInterval(this.intervalID);
+    next();
   }
 };
 </script>
