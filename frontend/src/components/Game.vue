@@ -103,12 +103,16 @@ export default {
   },
   created: function() {
     this.updateGame();
-    setInterval(
+    this.intervalID = setInterval(
       function() {
         this.updateGame();
       }.bind(this),
       1000
     );
+  },
+  beforeRouteLeave: function(to, from, next) {
+      clearInterval(this.intervalID);
+      next();
   }
 };
 </script>
