@@ -6,10 +6,10 @@ describe("App", () => {
   it("renders", () => {
     const wrapper = shallow(App, {
       stubs: {
-        'router-view': {
+        "router-view": {
           render: h => h("div")
-         }
-       }
+        }
+      }
     });
     expect(wrapper.contains("#app")).to.be.true;
   });

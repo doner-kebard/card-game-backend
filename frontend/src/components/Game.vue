@@ -1,40 +1,48 @@
 <template>
     <div id="game">
-        <div v-if="response.status != 'Waiting for an opponent'" id="board">
-            <div id="my-score">0</div>
-            <div id="opponent-score">0</div>
-            <div v-for="(row, rownum) in response.rows"
-                :key="row.$index"
-                class="game-row"
-                :rownum="rownum"
-                v-on:dragover="allowDrop"
-                v-on:drop="dropOnRow">
-                <div v-for="card in row"
-                    :key="card.$index"
+        <div v-if="response.status != 'Waiting for an opponent'"
+            id="board"
+            class="row">
+            <!-- my-score should show how many rows I'm currently winnning in -->
+            <div id="my-score" class="col text-right">0</div>
+            <!-- opponent-score should show how many rows I'm currently losing in -->
+            <div id="opponent-score" class="col text-left">0</div>
+            <div class="w-100"></div>
+            <div id="rows" class="col-12">
+                <div v-for="(row, rownum) in response.rows"
+                    :key="row.$index"
+                    class="game-row row border"
+                    style="height: 50px"
                     :rownum="rownum"
                     v-on:dragover="allowDrop"
-                    v-on:drop="dropOnRow"
-                    class="card">
-                    Power: {{card.power}}
-                    Owner: {{card.owner}}
+                    v-on:drop="dropOnRow">
+                    <div v-for="card in row"
+                        :key="card.$index"
+                        :rownum="rownum"
+                        class="card col-1">
+                        {{card.power}}
+                        {{card.owner | cut}}
+                    </div>
                 </div>
             </div>
-            <div class="hand">
-                <div v-for="(card, index) in response.hand"
-                    :key="index"
-                    class="card"
-                    :index="index"
-                    draggable
-                    v-on:dragstart="dragCardFromHand">
-                    Power: {{card.power}}
+            <div class="col-12">
+                <div class="hand row">
+                    <div v-for="(card, index) in response.hand"
+                        :key="index"
+                        class="card col-1"
+                        :index="index"
+                        draggable
+                        v-on:dragstart="dragCardFromHand">
+                        {{card.power}}
+                    </div>
                 </div>
             </div>
         </div>
-        <div v-else id="waiting-for-opponent">
-            <div id="game-status">
+        <div v-else id="waiting-for-opponent" class="row">
+            <div id="game-status" class="col-12">
                 Waiting for opponent
             </div>
-            <div v-if="joinLink" id="join-link">{{joinLink}}</div>
+            <div v-if="joinLink" id="join-link" class="col-12">{{joinLink}}</div>
         </div>
     </div>
 </template>
@@ -72,19 +80,12 @@ export default {
     allowDrop: function(ev) {
       ev.preventDefault();
     },
-    dropOnRow: async function(ev) {
+    dropOnRow: function(ev) {
       ev.preventDefault();
-      try {
-        const req = this.gameReq();
-        const data = ev.dataTransfer.getData("handIndex");
-        const sentData = { index: data, row: ev.target.getAttribute("rownum") };
-        console.log(ev.target);
-        console.log(sentData);
-        const response = await axios.post(req, sentData);
-        console.log(response);
-      } catch (err) {
-        throw err;
-      }
+      const req = this.gameReq();
+      const data = ev.dataTransfer.getData("handIndex");
+      const sentData = { index: data, row: ev.target.getAttribute("rownum") };
+      axios.post(req, sentData);
     }
   },
   computed: {
@@ -102,6 +103,7 @@ export default {
     }
   },
   created: function() {
+    this.response = {};
     this.updateGame();
     this.intervalID = setInterval(
       function() {
@@ -113,13 +115,11 @@ export default {
   beforeRouteLeave: function(to, from, next) {
     clearInterval(this.intervalID);
     next();
+  },
+  filters: {
+    cut: function(word) {
+      return word.slice(0, 3);
+    }
   }
 };
 </script>
-
-<style>
-.game-row {
-  height: 900px;
-  width: 100%;
-}
-</style>

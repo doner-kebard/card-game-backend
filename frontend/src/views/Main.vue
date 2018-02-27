@@ -1,6 +1,8 @@
 <template>
     <div id="main-view">
-        <router-link id="create-game" :to="{ name: 'CreateGame' }">
+        <router-link id="create-game"
+            :to="{ name: 'CreateGame' }"
+            class="btn btn-primary">
             Create Game
         </router-link>
     </div>
