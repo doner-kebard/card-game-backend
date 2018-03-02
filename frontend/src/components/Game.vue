@@ -58,21 +58,14 @@ export default {
   },
   methods: {
     gameReq: function() {
-      return (
-        "http://backend:3000/games/" +
-        this.$route.params.gameID +
-        "/player/" +
-        this.$route.params.playerID
-      );
+      const gameID = this.$route.params.gameID;
+      const playerID = this.$route.params.playerID;
+      return `http://backend:3000/games/${gameID}/player/${playerID}`;
     },
     updateGame: async function() {
-      try {
-        const req = this.gameReq();
-        const response = await axios.get(req);
-        this.response = response.data;
-      } catch (err) {
-        throw err;
-      }
+      const req = this.gameReq();
+      const response = await axios.get(req);
+      this.response = response.data;
     },
     dragCardFromHand: function(ev) {
       ev.dataTransfer.setData("handIndex", ev.target.getAttribute("index"));
@@ -84,27 +77,24 @@ export default {
       ev.preventDefault();
       const req = this.gameReq();
       const data = ev.dataTransfer.getData("handIndex");
-      const sentData = { index: data, row: ev.target.getAttribute("rownum") };
-      axios.post(req, sentData);
+      const playData = {
+        index: data,
+        row: ev.target.getAttribute("rownum")
+      };
+      axios.post(req, playData);
     }
   },
   computed: {
     joinLink: function() {
-      const loc = window.location;
-      return (
-        loc.protocol +
-        "//" +
-        loc.hostname +
-        ":" +
-        loc.port +
-        "/#/join-game/" +
-        this.$route.params.gameID
-      );
+      const l = window.location;
+      const gameID = this.$route.params.gameID;
+      return `${l.protocol}//${l.hostname}:${l.port}/#/join-game/${gameID}`;
     }
   },
   created: function() {
     this.response = {};
     this.updateGame();
+
     this.intervalID = setInterval(
       function() {
         this.updateGame();
