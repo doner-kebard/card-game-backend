@@ -7,21 +7,21 @@
 import axios from "axios";
 export default {
   name: "JoinGame",
-  created: async function() {
-    try {
-      const gameID = this.$route.params.joinID;
-      const response = await axios.post("http://backend:3000/games/" + gameID);
-      console.log(response);
-      this.$router.push({
-        name: "Game",
-        params: {
-          gameID: gameID,
-          playerID: response.data["player-id"]
-        }
-      });
-    } catch (err) {
-      throw err;
+  methods: {
+    fetchGame: async function(gameID) {
+      return await axios.post("http://backend:3000/games/" + gameID);
     }
+  },
+  created: async function() {
+    const gameID = this.$route.params.joinID;
+    const response = await this.fetchGame(gameID);
+    this.$router.push({
+      name: "Game",
+      params: {
+        gameID: gameID,
+        playerID: response.data["player-id"]
+      }
+    });
   }
 };
 </script>

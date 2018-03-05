@@ -8,6 +8,9 @@ describe("App", () => {
       stubs: {
         "router-view": {
           render: h => h("div")
+        },
+        "router-link": {
+          render: h => h("a")
         }
       }
     });

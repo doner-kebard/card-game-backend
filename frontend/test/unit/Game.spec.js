@@ -11,6 +11,7 @@ const options = {
     }
   }
 };
+
 const sampleData = {
   response: {
     status: "Playing",
@@ -28,6 +29,7 @@ describe("Game", () => {
     expect(wrapper.contains("#join-link")).to.be.true;
     expect(wrapper.find("#game-status").text()).to.eql("Waiting for opponent");
   });
+
   it("Shows board when playing", () => {
     const wrapper = shallow(Game, options);
     wrapper.setData(sampleData);
@@ -40,6 +42,7 @@ describe("Game", () => {
         .findAll(".card").length
     ).eql(1);
   });
+
   it("Can play cards", () => {
     const wrapper = shallow(Game, options);
     wrapper.setData(sampleData);

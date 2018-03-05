@@ -9,19 +9,45 @@
             <div id="opponent-score" class="col text-left">0</div>
             <div class="w-100"></div>
             <div id="rows" class="col-12">
+                <div id="row-card-title" class="row">
+                    <div id="my-game-row-title"
+                        class="col-6 text-center">
+                        <h2>My cards</h2>
+                    </div>
+                    <div id="opponent-game-row-title"
+                        class="col-6 text-center">
+                        <h2>Opponent's cards</h2>
+                    </div>
+                </div>
                 <div v-for="(row, rownum) in response.rows"
-                    :key="row.$index"
-                    class="game-row row border"
-                    style="height: 50px"
-                    :rownum="rownum"
-                    v-on:dragover="allowDrop"
-                    v-on:drop="dropOnRow">
-                    <div v-for="card in row"
-                        :key="card.$index"
-                        :rownum="rownum"
-                        class="card col-1">
-                        {{card.power}}
-                        {{card.owner | cut}}
+                     :key="row.$index"
+                     class="game-row row">
+                    <div class="col-6">
+                        <div class="row text-center justify-content-end owned-by-me border"
+                             v-on:dragover="allowDrop"
+                             v-on:drop="dropOnRow"
+                             :rownum="rownum"
+                             style="height: 50px">
+                            <div v-for="card in row"
+                                 v-if="card.owner === 'me'"
+                                 :key="card.$index"
+                                 :rownum="rownum"
+                                 class="card col-2">
+                                {{card.power}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row text-center owned-by-opponent border"
+                             style="height: 50px">
+                            <div v-for="card in row"
+                                 v-if="card.owner !== 'me'"
+                                 :key="card.$index"
+                                 :rownum="rownum"
+                                 class="card col-2">
+                                {{card.power}}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
