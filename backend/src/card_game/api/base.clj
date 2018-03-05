@@ -1,5 +1,6 @@
 (ns card-game.api.base
-  (:require [card-game.core :as core]
+  (:require [card-game.core.create-game :as create-game]
+            [card-game.core.play-card :as play-card]
             [card-game.victory-conditions :as victory-conditions]
             [card-game.persistence :as persistence]
             [card-game.api.helper :as helper]
@@ -17,7 +18,7 @@
   (let [game-state (persistence/fetch-game game-id)]
       (if (= (:status (get-game game-id player)) configs/play)
           (do
-            (persistence/save-game (core/play-card game-state (helper/player-num game-state player) index row))
+            (persistence/save-game (play-card/play-card game-state (helper/player-num game-state player) index row))
             (get-game game-id player))
           {:error configs/out-of-turn})))
 
@@ -32,7 +33,7 @@
                    (helper/create-player
                      (or
                        saved-game
-                       (assoc (core/new-game) :game-id game-id))))]
+                       (assoc (create-game/new-game) :game-id game-id))))]
         (get-game game-id (last (:player-ids game-state)))))))
 
 (defn create-game

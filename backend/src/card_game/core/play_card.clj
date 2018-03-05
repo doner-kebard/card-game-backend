@@ -1,27 +1,5 @@
-(ns card-game.core
-  (:require [configs :as configs])
-  (:gen-class))
-
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
-
-(defn new-player
-  "Creates a new player object"
-  ([]
-   {
-    :hand (configs/ini-hand)
-    }))
-
-(defn new-game
-  "Creates a new game object"
-  ([]
-   {
-    :players (vec (repeat 2 (new-player)))
-    :rows (vec (repeat 5 []))
-    :next-play [nil nil]
-    }))
+(ns card-game.core.play-card
+  (:require [configs :as configs]))
 
 (defn add-card-to-row
   "Adds a card onto the specified row"
@@ -75,8 +53,3 @@
               (assoc-in [:next-play player] {:player player :index index :row row})
               (apply-all-plays)))
       {:error configs/out-of-turn}))
-
-(defn alter-card
-  "Alters a cards' values, merging the new values with existing ones"
-  [game-state path new-values]
-  (update-in game-state path #(merge % new-values)))

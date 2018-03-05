@@ -1,26 +1,27 @@
 (ns card-game.winner-test
   (:require [expectations.clojure.test :refer :all]
-            [card-game.core :as core]
+            [card-game.core.create-game :as create-game]
+            [card-game.core.play-card :as play-card]
             [card-game.victory-conditions :as victory-conditions]
             [configs :as configs]))
 
 (defn play-a-game-helper
   [strategy1 strategy2]
-  (loop [game-state (core/new-game)
+  (loop [game-state (create-game/new-game)
          iteration (count (configs/ini-hand))]
       (if (= 0 iteration)
         game-state
         (recur
           (-> game-state
-              (core/play-card 0 0 (strategy1 iteration))
-              (core/play-card 1 0 (strategy2 iteration)))
+              (play-card/play-card 0 0 (strategy1 iteration))
+              (play-card/play-card 1 0 (strategy2 iteration)))
           (dec iteration)))))
 
 (defexpect finished-game
   ; We can tell if a game is finished
   (expect
     #(not (victory-conditions/finished? %))
-    (core/new-game))
+    (create-game/new-game))
 
   (expect
     #(victory-conditions/finished? %)
@@ -32,7 +33,7 @@
   ; Winner isn't set if game hasn't ended
   (expect
     nil
-    (-> (core/new-game)
+    (-> (create-game/new-game)
         (victory-conditions/winner)))
 
   ; Winner returns the winning player on a finished game, or 2 on a tie

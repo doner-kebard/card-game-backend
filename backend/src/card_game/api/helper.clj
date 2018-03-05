@@ -1,6 +1,5 @@
 (ns card-game.api.helper
-  (:require [card-game.core :as core]
-            [card-game.victory-conditions :as victory-conditions]
+  (:require [card-game.victory-conditions :as victory-conditions]
             [card-game.persistence :as persistence]
             [configs :as configs]))
 

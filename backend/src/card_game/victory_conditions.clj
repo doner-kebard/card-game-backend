@@ -1,5 +1,4 @@
-(ns card-game.victory-conditions
-  (:gen-class))
+(ns card-game.victory-conditions)
 
 (defn finished?
   "Tells us if a game has finished"
