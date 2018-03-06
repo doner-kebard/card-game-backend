@@ -1,14 +1,14 @@
-(ns card-game.winner-test
+(ns rules.winner-test
   (:require [expectations.clojure.test :refer :all]
-            [card-game.core.create-game :as create-game]
-            [card-game.core.play-card :as play-card]
-            [card-game.victory-conditions :as victory-conditions]
-            [configs :as configs]))
+            [rules.create-game :as create-game]
+            [rules.play-card :as play-card]
+            [rules.victory-conditions :as victory-conditions]
+            [configs.hand :as hand]))
 
 (defn play-a-game-helper
   [strategy1 strategy2]
   (loop [game-state (create-game/new-game)
-         iteration (count (configs/ini-hand))]
+         iteration (count (hand/ini-hand))]
       (if (= 0 iteration)
         game-state
         (recur

@@ -1,4 +1,4 @@
-(ns card-game.victory-conditions)
+(ns rules.victory-conditions)
 
 (defn finished?
   "Tells us if a game has finished"

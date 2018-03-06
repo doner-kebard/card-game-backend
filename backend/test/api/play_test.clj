@@ -1,7 +1,7 @@
-(ns card-game.api-play-test
+(ns api.play-test
   (:require [expectations.clojure.test :refer :all]
-            [card-game.api.base :as api]
-            [configs :as configs]))
+            [api.base :as api]
+            [configs.hand :as hand]))
 
 (defexpect playing-cards
   ; Cards in hand have power
@@ -12,7 +12,7 @@
 
   ; Cards are removed from hands upon being played
   (expect
-    #(= (count (:hand %)) (dec (count (configs/ini-hand))))
+    #(= (count (:hand %)) (dec (count (hand/ini-hand))))
     (let [game (api/create-game)
           game-id (:game-id game)
           player-id (:player-id game)
@@ -23,7 +23,7 @@
 
   ; Card is not removed if opponent has not yet played
   (expect
-    #(= (count (:hand %)) (count (configs/ini-hand)))
+    #(= (count (:hand %)) (count (hand/ini-hand)))
     (let [game (api/create-game)
           game-id (:game-id game)
           player-id (:player-id game)]
@@ -34,7 +34,7 @@
 
   ; Fetching the game as a player returns one less card after a play
   (expect
-    #(= (count (:hand %)) (dec (count (configs/ini-hand))))
+    #(= (count (:hand %)) (dec (count (hand/ini-hand))))
     (let [game (api/create-game)
           game-id (:game-id game)
           player-id (:player-id game)

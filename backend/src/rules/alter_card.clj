@@ -1,4 +1,4 @@
-(ns card-game.core.alter-card)
+(ns rules.alter-card)
 
 (defn alter-card
   "Alters a cards' values, merging the new values with existing ones"

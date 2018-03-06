@@ -1,5 +1,5 @@
-(ns card-game.core.play-card
-  (:require [configs :as configs]))
+(ns rules.play-card
+  (:require [configs.messages :as messages]))
 
 (defn add-card-to-row
   "Adds a card onto the specified row"
@@ -52,4 +52,4 @@
           (-> game-state
               (assoc-in [:next-play player] {:player player :index index :row row})
               (apply-all-plays)))
-      {:error configs/out-of-turn}))
+      {:error messages/out-of-turn}))

@@ -1,14 +1,14 @@
-(ns card-game.simultaneous-test
+(ns rules.simultaneous-test
   (:require [expectations.clojure.test :refer :all]
-            [card-game.core.create-game :as create-game]
-            [card-game.core.play-card :as play-card]
-            [card-game.victory-conditions :as victory-conditions]
-            [configs :as configs]))
+            [rules.create-game :as create-game]
+            [rules.play-card :as play-card]
+            [rules.victory-conditions :as victory-conditions]
+            [configs.messages :as messages]))
 
 (defexpect out-of-turn
   ; Can't play a card when you were not supposed to
   (expect
-    {:error configs/out-of-turn}
+    {:error messages/out-of-turn}
     (-> (create-game/new-game)
         (play-card/play-card 0 0 0)
         (play-card/play-card 0 0 0))))

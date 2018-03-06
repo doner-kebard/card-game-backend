@@ -1,7 +1,8 @@
-(ns card-game.api-newgame-test
+(ns api.newgame-test
   (:require [expectations.clojure.test :refer :all]
-            [card-game.api.base :as api]
-            [configs :as configs]))
+            [api.base :as api]
+            [configs.hand :as hand]
+            [configs.messages :as messages]))
 
 (defexpect sanity-check
   (expect
@@ -11,7 +12,7 @@
     #(contains? % :player-id)
     (api/create-game))
   (expect
-    #(= (count (:hand %)) (count (configs/ini-hand)))
+    #(= (count (:hand %)) (count (hand/ini-hand)))
     (api/create-game))
   (expect
     #(= 5 (count (:rows %)))
@@ -37,7 +38,7 @@
 
   ; A third player causes an error
   (expect
-    {:error configs/too-many-players}
+    {:error messages/too-many-players}
     (-> (api/create-game)
         :game-id
         (api/add-player)

@@ -1,7 +1,7 @@
-(ns card-game.api-winner-test
+(ns api.winner-test
   (:require [expectations.clojure.test :refer :all]
-            [card-game.api.base :as api]
-            [configs :as configs]))
+            [api.base :as api]
+            [configs.hand :as hand]))
 
 (defn play-a-game-helper
   [strategy1 strategy2]
@@ -10,7 +10,7 @@
         player-id (:player-id game)
         opponent-id (:player-id (api/add-player game-id))]
     (loop [game-state game
-           iteration (count (configs/ini-hand))]
+           iteration (count (hand/ini-hand))]
         (if (= 0 iteration)
           (api/get-game game-id player-id)
           (recur

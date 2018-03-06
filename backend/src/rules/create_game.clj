@@ -1,11 +1,11 @@
-(ns card-game.core.create-game
-  (:require [configs :as configs]))
+(ns rules.create-game
+  (:require [configs.hand :as hand]))
 
 (defn new-player
   "Creates a new player object"
   ([]
    {
-    :hand (configs/ini-hand)
+    :hand (hand/ini-hand)
     }))
 
 (defn new-game

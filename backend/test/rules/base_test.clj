@@ -1,9 +1,9 @@
-(ns card-game.core-base-test
+(ns rules.base-test
   (:require [expectations.clojure.test :refer :all]
-            [card-game.core.create-game :as create-game]
-            [card-game.core.play-card :as play-card]
-            [card-game.victory-conditions :as victory-conditions]
-            [card-game.test-helper :as helper]))
+            [rules.create-game :as create-game]
+            [rules.play-card :as play-card]
+            [rules.victory-conditions :as victory-conditions]
+            [test-helper :as helper]))
 
 (defexpect basic.game
   ; Game can be created

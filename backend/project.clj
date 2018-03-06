@@ -13,6 +13,6 @@
   :plugins [[com.jakemccrary/lein-test-refresh "0.22.0"]
             [lein-expectations "0.0.8"]
             [lein-ring "0.12.1"]]
-  :ring {:handler card-game.api.handler/entry}
+  :ring {:handler api.handler/entry}
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

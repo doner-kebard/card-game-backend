@@ -1,5 +1,5 @@
-(ns card-game.api.handler
-  (:require [card-game.api.base :as api])
+(ns api.handler
+  (:require [api.base :as api])
   (:use compojure.core
         cheshire.core
         ring.util.response)
