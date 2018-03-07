@@ -1,5 +1,3 @@
-FROM alpine
-RUN apk add --no-cache yarn python3
+FROM python:alpine
 WORKDIR /usr/src/app
-ENTRYPOINT ["sh", "entry.sh"]
-CMD yarn serve
+CMD python3 -m http.server 8080

@@ -6,8 +6,8 @@ export default class GamePage {
         this.hand = Selector('.hand');
         this.cardsInHand = this.hand.find('.card');
         this.joinLink = Selector('#join-link');
-        this.rows = Selector('.game-row .owned-by-me');
-        this.opponentRows = Selector('.game-row .owned-by-opponent');
+        this.rows = Selector('#my-rows .game-row');
+        this.opponentRows = Selector('#opp-rows .game-row');
         this.myScore = Selector('#my-score');
         this.opponentScore = Selector('#opponent-score');
         this.gameStatus = Selector('#game-status');
