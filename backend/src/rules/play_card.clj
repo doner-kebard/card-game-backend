@@ -1,29 +1,29 @@
 (ns rules.play-card
   (:require [configs.messages :as messages]))
 
-(defn add-card-to-row
+(defn ^:private add-card-to-row
   "Adds a card onto the specified row"
   [game-state card row]
   (update-in game-state [:rows row] #(conj % card)))
 
-(defn modify-hand
+(defn ^:private modify-hand
   "Modifies a player's hand according to some function"
   [game-state player modification]
   (update-in game-state [:players player :hand] modification))
 
-(defn item-remover
+(defn ^:private item-remover
   "Returns a function that removes given index from a vector"
   [index]
   #(vec (concat
           (subvec % 0 index)
           (subvec % (inc index)))))
 
-(defn remove-card
+(defn ^:private remove-card
   "Remove a card from hand"
   [game-state player index]
   (modify-hand game-state player (item-remover index)))
 
-(defn apply-play-card
+(defn ^:private apply-play-card
   "Plays a card waiting to be played onto the board"
   [game-state play]
     (let [player (:player play)
@@ -34,7 +34,7 @@
           (add-card-to-row (assoc card :owner player) row)
           (remove-card player index))))
 
-(defn apply-all-plays
+(defn ^:private apply-all-plays
   "Plays all cards waiting to be played"
   [game-state]
     (-> game-state

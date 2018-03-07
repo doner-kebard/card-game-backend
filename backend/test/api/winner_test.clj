@@ -3,7 +3,7 @@
             [api.base :as api]
             [configs.hand :as hand]))
 
-(defn play-a-game-helper
+(defn ^:private play-a-game-helper
   [strategy1 strategy2]
   (let [game (api/create-game)
         game-id (:game-id game)

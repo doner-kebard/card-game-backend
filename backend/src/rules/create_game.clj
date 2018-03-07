@@ -1,7 +1,7 @@
 (ns rules.create-game
   (:require [configs.hand :as hand]))
 
-(defn new-player
+(defn ^:private new-player
   "Creates a new player object"
   ([]
    {

@@ -8,11 +8,11 @@
             [ring.middleware.json :as middleware]
             [compojure.coercions :as coerce]))
 
-(defn parse-int [number-string]
+(defn ^:private parse-int [number-string]
   (try (Integer/parseInt number-string)
        (catch Exception e nil)))
 
-(defn play-action
+(defn ^:private play-action
   [game-id player-id action]
     (api/play-card-as-player
     game-id
@@ -20,7 +20,7 @@
     (parse-int (:index action))
     (parse-int (:row action))))
 
-(defroutes app-routes
+(defroutes ^:private app-routes
   (context "/games" [] (defroutes game-list-routes
     (POST "/" [] (api/create-game))
     (context "/:id" [id :<< coerce/as-int] (defroutes game-routes
@@ -30,12 +30,12 @@
         (POST "/" {body :body} (play-action id pid body))))))))
   (route/not-found "<h1>Page not found</h1>"))
 
-(def cors-headers 
+(def ^:private cors-headers 
   { "Access-Control-Allow-Origin" "*"
    "Access-Control-Allow-Headers" "Content-Type"
    "Access-Control-Allow-Methods" "OPTIONS"})
 
-(defn responsify
+(defn ^:private responsify
   [handler]
   (fn [request]
     (update-in (response (handler request))

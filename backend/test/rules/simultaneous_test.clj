@@ -55,7 +55,7 @@
 (defexpect update-only-when-both-play
   ; Doesn't updates game-state until both players played a card
   (expect
-    [[0 0] [0 0] [0 0] [0 0] [0 0]]
+    [[] [] [] [] []]
     (-> (create-game/new-game)
         (play-card/play-card 0 0 0)
-        (victory-conditions/get-points))))
+        :rows)))

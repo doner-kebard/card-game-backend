@@ -5,7 +5,7 @@
             [rules.victory-conditions :as victory-conditions]
             [configs.hand :as hand]))
 
-(defn play-a-game-helper
+(defn ^:private play-a-game-helper
   [strategy1 strategy2]
   (loop [game-state (create-game/new-game)
          iteration (count (hand/ini-hand))]

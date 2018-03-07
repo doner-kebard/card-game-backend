@@ -6,7 +6,7 @@
   "Translates a Player id into an internal player representation"
   [game-state id] (.indexOf (:player-ids game-state) id))
 
-(defn translate-player
+(defn ^:private translate-player
   "Translates an internal player to a human-readable representation"
   [game-state internal me]
   (cond
@@ -35,7 +35,7 @@
         (nil? (get-in game-state [:next-play (player-num game-state player-id)])) messages/play
         :else messages/wait))
 
-(defn uuid [] (str (java.util.UUID/randomUUID)))
+(defn ^:private uuid [] (str (java.util.UUID/randomUUID)))
 
 (defn create-player
   [game]
