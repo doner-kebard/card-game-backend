@@ -41,3 +41,17 @@
     (play-a-game-helper
       (fn [i] 0)
       (fn [i] (mod i 4)))))
+
+(defexpect scores
+  (expect
+    #(= [3 1] 
+        (:scores %))
+    (play-a-game-helper
+      (fn [i] (mod i 4))
+      (fn [i] 0)))
+  (expect
+    #(= [2 2]
+        (:scores %))
+    (play-a-game-helper
+      (fn [i] (mod i 2))
+      (fn [i] (+ (mod i 2) 2)))))

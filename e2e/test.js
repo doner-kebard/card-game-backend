@@ -62,7 +62,9 @@ test('Sample Game', async testCase => {
     
     await testCase
         .navigateTo(myGameURL.href)
-        .expect(gamePage.cardsInHand.exists).ok();
+        .expect(gamePage.cardsInHand.exists).ok()
+	.expect(gamePage.myScore.innerText).eql("0")
+	.expect(gamePage.opponentScore.innerText).eql("0");
     
     var cardsInPlay = 0;
     var maxHandNum = await gamePage.cardsInHand.count;
@@ -77,7 +79,7 @@ test('Sample Game', async testCase => {
         await gamePage.checkState(testCase, maxHandNum, cardsInPlay)
             .dragToElement(
                 gamePage.cardsInHand.nth(0),
-                gamePage.rows.nth(0))
+                gamePage.rows.nth(1))
         
         await gamePage.checkState(testCase, maxHandNum-1, cardsInPlay+1)
             .navigateTo(myGameURL.href);
@@ -87,6 +89,6 @@ test('Sample Game', async testCase => {
     }
 
     await testCase
-        .expect(gamePage.myScore.textContent).eql("0")
-        .expect(gamePage.opponentScore.textContent).eql("0")
+        .expect(gamePage.myScore.innerText).eql("1")
+        .expect(gamePage.opponentScore.innerText).eql("1")
 })
