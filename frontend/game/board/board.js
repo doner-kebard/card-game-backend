@@ -12,7 +12,7 @@ define(function (require) {
     return {
         buildRows: builder.buildRows,
         setBoard(boardState) {
-            var gameRows = document.querySelectorAll("game-row");
+            var gameRows = document.querySelectorAll(".game-row");
 
             gameRows.forEach(function (gameRow) {
                 helper.clearChildren(gameRow);
