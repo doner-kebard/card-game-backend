@@ -12,4 +12,5 @@ backend.hg/
 *.jar
 *.class
 
+e2e/node_modules
 frontend/node_modules

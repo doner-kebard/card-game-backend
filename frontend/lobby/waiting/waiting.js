@@ -13,7 +13,7 @@ function checkForOpponent() {
     req.onload = function () {
         const status = req.response["status"];
         
-        if (status !== "Waiting for an opponent") {
+        if (status !== config.messages["no-opp"]) {
             window.location.href = gameURL;
         }
     }
@@ -21,7 +21,7 @@ function checkForOpponent() {
     req.send();
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+function setup () {
     var joinLink = document.getElementById("joinTemplate")
         .content.querySelector('#join-link');
 
@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
     joinLink.appendChild(text);
     
     document.getElementById("waiting-for-opponent").appendChild(joinLink);
+    document.getElementById("game-status").innerHTML = config.messages["no-opp"];
 
     setInterval(checkForOpponent, 1000);
-});
+}
+
+onConfigLoad(setup);

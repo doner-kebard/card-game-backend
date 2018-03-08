@@ -9,6 +9,7 @@
                  [javax.servlet/servlet-api "2.5"]
                  [ring/ring-json "0.4.0"]
                  [com.taoensso/carmine "2.17.0"]
+                 [io.forward/yaml "1.0.7"]
                  [expectations "2.2.0-rc3" :scope "test"]]
   :plugins [[com.jakemccrary/lein-test-refresh "0.22.0"]
             [lein-expectations "0.0.8"]

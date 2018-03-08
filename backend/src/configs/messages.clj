@@ -1,11 +1,15 @@
-(ns configs.messages)
+(ns configs.messages
+  (:require [yaml.core :as yaml]))
 
-(def out-of-turn "Out of turn play")
+(def ^:private config-file
+  (yaml/from-file "/configs/config.yml" true))
 
-(def no-opp "Waiting for an opponent")
+(def out-of-turn (get-in config-file [:messages :out-of-turn]))
 
-(def play "Playing")
+(def no-opp (get-in config-file [:messages :no-opp]))
 
-(def wait "Waiting for opponent's play")
+(def play (get-in config-file [:messages :play]))
 
-(def too-many-players "Too many players")
+(def wait (get-in config-file [:messages :wait]))
+
+(def too-many-players (get-in config-file [:messages :too-many-players]))

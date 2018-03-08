@@ -7,6 +7,7 @@ services:
             - "8080:8080"
         volumes:
             - ./frontend:/usr/src/app
+            - ./configs:/usr/src/app/config/data
         depends_on:
             - backend
     backend:
@@ -16,19 +17,21 @@ services:
             - "3000:3000"
         volumes:
             - ./backend:/usr/src/app
+            - ./configs:/configs
             - lein-deps:/root/.m2
         links:
             - redis
     redis:
         image: redis:alpine
         restart: always
-    testcafe:
-        image: testcafe/testcafe
+    e2e:
+        build: e2e
         volumes:
             - ./e2e:/tests
+            - ./configs:/configs
         links:
             - frontend
             - backend
-        command: "-h"
+        command: "/bin/true"
 volumes:
     lein-deps:

@@ -3,6 +3,11 @@ import { Selector, ClientFunction } from 'testcafe';
 import MainPage from './main_page.js';
 import GamePage from './game_page.js';
 
+import yaml from 'js-yaml';
+import fs from 'fs';
+
+const config = yaml.safeLoad(fs.readFileSync('/configs/config.yml', 'utf8'));
+
 fixture("Game creation")
     .page("http://frontend:8080");
 
@@ -16,7 +21,7 @@ test('Create a game', async testCase => {
         .expect(gamePage.gameStatus.exists).notOk()
         .click(mainPage.createGame)
         .expect(gamePage.joinLink.exists).ok()
-        .expect(gamePage.gameStatus.innerText).eql("Waiting for opponent")
+        .expect(gamePage.gameStatus.innerText).eql(config.messages["no-opp"])
         .expect(mainPage.createGame.exists).notOk()
 });
 
