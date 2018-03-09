@@ -2,6 +2,8 @@
 
 define(function(require) {
     var helper = require('./helper.js');
+    var play = require('./play/hand.js');
+
     return {
         setHand(handState) {
             var hand = document.querySelector(".hand");
@@ -11,9 +13,12 @@ define(function(require) {
                 var newCard = helper.baseCard.cloneNode(true);
                 newCard.innerHTML = cardInHand["power"];
                 newCard.setAttribute("index", index);
+                newCard.addEventListener('click', function(){play.clickCard(newCard)});
 
                 hand.appendChild(newCard);
             });
+
+            helper.clickedCard = undefined;
         },
         dragCard(event) {
             event.dataTransfer.setData("handIndex", event.target.getAttribute("index"));

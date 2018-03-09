@@ -1,7 +1,7 @@
 "use strict";
 
 requirejs(['./board/board.js', './hand.js', './scores.js', './helper.js'], function (board, hand, scores, helper) {
-
+    
     function setState(state) {
         hand.setHand(state["hand"]);
         board.setBoard(state["rows"]);
@@ -32,5 +32,6 @@ requirejs(['./board/board.js', './hand.js', './scores.js', './helper.js'], funct
     // Make functions visible to the browser window so they can be seen from HTML events
     window.allowDrop = board.allowDrop;
     window.dropOnRow = board.dropOnRow;
+    window.clickOnRow = board.clickRow;
     window.dragCardFromHand = hand.dragCard;
 });
