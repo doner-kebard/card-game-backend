@@ -76,15 +76,19 @@ test('Sample Game', async testCase => {
 
     while (await gamePage.cardsInHand.exists) {
         await gamePage.checkState(testCase, maxHandNum, cardsInPlay)
+            .expect(gamePage.gameStatus.innerText).eql(config.messages["play"])
             .dragToElement(
                 gamePage.cardsInHand.nth(0),
                 gamePage.rows.nth(0))
+            .expect(gamePage.gameStatus.innerText).eql(config.messages["wait"])
             .navigateTo(opponentURL.href)
 
         await gamePage.checkState(testCase, maxHandNum, cardsInPlay)
+            .expect(gamePage.gameStatus.innerText).eql(config.messages["play"])
             .dragToElement(
                 gamePage.cardsInHand.nth(0),
                 gamePage.rows.nth(1))
+            .expect(gamePage.gameStatus.innerText).eql(config.messages["play"])
         
         await gamePage.checkState(testCase, maxHandNum-1, cardsInPlay+1)
             .navigateTo(myGameURL.href);

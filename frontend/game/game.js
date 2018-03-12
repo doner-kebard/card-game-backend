@@ -1,11 +1,13 @@
 "use strict";
 
 requirejs(['./board/board.js', './hand.js', './scores.js', './helper.js'], function (board, hand, scores, helper) {
-    
+
     function setState(state) {
         hand.setHand(state["hand"]);
         board.setBoard(state["rows"]);
         scores.setScores(state["scores"]);
+
+        helper.setStatus();
     }
 
     var lastnum = 0;

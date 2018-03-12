@@ -18,9 +18,14 @@ define(function(require) {
         },
         dropOnRow(event) {
             event.preventDefault();
+            const rownum = event.target.getAttribute("rownum");
+            const cardindex = event.dataTransfer.getData("handIndex");
 
-            play.playCard(event.target.getAttribute("rownum"),
-                          event.dataTransfer.getData("handIndex"));
+            helper.onGetStatus(function(status) {
+                if (status === config.messages["play"]) {
+                    play.playCard(rownum, cardindex);
+                }
+            })
         }
     }
 });

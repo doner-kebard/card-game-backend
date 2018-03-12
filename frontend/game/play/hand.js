@@ -12,13 +12,17 @@ define(function(require) {
 
     return {
         clickCard(card) {
-            clearBackground();
-            if (helper.clickedCard === card) {
-                helper.clickedCard = undefined;
-            } else {
-                helper.clickedCard = card;
-                card.style.background = "red";
-            }
+            helper.onGetStatus(function(status) {
+                if (status === config.messages["play"]) {
+                    clearBackground();
+                    if (helper.clickedCard === card) {
+                        helper.clickedCard = undefined;
+                    } else {
+                        helper.clickedCard = card;
+                        card.style.background = "red";
+                    }
+                }
+            })
         }  
     }
 });

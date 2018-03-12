@@ -14,6 +14,10 @@
                     TCG
                 </a>
             </h1>
+            <div id="status-row" class="row">
+                <div id="game-status" class="col-12">
+                </div>
+            </div>
             <div id="game">
                 <div id="board" class="row">
                     <div id="my-score" class="col text-right">0</div>
@@ -62,6 +66,8 @@
         </template>
         
         <!-- this makes require.js start off by loading game.js -->
+        <script src="/config/js-yaml.min.js"></script>
+        <script src="/config/config.js"></script>
         <script data-main="game.js" src="require.js"></script>
     </body>
 </html>
