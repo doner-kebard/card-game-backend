@@ -1,6 +1,6 @@
 (ns test-helper
-  (:require [configs.hand :as hand]))
+  (:require [configs.hands :as hands]))
 
-(defn ini-hand-power
+(defn default-hand-power
   [x]
-  (get-in (hand/ini-hand) [x :power]))
+  (get-in hands/default-hand [x :power]))

@@ -3,12 +3,12 @@
             [rules.create-game :as create-game]
             [rules.play-card :as play-card]
             [rules.victory-conditions :as victory-conditions]
-            [configs.hand :as hand]))
+            [configs.hands :as hands]))
 
 (defn ^:private play-a-game-helper
   [strategy1 strategy2]
   (loop [game-state (create-game/new-game)
-         iteration (count (hand/ini-hand))]
+         iteration (count hands/default-hand)]
       (if (= 0 iteration)
         game-state
         (recur

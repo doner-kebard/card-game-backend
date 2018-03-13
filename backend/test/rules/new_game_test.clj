@@ -28,3 +28,12 @@
     [[] [] [] [] []]
     (-> (create-game/new-game)
         :rows)))
+
+(defexpect configs.game
+  ; Game can start with different configs
+  (expect
+    [{:power 0 :attribute 9001}{:power 1}]
+    (-> (create-game/new-game {:hand [{:power 0 :attribute 9001}
+                                      {:power 1}]})
+        (get-in [:players 0 :hand]))))
+

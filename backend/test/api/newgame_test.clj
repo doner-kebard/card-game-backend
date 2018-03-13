@@ -1,7 +1,7 @@
 (ns api.newgame-test
   (:require [expectations.clojure.test :refer :all]
             [api.base :as api]
-            [configs.hand :as hand]
+            [configs.hands :as hands]
             [configs.messages :as messages]))
 
 (defexpect sanity-check
@@ -12,7 +12,7 @@
     #(contains? % :player-id)
     (api/create-game))
   (expect
-    #(= (count (:hand %)) (count (hand/ini-hand)))
+    #(= (count (:hand %)) (count hands/default-hand))
     (api/create-game))
   (expect
     #(= 5 (count (:rows %)))

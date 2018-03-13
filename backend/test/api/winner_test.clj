@@ -1,7 +1,7 @@
 (ns api.winner-test
   (:require [expectations.clojure.test :refer :all]
             [api.base :as api]
-            [configs.hand :as hand]))
+            [configs.hands :as hands]))
 
 (defn ^:private play-a-game-helper
   [strategy1 strategy2]
@@ -10,7 +10,7 @@
         player-id (:player-id game)
         opponent-id (:player-id (api/add-player game-id))]
     (loop [game-state game
-           iteration (count (hand/ini-hand))]
+           iteration (count hands/default-hand)]
         (if (= 0 iteration)
           (api/get-game game-id player-id)
           (recur

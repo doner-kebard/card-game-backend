@@ -1,8 +1,7 @@
-(ns configs.hand)
+(ns configs.hands)
 
-(defn ini-hand
-  "Generates de initial hand (can't be empty)"
-  []
+(def default-hand
+  "Default hand (can't be empty)"
   [{:power 5}
    {:power 6}
    {:power 7}
