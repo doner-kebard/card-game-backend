@@ -20,8 +20,10 @@ jobs:
           script:
               - eval "$(ssh-agent -s)" #start the ssh agent
               - chmod 600 .travis/deploy_key.pem
+              - cp .travis/known_hosts ~/.ssh/
               - ssh-add .travis/deploy_key.pem
               - git remote add deploy kenan@rhoton.es:~/Projects/card-game
+              - git checkout master
               - git push deploy
 
 
