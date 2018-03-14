@@ -1,5 +1,11 @@
 "use strict";
 
+var backend = ""
+
+onConfigLoad(function() {
+    backend = config.servers["backend"]
+})
+
 requirejs(['./board/board.js', './hand.js', './scores.js', './helper.js'], function (board, hand, scores, helper) {
 
     function setState(state) {
@@ -13,7 +19,7 @@ requirejs(['./board/board.js', './hand.js', './scores.js', './helper.js'], funct
     var lastnum = 0;
     function updateGame() {
         var req = new XMLHttpRequest();
-        req.open("GET", `http://backend:3000/games/${helper.gameID}/player/${helper.playerID}`);
+        req.open("GET", `http://${backend}/games/${helper.gameID}/player/${helper.playerID}`);
         req.responseType = "json";
 
         req.onload = function () {

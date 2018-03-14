@@ -6,8 +6,9 @@ const playerID = params.get("playerID");
 const gameURL = `/game/?gameID=${gameID}&playerID=${playerID}`;
 
 function checkForOpponent() {
+    var backend = config.servers["backend"]
     var req = new XMLHttpRequest();
-    req.open("GET", `http://backend:3000/games/${gameID}/player/${playerID}`);
+    req.open("GET", `http://${backend}/games/${gameID}/player/${playerID}`);
     req.responseType = "json";
     
     req.onload = function () {
@@ -22,10 +23,11 @@ function checkForOpponent() {
 }
 
 function setup () {
+    var frontend = config.servers["frontend"]
     var joinLink = document.getElementById("joinTemplate")
         .content.querySelector('#join-link');
 
-    var text = document.createTextNode(`http://frontend:8080/lobby/join/?gameID=${gameID}`);
+    var text = document.createTextNode(`http://${frontend}/lobby/join/?gameID=${gameID}`);
     joinLink.appendChild(text);
     
     document.getElementById("waiting-for-opponent").appendChild(joinLink);

@@ -22,7 +22,7 @@ This will give you instant feedback through the tests.
 
 For End-to-End testing, use [testcafe](http://devexpress.github.io/testcafe/documentation/test-api/) to run the e2e tests:
 
-`docker-compose run e2e test`
+`docker-compose -f docker-compose.yml -f docker-compose.e2e.yml run e2e test`
 
 ## License
 

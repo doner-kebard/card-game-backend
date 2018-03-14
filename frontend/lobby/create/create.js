@@ -1,9 +1,10 @@
 "use strict";
 
-document.addEventListener('DOMContentLoaded', function() {
+onConfigLoad(function() {
 
+    var backend = config.servers["backend"]
     var req = new XMLHttpRequest();
-    req.open('POST', 'http://backend:3000/games');
+    req.open('POST', `http://${backend}/games`);
     req.responseType = "json";
 
     // Define the action to take when the response is loaded

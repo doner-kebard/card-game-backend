@@ -6,7 +6,7 @@ const playerID = params.get("playerID");
 
 function onGetStatus (action) {
     var req = new XMLHttpRequest();
-    req.open("GET", `http://backend:3000/games/${gameID}/player/${playerID}`);
+    req.open("GET", `http://${backend}/games/${gameID}/player/${playerID}`);
     req.responseType = "json";
 
     req.onload = function () {
@@ -27,12 +27,12 @@ define(function() {
         gameID: gameID,
         playerID: playerID,
         baseCard: document.getElementById("card-template")
-                .content.querySelector(".card"),
+                          .content.querySelector(".card"),
         onGetStatus: onGetStatus,
         setStatus() {
             onGetStatus(function(status) {
                 document.getElementById("game-status").innerHTML = status;
-           })
+            })
         }   
     }
 });

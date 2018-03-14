@@ -3,10 +3,11 @@
 let params = new URLSearchParams(document.location.search.substring(1));
 const gameID = params.get("gameID");
 
-document.addEventListener('DOMContentLoaded', function() {
+onConfigLoad(function() {
 
+    var backend = config.servers["backend"]
     var req = new XMLHttpRequest();
-    req.open('POST', 'http://backend:3000/games/' + gameID);
+    req.open('POST', `http://${backend}/games/` + gameID);
     req.responseType = "json";
 
     // Define the action to take when the response is loaded

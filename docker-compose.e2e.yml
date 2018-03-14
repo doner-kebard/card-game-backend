@@ -1,0 +1,11 @@
+version: '2'
+services:
+    e2e:
+        build: e2e
+        volumes:
+            - ./e2e:/tests
+            - ./configs:/configs
+        links:
+            - frontend
+            - backend
+        command: "/bin/true"

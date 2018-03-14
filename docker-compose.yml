@@ -1,10 +1,10 @@
-version: '3'
+version: '2'
 services:
     frontend:
         build: frontend
         restart: always
         ports:
-            - "8080:8080"
+            - "8880:8080"
         volumes:
             - ./frontend:/usr/src/app
             - ./configs:/usr/src/app/config/data
@@ -22,16 +22,7 @@ services:
         links:
             - redis
     redis:
-        image: redis:alpine
+        image: redis
         restart: always
-    e2e:
-        build: e2e
-        volumes:
-            - ./e2e:/tests
-            - ./configs:/configs
-        links:
-            - frontend
-            - backend
-        command: "/bin/true"
 volumes:
     lein-deps:

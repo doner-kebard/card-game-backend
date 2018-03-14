@@ -1,12 +1,29 @@
 sudo: required
-services:
-  - docker
 
-script:
-  - docker-compose build
-  - docker-compose run backend lein test
-  - docker-compose run e2e test-delayed
+before_install:
+    - openssl aes-256-cbc -K $encrypted_cce65efc8ba2_key -iv $encrypted_cce65efc8ba2_iv -in .travis/deploy_key.pem.enc -out .travis/deploy_key.pem -d
+
+services:
+    - docker
+
+jobs:
+    include:
+        - stage: Unit Tests
+          script:
+              - docker-compose run backend lein test
+        - stage: End-to-End Tests
+          script:
+              - docker-compose up -d
+              - docker-compose -f docker-compose.yml -f docker-compose.e2e.yml run e2e test-delayed
+        - stage: Deploy
+          if: branch = master AND type != pull_request
+          script:
+              - eval "$(ssh-agent -s)" #start the ssh agent
+              - chmod 600 .travis/deploy_key.pem
+              - ssh-add .travis/deploy_key.pem
+              - git remote add deploy kenan@rhoton.es:~/Projects/card-game
+              - git push deploy
+
 
 notifications:
-  email:
-    false
+    email: false
