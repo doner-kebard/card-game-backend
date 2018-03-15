@@ -7,7 +7,7 @@
     (= 0 (count (get-in game-state [:players 0 :hand])))
     (= 0 (count (get-in game-state [:players 1 :hand])))))
 
-(defn ^:private points-in-row
+(defn points-in-row
   "Tells us how many points the data of a row has for a certain player"
   [row-data player]
   (reduce

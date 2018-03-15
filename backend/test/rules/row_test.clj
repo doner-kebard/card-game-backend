@@ -2,7 +2,8 @@
   (:require [expectations.clojure.test :refer :all]
             [rules.create-game :as create-game]
             [rules.play-card :as play-card]
-            [test-helper :as helper]))
+            [test-hand :as hand]
+            [autoplay :as autoplay]))
 
 (defexpect initial-state
   ; Game rows are empty initially
@@ -14,14 +15,14 @@
 (defexpect card-playing
   ; Playing a card to a row makes the card appear on that row only
   (expect
-    [nil nil nil (helper/default-hand-power 1) nil]
+    [nil nil nil (hand/power-of-nth 1) nil]
     (map #(:power (get % 0))
          (-> (create-game/new-game)
              (play-card/play-card 1 1 3)
              (play-card/play-card 0 1 3)
              :rows)))
   (expect
-    [(helper/default-hand-power 0) (helper/default-hand-power 1) nil nil nil]
+    [(hand/power-of-nth 0) (hand/power-of-nth 1) nil nil nil]
     (map #(:power (get % 0))
          (-> (create-game/new-game)
              (play-card/play-card 1 1 1)
@@ -30,10 +31,10 @@
 
   ; Playing a card many times makes it appear that many times in the row
   (expect
-    [(helper/default-hand-power 1)
-     (helper/default-hand-power 2)
-     (helper/default-hand-power 3)
-     (helper/default-hand-power 4)]
+    [(hand/power-of-nth 1)
+     (hand/power-of-nth 2)
+     (hand/power-of-nth 3)
+     (hand/power-of-nth 4)]
     (map :power 
          (-> (create-game/new-game)
              (play-card/play-card 1 1 3)

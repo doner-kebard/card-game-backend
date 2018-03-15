@@ -2,8 +2,8 @@
   (:require [expectations.clojure.test :refer :all]
             [rules.create-game :as create-game]
             [rules.play-card :as play-card]
-            [rules.victory-conditions :as victory-conditions]
-            [test-helper :as helper]))
+            [rules.victory-conditions :as victory]
+            [autoplay :as autoplay]))
 
 (defexpect basic.game
   ; Game can be created

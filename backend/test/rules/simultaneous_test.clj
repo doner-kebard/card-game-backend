@@ -2,7 +2,7 @@
   (:require [expectations.clojure.test :refer :all]
             [rules.create-game :as create-game]
             [rules.play-card :as play-card]
-            [rules.victory-conditions :as victory-conditions]
+            [rules.victory-conditions :as victory]
             [configs.messages :as messages]))
 
 (defexpect out-of-turn

@@ -26,18 +26,26 @@
                     <div id="rows" class="col-12">
                         <div id="row-card-title" class="row">
                             <div id="my-game-row-title"
-                                 class="col-6 text-center">
+                                 class="col-5 text-center">
                                 <h2>My cards</h2>
                             </div>
+                            <div id="scores-title"
+                                 class="col-2 text-center">
+                                 <h2>Scores</h2>
+                            </div>
                             <div id="opponent-game-row-title"
-                                 class="col-6 text-center">
+                                 class="col-5 text-center">
                                 <h2>Opponent's cards</h2>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6" id="my-rows">
+                            <div class="col-5" id="my-rows">
                             </div>
-                            <div class="col-6" id="opp-rows">
+                            <div class="col-1 text-center" id="my-scores">
+                            </div>
+                            <div class="col-1 text-center" id="opp-scores">
+                            </div>
+                            <div class="col-5" id="opp-rows">
                             </div>
                         </div>
                     </div>
@@ -55,6 +63,12 @@
                  ondrop="dropOnRow(event)"
                  onclick="clickOnRow(event)"
                  style="height: 50px">
+            </div>
+        </template>
+
+        <template id="score-template">
+            <div class="scores-row row text-center"
+                style="height: 50px">
             </div>
         </template>
         
