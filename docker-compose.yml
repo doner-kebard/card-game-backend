@@ -4,10 +4,10 @@ services:
         build: frontend
         restart: always
         ports:
-            - "8880:8080"
+            - "8880:8880"
         volumes:
             - ./frontend:/usr/src/app
-            - ./configs:/usr/src/app/config/data
+            - ./configs:/usr/src/app/src/config/data
         depends_on:
             - backend
     backend:

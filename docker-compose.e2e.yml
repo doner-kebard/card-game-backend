@@ -1,9 +1,9 @@
 version: '2'
 services:
     e2e:
-        build: e2e
+        build: e2e_tests
         volumes:
-            - ./e2e:/tests
+            - ./e2e_tests:/tests
             - ./configs:/configs
         links:
             - frontend

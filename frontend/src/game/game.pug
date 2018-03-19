@@ -1,0 +1,39 @@
+extends ../tcg
+
+block view
+    #status-row.row
+        #game-status.col-12
+    #game
+        #board.row
+            #my-score.col.text-right 0
+            #opponent-score.col.text-left 0
+            .w-100
+            #rows.col-12
+                #row-card-title.row
+                    #my-game-row-title.col-5.text-center
+                        h2 My cards
+                    #scores-title.col-2.text-center
+                        h2 Scores
+                    #opponent-game-row-title.col-6.text-center
+                        h2 Opponent's cards
+                .row
+                    #my-rows.col-5
+                    #my-scores.col-1.text-center
+                    #opp-scores.col-1.text-center
+                    #opp-rows.col-5
+            .col-12
+                .hand.row
+    template#row-template
+        .game-row.row.text-center.justify-content-end.border(
+            ondragover!="allowDrop(event)"
+            ondrop!="dropOnRow(event)"
+            onclick!="clickOnRow(event)"
+            style="height: 50px"
+            )
+    template#score-template
+        .scores-row.row.text-center(style="height: 50px")
+    template#card-template
+        .card.col-1(
+            draggable="true"
+            ondragstart!="dragCardFromHand(event)"
+        )

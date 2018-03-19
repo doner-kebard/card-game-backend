@@ -12,5 +12,8 @@ backend.hg/
 *.jar
 *.class
 
-e2e/node_modules
+e2e_tests/node_modules
+e2e_tests/screenshots
 frontend/node_modules
+frontend/yarn-error.log
+frontend/dist
