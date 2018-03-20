@@ -3,6 +3,7 @@
             [rules.create-game :as create-game]
             [rules.play-card :as play-card]
             [rules.victory-conditions :as victory]
+            [configs.hands :as hands]
             [autoplay :as autoplay]))
 
 (defexpect basic.game
@@ -25,9 +26,24 @@
 
   ; Rows begin empty
   (expect
-    [[] [] [] [] []]
+    (repeat 5 [])
     (-> (create-game/new-game)
         :rows)))
+
+(defexpect starting-hand
+  ; Players start with expected hand
+  (expect
+    hands/default-hand
+    (-> (create-game/new-game)
+        :players
+        first
+        :hand))
+  (expect
+    hands/default-hand
+    (-> (create-game/new-game)
+        :players
+        second
+        :hand)))
 
 (defexpect configs.game
   ; Game can start with different configs
@@ -37,3 +53,9 @@
                                       {:power 1}]})
         (get-in [:players 0 :hand]))))
 
+(defexpect next-play
+  ; Game starts with a nil next-play
+  (expect
+    [nil nil]
+    (-> (create-game/new-game)
+        :next-play)))
