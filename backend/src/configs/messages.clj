@@ -2,7 +2,7 @@
   (:require [yaml.core :as yaml]))
 
 (def ^:private config-file
-  (yaml/from-file "/configs/config.yml" true))
+  (yaml/from-file "../configs/config.yml" true))
 
 (def out-of-turn (get-in config-file [:messages :out-of-turn]))
 

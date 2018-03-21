@@ -1,67 +1,41 @@
 (ns api.play-test
   (:require [expectations.clojure.test :refer :all]
+            [clojure.test :as ctest]
+            [mocking :as mocking]
             [api.base :as api]
             [configs.hands :as hands]))
 
+(ctest/use-fixtures :each mocking/mock-persistence)
+
 (defexpect playing-cards
-  ; Cards in hand have power
-  (expect
-    #(empty? (filter (fn [e] (nil? (:power e))) %))
-    (-> (api/create-game)
-        :hand))
+  (let [game (api/create-game)
+        game-id (:game-id game)
+        player-id (:player-id game)
+        opponent (api/add-player game-id)
+        opponent-id (:player-id opponent)]
+    ; Cards in hand have power
+    (expect
+      #(empty? (filter (fn [e] (nil? (:power e))) %))
+      (:hand game))
 
-  ; Cards are removed from hands upon being played
-  (expect
-    #(= (count (:hand %)) (dec (count hands/default-hand)))
-    (let [game (api/create-game)
-          game-id (:game-id game)
-          player-id (:player-id game)
-          opponent-id (:player-id (api/add-player game-id))]
+    ; Card is not removed if opponent has not yet played
+    (expect
+      #(= (count (:hand %)) (count hands/default-hand))
       (do
-        (api/play-card-as-player game-id opponent-id 0 0)
-        (api/play-card-as-player game-id player-id 0 0))))
-
-  ; Card is not removed if opponent has not yet played
-  (expect
-    #(= (count (:hand %)) (count hands/default-hand))
-    (let [game (api/create-game)
-          game-id (:game-id game)
-          player-id (:player-id game)]
-      (do
-        (api/add-player game-id)
         (api/play-card-as-player game-id player-id 0 0)
-        (api/get-game game-id player-id))))
+        (api/get-game game-id player-id)))
 
-  ; Fetching the game as a player returns one less card after a play
-  (expect
-    #(= (count (:hand %)) (dec (count hands/default-hand)))
-    (let [game (api/create-game)
-          game-id (:game-id game)
-          player-id (:player-id game)
-          opponent-id (:player-id (api/add-player game-id))]
-      (do
-        (api/play-card-as-player game-id opponent-id 0 0)
-        (api/play-card-as-player game-id player-id 0 0)
-        (api/get-game game-id player-id ))))
+    ; Cards are removed from hands upon both having played
+    (expect
+      #(= (count (:hand %)) (dec (count hands/default-hand)))
+      (api/play-card-as-player game-id opponent-id 0 1))
 
-  ; card played is owned by self
-  (expect
-    #(= :me (get-in % [:rows 0 0 :owner]))
-    (let [game (api/create-game)
-          game-id (:game-id game)
-          player-id (:player-id game)
-          opponent-id (:player-id (api/add-player game-id))]
-      (do
-        (api/play-card-as-player game-id opponent-id 1 1)
-        (api/play-card-as-player game-id player-id 0 0))))
+    ; card played is owned by self
+    (expect
+      #(= :me (get-in % [:rows 0 0 :owner]))
+      (api/get-game game-id player-id))
 
-  ; opponent's card is owned by him
-  (expect
-    #(= :opponent (get-in % [:rows 1 0 :owner]))
-    (let [game (api/create-game)
-          game-id (:game-id game)
-          player-id (:player-id game)
-          opponent-id (:player-id (api/add-player game-id))]
-      (do
-        (api/play-card-as-player game-id opponent-id 1 1)
-        (api/play-card-as-player game-id player-id 0 0)))))
+    ; opponent's card is owned by him
+    (expect
+      #(= :opponent (get-in % [:rows 1 0 :owner]))
+      (api/get-game game-id player-id))))

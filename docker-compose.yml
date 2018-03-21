@@ -17,7 +17,7 @@ services:
             - "3000:3000"
         volumes:
             - ./backend:/usr/src/app
-            - ./configs:/configs
+            - ./configs:/usr/src/configs
             - lein-deps:/root/.m2
         links:
             - redis
