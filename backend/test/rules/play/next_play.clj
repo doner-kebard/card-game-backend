@@ -5,13 +5,13 @@
 (defexpect next-play
   ; Stores next-play
   (expect
-    {:player 0 :index 0 :row 0}
+    {:player 0 :index 0 :row 0 :target nil}
     (-> {:players [{:hand [{} {}]} {:hand [{} {}]}]
          :rows [[]]}
         (play-card/play-card 0 0 0)
         (get-in [:next-play 0])))
   (expect
-    {:player 1 :index 2 :row 3}
+    {:player 1 :index 2 :row 3 :target nil}
     (-> {:players [{:hand [{} {}]} {:hand [{} {} {}]}]
          :rows [[] [] []]}
         (play-card/play-card 0 0 0)

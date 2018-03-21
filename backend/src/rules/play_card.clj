@@ -44,12 +44,12 @@
 
 (defn play-card
   "Takes a playing of a card from hand onto a game row and makes it wait until both players had played"
-  [game-state player index row]
+  [game-state player index row & target]
   ; Uses stored :next-play to know who is supposed to play
   (if (nil? (get-in game-state [:next-play player]))
       (if (every? nil? (:next-play game-state))
-          (assoc-in game-state [:next-play player] {:player player :index index :row row})
+          (assoc-in game-state [:next-play player] {:player player :index index :row row :target (first target)})
           (-> game-state
-              (assoc-in [:next-play player] {:player player :index index :row row})
+              (assoc-in [:next-play player] {:player player :index index :row row :target (first target)})
               (apply-all-plays)))
       {:error messages/out-of-turn}))

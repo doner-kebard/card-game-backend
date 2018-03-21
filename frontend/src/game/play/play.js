@@ -7,10 +7,11 @@ const config = require('config/config.js');
 const backend = config.servers["backend"];
 
 module.exports = {
-    playCard(rownum, cardindex) {
+    playCard(rownum, cardindex, target) {
         const playData = {
             index: cardindex,
             row: rownum,
+            target: target,
         };
         document.querySelector('.card[index="'+cardindex+'"]').style.background = "yellow";
 
