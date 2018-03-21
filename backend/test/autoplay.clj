@@ -19,15 +19,3 @@
               (api/play-card-as-player game-id player-id 0 (strategy1 iteration))
               (api/play-card-as-player game-id opponent-id 0 (strategy2 iteration)))
             (dec iteration))))))
-
-(defn as-rules
-  [strategy1 strategy2]
-  (loop [game-state (create-game/new-game)
-         iteration (count hands/default-hand)]
-      (if (= 0 iteration)
-        game-state
-        (recur
-          (-> game-state
-              (play-card/play-card 0 0 (strategy1 iteration))
-              (play-card/play-card 1 0 (strategy2 iteration)))
-          (dec iteration)))))
