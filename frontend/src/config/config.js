@@ -1,1 +1,1 @@
-module.exports = require('./data/config.yml')
+module.exports = require('./data/config.yml');

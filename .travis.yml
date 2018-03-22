@@ -8,6 +8,7 @@ jobs:
         - stage: Unit Tests
           script:
               - docker-compose run backend lein test
+              - docker-compose run frontend yarn test
         - stage: End-to-End Tests
           script:
               - docker-compose run frontend yarn install # Prepare modules
