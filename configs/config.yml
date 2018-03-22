@@ -5,6 +5,3 @@ messages:
     play: "Playing"
     wait: "Waiting for opponent's play"
     too-many-players: "Too many players"
-servers:
-    frontend: "frontend:8880"
-    backend: "backend:3000"

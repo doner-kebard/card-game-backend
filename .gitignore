@@ -17,3 +17,5 @@ e2e_tests/screenshots
 frontend/node_modules
 frontend/yarn-error.log
 frontend/dist
+
+configs/servers.yml
