@@ -8,21 +8,21 @@
     (= 0 (count (get-in game-state [:players 1 :hand])))))
 
 (defn points-in-row
-  "Tells us how many points the data of a row has for a certain player"
-  [row-data player]
+  "Tells us how many points the cards of a row has for a certain player"
+  [row-cards player]
   (reduce
     #(if (= (:owner %2) player)
        (+ %1 (:power %2))
        %1)
     0
-    row-data))
+    row-cards))
 
 (defn ^:private player-wins-row?
   "Tells us if a player is winning a row from its data"
   [row-data player]
   (let [opponent (mod (inc player) 2)]
-    (> (points-in-row row-data player)
-       (points-in-row row-data opponent))))
+    (> (points-in-row (:cards row-data) player)
+       (points-in-row (:cards row-data) opponent))))
 
 (defn get-won-rows
   "Tells us how many rows a player is winning"

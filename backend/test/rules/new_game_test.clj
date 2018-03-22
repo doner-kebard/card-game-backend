@@ -4,6 +4,7 @@
             [rules.play-card :as play-card]
             [rules.victory-conditions :as victory]
             [configs.hands :as hands]
+            [configs.rows :as rows]
             [autoplay :as autoplay]))
 
 (defexpect basic.game
@@ -24,9 +25,9 @@
         (get-in [:players 0 :hand])
         (empty?)))
 
-  ; Rows begin empty
+  ; Rows begin empty and with limit
   (expect
-    (repeat 5 [])
+    (repeat 5 {:limit rows/default-limit :cards []})
     (-> (create-game/new-game)
         :rows)))
 

@@ -8,13 +8,19 @@
   [game-state player-id]
   (get-in game-state [:players (conversions/player-num game-state player-id) :hand]))
 
+(defn get-row-cards
+  "Returns the cards as seen by the player"
+  [row-cards game-state player-id]
+  (mapv (fn [card]
+          (assoc card :owner
+                 (conversions/translate-player game-state (:owner card) player-id)))
+        row-cards))
+
 (defn get-rows
   "Return the rows as seen by the player"
   [game-state player-id]
-  (mapv #(mapv (fn [card]
-                 (assoc card :owner
-                   (conversions/translate-player game-state (:owner card) player-id)))
-               %)
+  (mapv (fn [row]
+          (get-row-cards (:cards row) game-state player-id))
         (:rows game-state)))
 
 (defn get-rows-power
@@ -28,8 +34,8 @@
         rows-power
         (recur
           (conj rows-power
-                [(victory/points-in-row (first rows) player)
-                 (victory/points-in-row (first rows) opponent)])
+                [(victory/points-in-row (:cards (first rows)) player)
+                 (victory/points-in-row (:cards (first rows)) opponent)])
           (rest rows))))))
 
 (defn get-scores

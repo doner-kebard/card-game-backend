@@ -13,11 +13,11 @@
   (player-view/get-game-as-player (persistence/fetch-game game-id) player-id))
 
 (defn play-card-as-player
-  [game-id player index row & target]
+  [game-id player index row-id & target]
   (let [game-state (persistence/fetch-game game-id)]
       (if (= (:status (get-game game-id player)) messages/play)
           (do
-            (persistence/save-game (play-card/play-card game-state (conversions/player-num game-state player) index row (first target)))
+            (persistence/save-game (play-card/play-card game-state (conversions/player-num game-state player) index row-id (first target)))
             (get-game game-id player))
           {:error messages/out-of-turn})))
 

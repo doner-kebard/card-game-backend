@@ -5,20 +5,28 @@
 (defexpect row-winner
   (expect
     0
-    (victory/get-won-rows {:rows [[] [] [] [] []]} 0))
+    (victory/get-won-rows {:rows [{:cards []} 
+                                  {:cards []} 
+                                  {:cards []} 
+                                  {:cards []}
+                                  {:cards []}]} 0))
 
   (expect
     1
-    (victory/get-won-rows {:rows [[{:power 1 :owner 5}] [] [] [] []]} 5))
+    (victory/get-won-rows {:rows [{:cards [{:power 1 :owner 5}]}
+                                  {:cards []} 
+                                  {:cards []}
+                                  {:cards []}
+                                  {:cards []}]} 5))
 
   (expect
     4
     (victory/get-won-rows
       {:rows [
-              [{:power 1 :owner 0}]
-              [{:power 200 :owner 1} {:power 9001 :owner 0}]
-              [{:power -1 :owner 0} {:power 5 :owner 1} {:power 9 :owner 0}]
-              [{:power 3 :owner 1} {:power 1 :owner 0}
-               {:power 2 :owner 0} {:power -1 :owner 1}]
+              {:cards [{:power 1 :owner 0}]}
+              {:cards [{:power 200 :owner 1} {:power 9001 :owner 0}]}
+              {:cards [{:power -1 :owner 0} {:power 5 :owner 1} {:power 9 :owner 0}]}
+              {:cards [{:power 3 :owner 1} {:power 1 :owner 0}
+                       {:power 2 :owner 0} {:power -1 :owner 1}]}
               []]}
       0)))

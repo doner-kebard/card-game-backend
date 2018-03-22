@@ -3,8 +3,8 @@
 
 (defn ^:private add-card-to-row
   "Adds a card onto the specified row"
-  [game-state card row]
-  (update-in game-state [:rows row] #(conj % card)))
+  [game-state card row-id]
+  (update-in game-state [:rows row-id :cards] #(conj % card)))
 
 (defn ^:private modify-hand
   "Modifies a player's hand according to some function"
@@ -28,10 +28,10 @@
   [game-state play]
     (let [player (:player play)
           index (:index play)
-          row (:row play)
+          row-id (:row play)
           card (get-in game-state [:players player :hand index])]
       (-> game-state
-          (add-card-to-row (assoc card :owner player) row)
+          (add-card-to-row (assoc card :owner player) row-id)
           (remove-card player index))))
 
 (defn ^:private apply-all-plays
@@ -44,12 +44,12 @@
 
 (defn play-card
   "Takes a playing of a card from hand onto a game row and makes it wait until both players had played"
-  [game-state player index row & target]
+  [game-state player index row-id & target]
   ; Uses stored :next-play to know who is supposed to play
   (if (nil? (get-in game-state [:next-play player]))
       (if (every? nil? (:next-play game-state))
-          (assoc-in game-state [:next-play player] {:player player :index index :row row :target (first target)})
+          (assoc-in game-state [:next-play player] {:player player :index index :row row-id :target (first target)})
           (-> game-state
-              (assoc-in [:next-play player] {:player player :index index :row row :target (first target)})
+              (assoc-in [:next-play player] {:player player :index index :row row-id :target (first target)})
               (apply-all-plays)))
       {:error messages/out-of-turn}))

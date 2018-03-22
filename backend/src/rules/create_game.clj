@@ -1,5 +1,6 @@
 (ns rules.create-game
-  (:require [configs.hands :as hands]))
+  (:require [configs.hands :as hands]
+            [configs.rows :as rows]))
 
 (defn ^:private new-player
   "Creates a new player object"
@@ -17,6 +18,9 @@
     :players (vec (repeat 2 (new-player (if (contains? ini-config :hand)
                                             (:hand ini-config)
                                             hands/default-hand))))
-    :rows (vec (repeat 5 []))
+    :rows (vec (repeat 5 {:limit (if (contains? ini-config :limit)
+                                     (:limit ini-config)
+                                     rows/default-limit)
+                          :cards []}))
     :next-play [nil nil]
     }))

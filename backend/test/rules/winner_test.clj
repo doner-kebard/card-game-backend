@@ -37,20 +37,20 @@
     0
     (victory/winner
       {:players [{:hand []} {:hand[]}]
-       :rows [[{:power 1 :owner 0}]]}))
+       :rows [{:cards [{:power 1 :owner 0}]}]}))
   (expect
     1
     (victory/winner
       {:players [{:hand []} {:hand[]}]
        :rows [
-              [{:power 20 :owner 0}]
-              [{:power 1 :owner 1}]
-              [{:power 5 :owner 0} {:power 6 :owner 1}]]}))
+              {:cards [{:power 20 :owner 0}]}
+              {:cards [{:power 1 :owner 1}]}
+              {:cards [{:power 5 :owner 0} {:power 6 :owner 1}]}]}))
   (expect
     2
     (victory/winner
       {:players [{:hand []} {:hand[]}]
        :rows [
-              [{:power 20 :owner 0}]
-              [{:power 1 :owner 1}]
-              [{:power 5 :owner 0} {:power 5 :owner 1}]]})))
+              {:cards [{:power 20 :owner 0}]}
+              {:cards [{:power 1 :owner 1}]}
+              {:cards [{:power 5 :owner 0} {:power 5 :owner 1}]}]})))
