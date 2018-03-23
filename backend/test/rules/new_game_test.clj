@@ -27,7 +27,11 @@
 
   ; Rows begin empty and with limit
   (expect
-    (repeat 5 {:limit rows/default-limit :cards []})
+    [{:limit (nth rows/default-limits 0) :cards []}
+     {:limit (nth rows/default-limits 1) :cards []}
+     {:limit (nth rows/default-limits 2) :cards []}
+     {:limit (nth rows/default-limits 3) :cards []}
+     {:limit (nth rows/default-limits 4) :cards []}]
     (-> (create-game/new-game)
         :rows)))
 
@@ -52,7 +56,11 @@
     [{:power 0 :attribute 9001}{:power 1}]
     (-> (create-game/new-game {:hand [{:power 0 :attribute 9001}
                                       {:power 1}]})
-        (get-in [:players 0 :hand]))))
+        (get-in [:players 0 :hand])))
+  (expect
+    [{:limit 0 :cards []} {:limit 2 :cards []} {:limit 4 :cards []} {:limit 6 :cards []} {:limit 8 :cards []}]
+    (-> (create-game/new-game {:limits [0 2 4 6 8]})
+        :rows)))
 
 (defexpect next-play
   ; Game starts with a nil next-play

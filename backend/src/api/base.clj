@@ -23,7 +23,8 @@
 
 (defn add-player
   "Adds a player to a game"
-  [game-id]
+  ([game-id] (add-player game-id {}))
+  ([game-id ini-config]
   (let [saved-game (persistence/fetch-game game-id)
         players-connected (count (:player-ids saved-game))]
     (if (> players-connected 1)
@@ -32,9 +33,10 @@
                    (generators/player-uuid
                      (or
                        saved-game
-                       (assoc (create-game/new-game) :game-id game-id))))]
-        (get-game game-id (last (:player-ids game-state)))))))
+                       (assoc (create-game/new-game ini-config) :game-id game-id))))]
+        (get-game game-id (last (:player-ids game-state))))))))
 
 (defn create-game
   "Creates a new instance of a game"
-  [] (add-player (persistence/next-id)))
+  ([] (create-game {}))
+  ([ini-config] (add-player (persistence/next-id) ini-config)))

@@ -11,16 +11,13 @@
 
 (defn new-game
   "Creates a new game object"
-  ([]
-   (new-game {}))
+  ([] (new-game {}))
   ([ini-config]
    {
-    :players (vec (repeat 2 (new-player (if (contains? ini-config :hand)
-                                            (:hand ini-config)
-                                            hands/default-hand))))
-    :rows (vec (repeat 5 {:limit (if (contains? ini-config :limit)
-                                     (:limit ini-config)
-                                     rows/default-limit)
-                          :cards []}))
+    :players (vec (repeat 2 (new-player (:hand ini-config hands/default-hand))))
+    :rows (vec (reduce
+                 #(concat %1 [{:limit %2 :cards []}])
+                 []
+                 (:limits ini-config rows/default-limits)))
     :next-play [nil nil]
     }))

@@ -12,4 +12,6 @@
 
 (def wait (get-in config-file [:messages :wait]))
 
+(def row-limit (get-in config-file [:messages :row-limit]))
+
 (def too-many-players (get-in config-file [:messages :too-many-players]))

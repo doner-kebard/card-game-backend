@@ -4,4 +4,5 @@ messages:
     no-opp: "Waiting for an opponent"
     play: "Playing"
     wait: "Waiting for opponent's play"
+    row-limit: "Can't play on this row"
     too-many-players: "Too many players"

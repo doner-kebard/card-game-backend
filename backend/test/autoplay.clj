@@ -1,12 +1,13 @@
 (ns autoplay
   (:require [configs.hands :as hands]
+            [configs.rows :as rows]
             [api.base :as api]
             [rules.create-game :as create-game]
             [rules.play-card :as play-card]))
 
 (defn as-api
   [strategy1 strategy2]
-  (let [game (api/create-game)
+  (let [game (api/create-game {:limits rows/limitless})
         game-id (:game-id game)
         player-id (:player-id game)
         opponent-id (:player-id (api/add-player game-id))]
