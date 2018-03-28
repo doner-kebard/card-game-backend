@@ -21,22 +21,30 @@
             (get-game game-id player))
           {:error messages/out-of-turn})))
 
+(defn ^:private create-empty-game
+  "Creates a new instance of a game"
+  [ini-config]
+  (let [game-id (persistence/next-id)]
+    (persistence/save-game
+      (assoc (create-game/new-game ini-config)
+             :game-id game-id))
+    game-id))
+
 (defn add-player
   "Adds a player to a game"
-  ([game-id] (add-player game-id {}))
-  ([game-id ini-config]
+  [game-id]
   (let [saved-game (persistence/fetch-game game-id)
         players-connected (count (:player-ids saved-game))]
     (if (> players-connected 1)
       {:error messages/too-many-players}
       (let [game-state (persistence/save-game
-                   (generators/player-uuid
-                     (or
-                       saved-game
-                       (assoc (create-game/new-game ini-config) :game-id game-id))))]
-        (get-game game-id (last (:player-ids game-state))))))))
+                         (generators/player-uuid
+                           saved-game))]
+        (get-game game-id (last (:player-ids game-state)))))))
 
 (defn create-game
-  "Creates a new instance of a game"
+  "Creates a new instance of a game with a player"
   ([] (create-game {}))
-  ([ini-config] (add-player (persistence/next-id) ini-config)))
+  ([ini-config]
+   (-> (create-empty-game ini-config)
+       (add-player))))
