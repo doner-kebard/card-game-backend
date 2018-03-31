@@ -2,7 +2,7 @@
 
 
 (def default-limits
-  (vec (repeat 5 9000))) ; Set to 9000 before frontend can handle limits
+  (vec (repeat 5 4)))
 
 (def limitless
   (vec (repeat 5 9000)))

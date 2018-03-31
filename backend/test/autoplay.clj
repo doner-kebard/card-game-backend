@@ -7,12 +7,13 @@
 
 (defn as-api
   [strategy1 strategy2]
-  (let [game (api/create-game {:limits rows/limitless})
+  (let [game (api/create-game {:hand hands/simple-hand
+                               :limits rows/limitless})
         game-id (:game-id game)
         player-id (:player-id game)
         opponent-id (:player-id (api/add-player game-id))]
     (loop [game-state game
-           iteration (count hands/default-hand)]
+           iteration (count (:hand game))]
         (if (= 0 iteration)
           (api/get-game game-id player-id)
           (recur
