@@ -1,5 +1,6 @@
 (ns rules.play-card
-  (:require [configs.messages :as messages]))
+  (:require [configs.messages :as messages]
+            [rules.alter-card :as alter-card]))
 
 (defn ^:private add-card-to-row
   "Adds a card onto the specified row"
@@ -23,14 +24,26 @@
   [game-state player index]
   (modify-hand game-state player (item-remover index)))
 
-(defn ^:private apply-play-card
+(defn ^:private apply-play-card-abilities
+  "Applies the abilities of the played card"
+  [game-state play]
+  (if (nil? (:target play))
+    game-state
+    (alter-card/add-power
+      game-state 
+      (:target play)
+      (get-in game-state [:players (:player play)
+                          :hand (:index play)
+                          :add-power]))))
+
+(defn apply-play-card
   "Plays a card waiting to be played onto the board"
   [game-state play]
     (let [player-id (:player play)
           index (:index play)
           row-id (:row play)
           card (get-in game-state [:players player-id :hand index])]
-      (-> game-state
+      (-> (apply-play-card-abilities game-state play)
           (add-card-to-row (assoc card :owner player-id) row-id)
           (remove-card player-id index))))
 
@@ -61,13 +74,17 @@
   "Takes a playing of a card from hand onto a game row and makes it wait until both players had played"
   [game-state player-id index row-id & target]
   ; Uses stored :next-play to know who is supposed to play
-  (cond (some? (get-in game-state [:next-play player-id]))
-        {:error messages/out-of-turn}
-        (crowded-row? (get-in game-state [:rows row-id]) player-id)
-        {:error messages/row-limit}
-        :else
-        (if (every? nil? (:next-play game-state))
-            (assoc-in game-state [:next-play player-id] {:player player-id :index index :row row-id :target (first target)})
-            (-> game-state
-                (assoc-in [:next-play player-id] {:player player-id :index index :row row-id :target (first target)})
-                (apply-all-plays)))))
+  (cond 
+    (some? (get-in game-state [:next-play player-id]))
+    {:error messages/out-of-turn}
+
+    (crowded-row? (get-in game-state [:rows row-id]) player-id)
+    {:error messages/row-limit}
+
+    (every? nil? (:next-play game-state))
+    (assoc-in game-state [:next-play player-id] {:player player-id :index index :row row-id :target (first target)})
+
+    :else
+    (-> game-state
+        (assoc-in [:next-play player-id] {:player player-id :index index :row row-id :target (first target)})
+        (apply-all-plays))))

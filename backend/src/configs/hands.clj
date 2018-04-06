@@ -14,3 +14,7 @@
    {:power 6 :add-power -1}
    {:power 4 :add-power 2}
    {:power 4 :add-power -2}])
+
+(def default-hands
+  "Default hands"
+  [default-hand default-hand])

@@ -32,10 +32,10 @@
 
     ; card played is owned by self
     (expect
-      #(= :me (get-in % [:rows 0 0 :owner]))
+      #(= :me (get-in % [:rows 0 :cards 0 :owner]))
       (api/get-game game-id player-id))
 
     ; opponent's card is owned by him
     (expect
-      #(= :opponent (get-in % [:rows 1 0 :owner]))
+      #(= :opponent (get-in % [:rows 1 :cards 0 :owner]))
       (api/get-game game-id player-id))))

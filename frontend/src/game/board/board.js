@@ -19,7 +19,7 @@ module.exports = {
         })
 
         boardState.forEach(function (row, rownum) {
-            row.forEach(function (cardInRow) {
+            row["cards"].forEach(function (cardInRow) {
                 var newCard = builder.buildCard(templates.baseCard, cardInRow);
 
                 if (cardInRow["owner"] === "me") {

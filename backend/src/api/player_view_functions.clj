@@ -20,7 +20,9 @@
   "Return the rows as seen by the player"
   [game-state player-id]
   (mapv (fn [row]
-          (get-row-cards (:cards row) game-state player-id))
+          (assoc row
+                 :cards
+                 (get-row-cards (:cards row) game-state player-id)))
         (:rows game-state)))
 
 (defn get-rows-power
