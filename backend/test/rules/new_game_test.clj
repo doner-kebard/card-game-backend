@@ -35,26 +35,26 @@
     (-> (create-game/new-game)
         :rows)))
 
-;(defexpect starting-hand
+(defexpect starting-hand
   ; Players start with expected hand
-;  (expect
-;    hands/default-hand
-;    (-> (create-game/new-game)
-;        :players
-;        first
-;        :hand))
-;  (expect
-;    hands/default-hand
-;    (-> (create-game/new-game)
-;        :players
-;        second
-;        :hand)))
+  (expect
+    hands/default-hand
+    (-> (create-game/new-game)
+        :players
+        first
+        :hand))
+  (expect
+    hands/default-hand
+    (-> (create-game/new-game)
+        :players
+        second
+        :hand)))
 
 (defexpect configs.game
   ; Game can start with different configs
   (expect
-    [{:hand [{:power 0 :attribute 9001 :id 0}{:power 1 :id 1}]}
-     {:hand [{:whatever 10 :id 1000}]}]
+    [{:hand [{:power 0 :attribute 9001}{:power 1}]}
+     {:hand [{:whatever 10}]}]
     (-> (create-game/new-game {:hands [[{:power 0 :attribute 9001}
                                         {:power 1}]
                                        [{:whatever 10}]]})

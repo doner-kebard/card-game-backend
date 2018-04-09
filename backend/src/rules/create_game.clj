@@ -4,11 +4,10 @@
 
 (defn new-player
   "Creates a new player object"
-[hand player]
-{
- :hand (mapv (fn [card id] (assoc card :id id))
-             hand
-             (iterate inc (* player 1000)))})
+  [hand]
+  {
+   :hand hand
+  }) 
 
 (defn new-game
   "Creates a new game object"
@@ -17,8 +16,8 @@
    {
 
     :players (let [hands (:hands ini-config hands/default-hands)]
-               [(new-player (first hands) 0)
-                (new-player (second hands) 1)])
+               [(new-player (first hands))
+                (new-player (second hands))])
 
     :rows (vec (reduce
                  #(concat %1 [{:limit %2 :cards []}])
