@@ -5,6 +5,17 @@ var templates = require('game/templates.js');
 var status = require('game/status.js');
 var play = require('game/play/hand.js');
 
+function showAddPower(value) {
+    if (value === undefined){
+        return ""
+    } else {
+        var text = " ("
+        if (value > 0) text += "+"
+        text += value + ")"
+        return text
+    }
+}
+
 module.exports = {
     setHand(handState) {
         var hand = document.querySelector(".hand");
@@ -12,7 +23,8 @@ module.exports = {
 
         handState.forEach(function (cardInHand, index) {
             var newCard = templates.baseCard.cloneNode(true);
-            newCard.innerHTML = cardInHand["power"];
+            newCard.innerHTML = cardInHand["power"]
+            newCard.innerHTML += showAddPower(cardInHand["add-power"])
             newCard.setAttribute("index", index);
             newCard.addEventListener('click', function(){play.clickCard(newCard)});
 
