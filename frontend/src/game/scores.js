@@ -7,8 +7,7 @@ module.exports = {
     },
     setScoresByRow(scoresByRowState) {
         scoresByRowState.forEach(function (row, rownum) {
-            document.querySelectorAll("#my-scores .scores-row")[rownum].innerText = row[0];
-            document.querySelectorAll("#opp-scores .scores-row")[rownum].innerText = row[1];
+            document.querySelectorAll("#row-scores .scores-row")[rownum].innerText = row[0] + " - " + row[1];
         });
     }
 }

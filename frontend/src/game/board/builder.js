@@ -7,8 +7,8 @@ const oppRows = document.getElementById("opp-rows");
 
 const baseScore = document.getElementById("score-template")
     .content.querySelector("div");
-const myScores = document.getElementById("my-scores");
-const oppScores = document.getElementById("opp-scores");
+const rowScores = document.getElementById("row-scores");
+const limits = document.getElementById("limits");
 
 module.exports = {
     buildRows() {
@@ -26,11 +26,11 @@ module.exports = {
 
             var newScore = baseScore.cloneNode(true);
             newScore.setAttribute("rownum", i);
-            myScores.appendChild(newScore);
+            rowScores.appendChild(newScore);
 
             var newScore2 = baseScore.cloneNode(true);
             newScore2.setAttribute("rownum", i);
-            oppScores.appendChild(newScore2);
+            limits.appendChild(newScore2);
         }
     },
     buildCard(baseCard, cardData){
