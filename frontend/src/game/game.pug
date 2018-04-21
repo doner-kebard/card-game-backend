@@ -10,16 +10,16 @@ block view
             .w-100
             #rows.col-12
                 #row-card-title.row
-                    #my-game-row-title.col-5.text-center
+                    #my-game-row-title.col-5
                         h2 My cards
-                    #scores-title.col-2.text-center
+                    #scores-title.col-2
                         h2 Scores
-                    #opponent-game-row-title.col-5.text-center
+                    #opponent-game-row-title.col-5
                         h2 Opponent's cards
                 .row
                     #my-rows.col-5
-                    #row-scores.col-1.text-center
-                    #limits.col-1.text-center
+                    #row-scores.col-1
+                    #limits.col-1
                     #opp-rows.col-5
             .col-12
                 .hand.row
@@ -31,7 +31,7 @@ block view
             style="height: 50px"
             )
     template#score-template
-        .scores-row.row.text-center(style="height: 50px")
+        .scores-row(style="height: 50px")
     template#card-template
         .card.col-1(
             draggable="true"
