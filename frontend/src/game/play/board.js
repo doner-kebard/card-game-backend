@@ -9,8 +9,9 @@ module.exports = {
         if (status.clickedCard !== undefined) {
             event.preventDefault();
 
-            play.playCard(event.target.getAttribute("rownum"),
-                status.clickedCard.getAttribute("index"));
+            var rownum = event.target.getAttribute("rownum");
+            status.clickedCard.setAttribute("row-played", rownum);
+            play.playCard(status.clickedCard);
         }
     },
     allowDrop(event) {
@@ -18,12 +19,15 @@ module.exports = {
     },
     dropOnRow(event) {
         event.preventDefault();
-        const rownum = event.target.getAttribute("rownum");
-        const cardindex = event.dataTransfer.getData("handIndex");
+        var card = document.querySelector('.card[index="'+
+            event.dataTransfer.getData("handIndex")+
+            '"]');
+        card.setAttribute("row-played",
+            event.target.getAttribute("rownum"));
 
         status.onGetStatus(function(status) {
             if (status === config.messages["play"]) {
-                play.playCard(rownum, cardindex);
+                play.playCard(card);
             }
         })
     }

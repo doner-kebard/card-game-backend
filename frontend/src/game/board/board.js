@@ -21,6 +21,7 @@ module.exports = {
         boardState.forEach(function (row, rownum) {
             row["cards"].forEach(function (cardInRow) {
                 var newCard = builder.buildCard(templates.baseCard, cardInRow);
+                newCard.setAttribute("rownum", rownum);
 
                 if (cardInRow["owner"] === "me") {
                     fetchRow("#my-rows .game-row", rownum).appendChild(newCard);

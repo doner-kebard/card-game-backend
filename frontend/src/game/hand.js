@@ -23,8 +23,9 @@ module.exports = {
 
         handState.forEach(function (cardInHand, index) {
             var newCard = templates.baseCard.cloneNode(true);
-            newCard.innerHTML = cardInHand["power"]
-            newCard.innerHTML += showAddPower(cardInHand["add-power"])
+            newCard.innerHTML = cardInHand["power"];
+            newCard.setAttribute("add-power", cardInHand["add-power"]);
+            newCard.innerHTML += showAddPower(cardInHand["add-power"]);
             newCard.setAttribute("index", index);
             newCard.addEventListener('click', function(){play.clickCard(newCard)});
 

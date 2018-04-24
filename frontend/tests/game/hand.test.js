@@ -44,18 +44,18 @@ test('Set hand obeys the state', () => {
         document.querySelectorAll('.hand .card')[0].innerHTML
     ).toBe("3");
 
-    // Cards are replaced
-    var sampleHand = [{power: 5}, {power: 1}];
+    // Cards show ability
+    var sampleHand = [{power: 5, "add-power": -3}, {power: 1, "add-power": 7}];
     hand.setHand(sampleHand);
     expect(
         document.querySelectorAll('.hand .card').length
     ).toBe(2);
     expect(
         document.querySelectorAll('.hand .card')[0].innerHTML
-    ).toBe("5");
+    ).toBe("5 (-3)");
     expect(
         document.querySelectorAll('.hand .card')[1].innerHTML
-    ).toBe("1");
+    ).toBe("1 (+7)");
 
     // Cards are deleted
     var sampleHand = [];
