@@ -3,59 +3,64 @@
             [api.conversions :as conversions]
             [configs.messages :as messages]))
 
-(defn get-hand
-  "Return hand as seen by the player"
+(defn get-cards
+  "Returns cards as seen by a player"
   [game-state player-id]
-  (get-in game-state [:players (conversions/player-num game-state player-id) :hand]))
-
-(defn get-row-cards
-  "Returns the cards as seen by the player"
-  [row-cards game-state player-id]
-  (mapv (fn [card]
-          (assoc card :owner
-                 (conversions/translate-player game-state (:owner card) player-id)))
-        row-cards))
+  (vec (map
+         #(if (= (:owner %) player-id)
+            (assoc % :owner "me")
+            {:location (:location %)
+             :owner "opp"})
+         (:cards game-state))))
 
 (defn get-rows
-  "Return the rows as seen by the player"
+  "Return the rows info as seen by the player"
   [game-state player-id]
-  (mapv (fn [row]
-          (assoc row
-                 :cards
-                 (get-row-cards (:cards row) game-state player-id)))
-        (:rows game-state)))
-
-(defn get-rows-power
-  "Return the powers of each row as seen by the player"
-  [game-state player-id]
-  (let [player (conversions/player-num game-state player-id)
-        opponent (mod (inc player) 2)]
-    (loop [rows-power []
-           rows (:rows game-state)]
-      (if (empty? rows)
-        rows-power
+  (let [player-ids (:player-ids game-state)
+        opp-id (if (= (first player-ids) player-id)
+                 (second player-ids)
+                 (first player-ids))]
+    (loop [rows (:rows game-state)
+           row 0]
+      (if (= row (count (:rows game-state)))
+        rows
         (recur
-          (conj rows-power
-                [(victory/points-in-row (:cards (first rows)) player)
-                 (victory/points-in-row (:cards (first rows)) opponent)])
-          (rest rows))))))
+          (assoc-in
+            rows
+            [row :scores]
+            [(victory/points-in-row game-state row player-id)
+             (victory/points-in-row game-state row opp-id)])
+          (inc row))))))
 
 (defn get-scores
   "Return the scores as seen by the player"
   [game-state player-id]
-  (let [player (conversions/player-num game-state player-id)
-        opponent (mod (inc player) 2)]
-    [(victory/get-won-rows game-state player)
-     (victory/get-won-rows game-state opponent)]))
+  (let [player-ids (:player-ids game-state)
+        opp-id (if (= (first player-ids) player-id)
+                 (second player-ids)
+                 (first player-ids))]
+    [(victory/get-won-rows game-state player-id)
+     (victory/get-won-rows game-state opp-id)]))
 
 (defn get-winner
   "Return the winner as seen by the player"
   [game-state player-id]
-  (conversions/translate-player game-state (victory/winner game-state) player-id))
+  (let [winner (victory/winner game-state)
+        player-ids (:player-ids game-state)
+        opp-id (if (= (first player-ids) player-id)
+                 (second player-ids)
+                 (first player-ids))]
+    (cond (= winner player-id)
+          "me"
+          (= winner opp-id)
+          "opp"
+          :else
+          winner)))
 
 (defn get-status
   "Returns the status of the game from a player's perspective"
   [game-state player-id]
-  (cond (= (count (:player-ids game-state)) 1) messages/no-opp
-        (nil? (get-in game-state [:next-play (conversions/player-num game-state player-id)])) messages/play
-        :else messages/wait))
+  (:status game-state
+           (if (nil? (get-in game-state [:next-play (keyword player-id)]))
+             messages/play
+             messages/wait)))

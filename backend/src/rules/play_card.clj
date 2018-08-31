@@ -1,90 +1,67 @@
 (ns rules.play-card
   (:require [configs.messages :as messages]
-            [rules.alter-card :as alter-card]))
+            [rules.alter-card :as alter-card]
+            [rules.count-cards :as count-cards]))
 
-(defn ^:private add-card-to-row
-  "Adds a card onto the specified row"
-  [game-state card row-id]
-  (update-in game-state [:rows row-id :cards] #(conj % card)))
+(defn move-card
+  "Moves a card to the specified row"
+  [game-state card-id row-id]
+  (assoc-in game-state [:cards card-id :location] [:row row-id]))
 
-(defn ^:private modify-hand
-  "Modifies a player's hand according to some function"
-  [game-state player modification]
-  (update-in game-state [:players player :hand] modification))
-
-(defn ^:private item-remover
-  "Returns a function that removes given index from a vector"
-  [index]
-  #(vec (concat
-          (subvec % 0 index)
-          (subvec % (inc index)))))
-
-(defn ^:private remove-card
-  "Remove a card from hand"
-  [game-state player index]
-  (modify-hand game-state player (item-remover index)))
-
-(defn ^:private apply-play-card-abilities
-  "Applies the abilities of the played card"
+(defn apply-add-power
+  "Applies an add-power ability"
   [game-state play]
-  (if (nil? (:target play))
-    game-state
-    (alter-card/add-power
-      game-state 
-      (:target play)
-      (get-in game-state [:players (:player play)
-                          :hand (:index play)
-                          :add-power]))))
+  (let [add-power (get-in game-state
+                          [:cards (:card-id play) :add-power])
+        target (:target play)]
+    (if (nil? add-power)
+        game-state
+        (alter-card/add-power game-state target add-power))))
 
-(defn apply-play-card
-  "Plays a card waiting to be played onto the board"
+(defn apply-play
+  "Applies an entire play"
   [game-state play]
-    (let [player-id (:player play)
-          index (:index play)
-          row-id (:row play)
-          card (get-in game-state [:players player-id :hand index])]
-      (-> (apply-play-card-abilities game-state play)
-          (add-card-to-row (assoc card :owner player-id) row-id)
-          (remove-card player-id index))))
+  (-> game-state
+      (apply-add-power play)
+      (move-card (:card-id play) (:row-id play))))
 
-(defn ^:private apply-all-plays
+(defn apply-all-plays
   "Plays all cards waiting to be played"
   [game-state]
     (-> game-state
-        (apply-play-card (get-in game-state [:next-play 0]))
-        (apply-play-card (get-in game-state [:next-play 1]))
-        (assoc :next-play [nil nil])))
+        (apply-play (first (vals (:next-play game-state))))
+        (apply-play (second (vals (:next-play game-state))))
+        (assoc :next-play {})))
 
-(defn ^:private count-owned-cards
-  "Returns number of cards owned by a player in row-cards"
-  [row-cards player-id]
-  (reduce #(if (= (:owner %2) player-id)
-               (inc %1)
-               %1)
-          0
-          row-cards))
-
-(defn ^:private crowded-row?
+(defn  crowded-row?
   "True if a row has :limit cards for player-id"
-  [row-data player-id]
-  (<= (:limit row-data 9000)
-      (count-owned-cards (:cards row-data) player-id)))
+  [game-state row-id player-id]
+  (<= (get-in game-state [:rows row-id :limit] 9000)
+      (count-cards/count-cards game-state {:location [:row row-id]
+                                           :owner player-id})))
 
 (defn play-card
   "Takes a playing of a card from hand onto a game row and makes it wait until both players had played"
-  [game-state player-id index row-id & target]
+  [game-state player-id card-id row-id & target]
   ; Uses stored :next-play to know who is supposed to play
   (cond 
-    (some? (get-in game-state [:next-play player-id]))
+    (some? (get-in game-state [:next-play (keyword player-id)]))
     {:error messages/out-of-turn}
 
-    (crowded-row? (get-in game-state [:rows row-id]) player-id)
+    (not= (get-in game-state [:cards card-id :owner]) player-id)
+    {:error messages/not-owned-card}
+
+    (>= row-id (count (:rows game-state)))
+    {:error messages/no-row}
+
+    (crowded-row? game-state row-id player-id)
     {:error messages/row-limit}
 
-    (every? nil? (:next-play game-state))
-    (assoc-in game-state [:next-play player-id] {:player player-id :index index :row row-id :target (first target)})
+    (and (some? (get-in game-state [:cards card-id :add-power])) (nil? target))
+    {:error messages/need-target}
 
     :else
-    (-> game-state
-        (assoc-in [:next-play player-id] {:player player-id :index index :row row-id :target (first target)})
-        (apply-all-plays))))
+    (let [game-state (assoc-in game-state [:next-play (keyword player-id)] {:card-id card-id :row-id row-id :target (first target)})]
+      (if (= 2 (count (:next-play game-state)))
+        (apply-all-plays game-state)
+        game-state))))

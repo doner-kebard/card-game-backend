@@ -6,3 +6,6 @@ messages:
     wait: "Waiting for opponent's play"
     row-limit: "Can't play on this row"
     too-many-players: "Too many players"
+    need-target: "A target is needed"
+    not-owned-card: "You don't own this card"
+    no-row: "This row doesn't exist"

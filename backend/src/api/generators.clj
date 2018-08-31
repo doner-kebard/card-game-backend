@@ -7,4 +7,4 @@
   (loop [id (uuid)]
     (if (some #{id} (:player-ids game))
       (recur (uuid))
-      (update game :player-ids #(vec (conj % id))))))
+      id)))

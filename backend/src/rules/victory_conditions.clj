@@ -1,50 +1,61 @@
-(ns rules.victory-conditions)
+(ns rules.victory-conditions
+  (:require [rules.count-cards :as count-cards]))
 
 (defn finished?
   "Tells us if a game has finished"
   [game-state]
-  (and
-    (= 0 (count (get-in game-state [:players 0 :hand])))
-    (= 0 (count (get-in game-state [:players 1 :hand])))))
+  (= 0 (count-cards/count-cards game-state {:location [:hand]})))
 
 (defn points-in-row
   "Tells us how many points the cards of a row has for a certain player"
-  [row-cards player]
-  (reduce
-    #(if (= (:owner %2) player)
-       (+ %1 (:power %2))
-       %1)
-    0
-    row-cards))
+  [game-state row-id player-id]
+  (count-cards/count-cards game-state
+                           {:location [:row row-id]
+                            :owner player-id}
+                           :power))
 
-(defn ^:private player-wins-row?
-  "Tells us if a player is winning a row from its data"
-  [row-data player]
-  (let [opponent (mod (inc player) 2)]
-    (> (points-in-row (:cards row-data) player)
-       (points-in-row (:cards row-data) opponent))))
+(defn player-wins-row?
+  "Tells us if a player is winning a row"
+  [game-state row-id player-id]
+  (let [opponent-id (if (= player-id (first (:player-ids game-state)))
+                      (second (:player-ids game-state))
+                      (first (:player-ids game-state)))]
+    (> (points-in-row game-state row-id player-id)
+       (points-in-row game-state row-id opponent-id))))
 
 (defn get-won-rows
   "Tells us how many rows a player is winning"
-  [game-state player]
-  (reduce
-    #(if (player-wins-row? %2 player) (inc %1) %1)
-    0
-    (get-in game-state [:rows])))
+  [game-state player-id]
+  (loop [won 0 row 0]
+    (if (>= row (count (:rows game-state)))
+      won
+      (recur
+        (if (player-wins-row? game-state row player-id)
+          (inc won)
+          won)
+        (inc row)))))
 
-(defn ^:private most-points
-  "Which player has the most points?"
+(defn most-won-rows
+  "Which player is winning the most rows?"
   [game-state]
-  (let [one (get-won-rows game-state 0)
-        two (get-won-rows game-state 1)]
-    (cond
-      (> one two) 0
-      (< one two) 1
-      :else 2)))
+  (let [player-ids (:player-ids game-state)
+        won-rows (map #(get-won-rows game-state %) player-ids)]
+    (loop [winner ""
+           most-wons 0
+           player-ids player-ids]
+      (if (empty? player-ids)
+        winner
+        (let [tmp-wons (get-won-rows game-state (first player-ids))]
+          (cond (= tmp-wons most-wons)
+                (recur "" most-wons (rest player-ids))
+                (> tmp-wons most-wons)
+                (recur (first player-ids) tmp-wons (rest player-ids))
+                :else
+                (recur winner most-wons (rest player-ids))))))))
 
 (defn winner
   "Tells us if there's a winner and if so, who it is"
   [game-state]
   (if (finished? game-state)
-    (most-points game-state)
+    (most-won-rows game-state)
     nil))

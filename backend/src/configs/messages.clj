@@ -15,3 +15,11 @@
 (def row-limit (get-in config-file [:messages :row-limit]))
 
 (def too-many-players (get-in config-file [:messages :too-many-players]))
+
+(def need-target (get-in config-file [:messages :need-target]))
+
+(def not-owned-card (get-in config-file [:messages :not-owned-card]))
+
+(def no-row (get-in config-file [:messages :no-row]))
+
+(def lobby-not-created (get-in config-file [:messages :no-lobby-not-created]))
