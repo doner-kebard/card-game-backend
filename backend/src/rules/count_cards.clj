@@ -1,7 +1,7 @@
 (ns rules.count-cards)
 
 (defn count-cards
-  "Count all cards that has keys as in condition an sums their summand"
+  "Count (or sums the summands of) all cards that have keys as in condition "
   [game-state condition & summand]
   (let [k (vec (keys condition))
         summand (first summand)]
