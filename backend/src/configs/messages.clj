@@ -23,3 +23,5 @@
 (def no-row (get-in config-file [:messages :no-row]))
 
 (def lobby-not-created (get-in config-file [:messages :no-lobby-not-created]))
+
+(def invalid-id (get-in config-file [:messages :invalid-id]))

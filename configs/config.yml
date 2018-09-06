@@ -9,3 +9,4 @@ messages:
     need-target: "A target is needed"
     not-owned-card: "You don't own this card"
     no-row: "This row doesn't exist"
+    invalid-id: "Wrong id"
