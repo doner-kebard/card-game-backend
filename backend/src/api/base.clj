@@ -51,6 +51,7 @@
                                   second-uuid]})
                   (assoc :game-id (:game-id lobby))
                   persistence/save-game
+                  :game-id
                   (get-game second-uuid))))))
 
 (defn create-game
