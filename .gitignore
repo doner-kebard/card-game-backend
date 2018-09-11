@@ -5,7 +5,7 @@ backend/classes
 backend/checkouts
 backendpom.xml
 backendpom.xml.asc
-backend/.lein-*
+backend/.lein-failures
 backend/.nrepl-port
 backend.hgignore
 backend.hg/

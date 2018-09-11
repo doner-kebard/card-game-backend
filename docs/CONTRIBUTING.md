@@ -40,6 +40,13 @@ To run *all* tests, use:
 
 `bash fulltest.sh`
 
+### Code-review tools
+
+We have installed on the project a couple of tools to help us review the code.
+
+- *Cloverage*: Run `lein cloverage` from `backend/` to get a report of how well our code is being tested.
+- *Yagni*: Run `lein yagni` from `backend/` to get a report of which functions are not being used.
+
 ## Project architecture
 
 The project is divided (as of now) into two main sections: *backend* and *frontend*, each with their quirks.
