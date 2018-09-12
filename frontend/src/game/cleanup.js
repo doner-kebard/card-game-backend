@@ -6,4 +6,4 @@ module.exports = {
             elem.removeChild(elem.firstChild);
         }
     },
-}
+};

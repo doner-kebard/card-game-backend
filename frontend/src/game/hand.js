@@ -1,18 +1,20 @@
 "use strict";
 
-var cleanup = require('game/cleanup.js');
-var templates = require('game/templates.js');
-var status = require('game/status.js');
-var play = require('game/play/hand.js');
+var cleanup = require("game/cleanup.js");
+var templates = require("game/templates.js");
+var status = require("game/status.js");
+var play = require("game/play/hand.js");
 
 function showAddPower(value) {
-    if (value === undefined){
-        return ""
+    if (value === undefined) {
+        return "";
     } else {
-        var text = " ("
-        if (value > 0) text += "+"
-        text += value + ")"
-        return text
+        var text = " (";
+        if (value > 0) {
+            text += "+";
+        }
+        text += value + ")";
+        return text;
     }
 }
 
@@ -37,4 +39,4 @@ module.exports = {
     dragCard(event) {
         event.dataTransfer.setData("handIndex", event.target.getAttribute("index"));
     }
-}
+};

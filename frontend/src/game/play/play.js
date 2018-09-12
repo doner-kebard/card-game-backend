@@ -1,9 +1,9 @@
 "use strict";
 
-const fetch = require('node-fetch');
-var params = require('game/params.js');
-var status = require('game/status.js');
-const config = require('config/config.js');
+const fetch = require("node-fetch");
+var params = require("game/params.js");
+var status = require("game/status.js");
+const config = require("config/config.js");
 const backend = config.servers["backend"];
 
 module.exports = {
@@ -23,13 +23,13 @@ module.exports = {
             fetch(
                 `http://${backend}/games/${params.gameID}/player/${params.playerID}`,
                 {
-                    method: 'POST',
+                    method: "POST",
                     body: JSON.stringify(playData),
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: { "Content-Type": "application/json" }
                 }
             )
                 .then( () => status.setStatus() )
-                .catch(error => console.log(error))
+                .catch(error => console.log(error));
         }
     }
-}
+};

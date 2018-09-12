@@ -1,9 +1,9 @@
 "use strict";
 
-var cleanup = require('game/cleanup.js');
-var templates = require('game/templates.js');
-var builder = require('game/board/builder.js');
-var play = require('game/play/board.js');
+var cleanup = require("game/cleanup.js");
+var templates = require("game/templates.js");
+var builder = require("game/board/builder.js");
+var play = require("game/play/board.js");
 
 function fetchRow(finder, index) {
     return document.querySelectorAll(finder)[index];
@@ -16,7 +16,7 @@ module.exports = {
 
         gameRows.forEach(function (gameRow) {
             cleanup.clearChildren(gameRow);
-        })
+        });
 
         boardState.forEach(function (row, rownum) {
             row["cards"].forEach(function (cardInRow) {
@@ -29,10 +29,10 @@ module.exports = {
                     fetchRow("#opp-rows .game-row", rownum).appendChild(newCard);
                 }
             });
-            document.querySelectorAll("#limits .scores-row")[rownum].innerText = "(lim: " + row["limit"] + ")"
+            document.querySelectorAll("#limits .scores-row")[rownum].innerText = "(lim: " + row["limit"] + ")";
         });
     },
     allowDrop: play.allowDrop,
     dropOnRow: play.dropOnRow,
     clickRow: play.clickRow
-}
+};

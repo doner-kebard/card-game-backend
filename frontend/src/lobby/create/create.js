@@ -1,8 +1,8 @@
 "use strict";
 
-const config = require('config/config.js')
-const fetch = require('node-fetch')
-const backend = config.servers["backend"]
+const config = require("config/config.js");
+const fetch = require("node-fetch");
+const backend = config.servers["backend"];
 
 async function createGame() {
     try {

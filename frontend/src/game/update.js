@@ -1,14 +1,14 @@
 "use strict";
 
-const fetch = require('node-fetch');
-const config = require('config/config.js');
+const fetch = require("node-fetch");
+const config = require("config/config.js");
 const backend = config.servers["backend"];
 
-var board = require('game/board/board.js');
-var hand = require('game/hand.js');
-var scores = require('game/scores.js');
-var status = require('game/status.js');
-const params = require('game/params.js');
+var board = require("game/board/board.js");
+var hand = require("game/hand.js");
+var scores = require("game/scores.js");
+var status = require("game/status.js");
+const params = require("game/params.js");
 
 function setState(state) {
     hand.setHand(state["hand"]);

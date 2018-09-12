@@ -3,4 +3,4 @@ module.exports = {
     moduleNameMapper: {
         ".*config.yml$": "<rootDir>/tests/mocks/config.js"
     }
-}
+};

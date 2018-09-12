@@ -10,4 +10,4 @@ module.exports = {
             document.querySelectorAll("#row-scores .scores-row")[rownum].innerText = row[0] + " - " + row[1];
         });
     }
-}
+};

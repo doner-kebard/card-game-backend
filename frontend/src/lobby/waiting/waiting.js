@@ -1,8 +1,8 @@
 "use strict";
 
-const config = require('config/config.js')
-const backend = config.servers["backend"]
-const frontend = config.servers["frontend"]
+const config = require("config/config.js");
+const backend = config.servers["backend"];
+const frontend = config.servers["frontend"];
 
 let params = new URLSearchParams(document.location.search.substring(1));
 const gameID = params.get("gameID");
@@ -20,7 +20,7 @@ async function checkForOpponent() {
 }
 
 var joinLink = document.getElementById("joinTemplate")
-    .content.querySelector('#join-link');
+    .content.querySelector("#join-link");
 
 var text = document.createTextNode(`http://${frontend}/lobby_join.html?gameID=${gameID}`);
 joinLink.appendChild(text);

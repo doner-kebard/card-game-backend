@@ -18,6 +18,6 @@ function joinGame() {
             //Use replace to remove ourselves from browser history
             window.location.replace(url);
         });
-};
+}
 
 joinGame();

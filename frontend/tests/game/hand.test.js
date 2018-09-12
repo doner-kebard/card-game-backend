@@ -4,11 +4,11 @@ document.body.innerHTML =
     `<div class="hand"></div>
     <template id="card-template">
         <div class="card"></div>
-    </template>`
+    </template>`;
 
-const hand = require('game/hand.js');
+const hand = require("game/hand.js");
 
-test('Dragging a card sets the data', () => {
+test("Dragging a card sets the data", () => {
     var event = {
         dataTransfer: {
             setData: jest.fn()
@@ -16,7 +16,7 @@ test('Dragging a card sets the data', () => {
         target: {
             getAttribute: jest.fn()
         }
-    }
+    };
 
     event.target.getAttribute
         .mockReturnValueOnce("10")
@@ -31,36 +31,36 @@ test('Dragging a card sets the data', () => {
     expect(
         event.dataTransfer.setData.mock.calls[1][1]
     ).toBe("2");
-})
+});
 
-test('Set hand obeys the state', () => {
+test("Set hand obeys the state", () => {
     // Card is added
     var sampleHand = [{power: 3}];
     hand.setHand(sampleHand);
     expect(
-        document.querySelectorAll('.hand .card').length
+        document.querySelectorAll(".hand .card").length
     ).toBe(1);
     expect(
-        document.querySelectorAll('.hand .card')[0].innerHTML
+        document.querySelectorAll(".hand .card")[0].innerHTML
     ).toBe("3");
 
     // Cards show ability
-    var sampleHand = [{power: 5, "add-power": -3}, {power: 1, "add-power": 7}];
+    sampleHand = [{power: 5, "add-power": -3}, {power: 1, "add-power": 7}];
     hand.setHand(sampleHand);
     expect(
-        document.querySelectorAll('.hand .card').length
+        document.querySelectorAll(".hand .card").length
     ).toBe(2);
     expect(
-        document.querySelectorAll('.hand .card')[0].innerHTML
+        document.querySelectorAll(".hand .card")[0].innerHTML
     ).toBe("5 (-3)");
     expect(
-        document.querySelectorAll('.hand .card')[1].innerHTML
+        document.querySelectorAll(".hand .card")[1].innerHTML
     ).toBe("1 (+7)");
 
     // Cards are deleted
-    var sampleHand = [];
+    sampleHand = [];
     hand.setHand(sampleHand);
     expect(
-        document.querySelectorAll('.hand .card').length
+        document.querySelectorAll(".hand .card").length
     ).toBe(0);
 });
