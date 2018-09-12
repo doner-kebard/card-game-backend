@@ -4,7 +4,7 @@
   :license {:name "MIT License"
             :url "https://opensource.org/licenses/MIT"}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [compojure "1.6.0"]
+                 [compojure "1.6.1"]
                  [cheshire "5.8.0"]
                  [javax.servlet/servlet-api "2.5"]
                  [ring/ring-json "0.4.0"]

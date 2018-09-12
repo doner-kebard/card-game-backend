@@ -21,13 +21,16 @@
     (parse-int (:row action))))
 
 (defroutes ^:private app-routes
-  (context "/games" [] (defroutes game-list-routes
-    (POST "/" [] (api/create-game))
-    (context "/:id" [id :<< coerce/as-int] (defroutes game-routes
-      (POST "/" [] (api/add-player id))
-      (context "/player/:pid" [pid] (defroutes player-routes
-        (GET "/" [] (api/get-game id pid))
-        (POST "/" {body :body} (play-action id pid body))))))))
+  (POST "/games" [] (api/create-game))
+  (POST "/games/:id{[0-9]+}"
+        [id :<< coerce/as-int]
+        (api/add-player id))
+  (GET "/games/:id{[0-9]+}/player/:player"
+       [id :<< coerce/as-int player]
+       (api/get-game id player))
+  (POST "/games/:id{[0-9]+}/player/:player"
+        [id :<< coerce/as-int player :as {body :body}]
+        (play-action id player body))
   (route/not-found "<h1>Page not found</h1>"))
 
 (def ^:private cors-headers 
@@ -44,6 +47,5 @@
 
 (def entry
   (-> (responsify app-routes)
-      (handler/api)
       (middleware/wrap-json-body {:keywords? true})
       (middleware/wrap-json-response)))
