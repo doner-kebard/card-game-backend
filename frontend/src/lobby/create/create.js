@@ -6,7 +6,7 @@ const backend = config.servers["backend"];
 
 async function createGame() {
     try {
-        const res = await fetch(`http://${backend}/games`, { method: 'POST' });
+        const res = await fetch(`http://${backend}/games`, { method: "POST" });
         const response = await res.json();
         const gameID = response["game-id"];
         const playerID = response["player-id"];

@@ -29,7 +29,7 @@ module.exports = {
                 }
             )
                 .then( () => status.setStatus() )
-                .catch(error => console.log(error));
+                .catch((error) => console.log(error));
         }
     }
 };

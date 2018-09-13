@@ -22,14 +22,14 @@ function setState(state) {
 var lastnum = 0;
 function updateGame() {
     fetch( `http://${backend}/games/${params.gameID}/player/${params.playerID}`)
-        .then(res => res.json())
-        .then(json => {
+        .then((res) => res.json())
+        .then((json) => {
             var num = json["hand"].length;
             if (num !== lastnum){
                 lastnum = num;
                 setState(json);
             }
-        })
+        });
 }
 
 module.exports = updateGame;

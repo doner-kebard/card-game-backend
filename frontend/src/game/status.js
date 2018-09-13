@@ -7,8 +7,8 @@ const backend = config.servers["backend"];
 
 function onGetStatus (action) {
     fetch(`http://${backend}/games/${params.gameID}/player/${params.playerID}`)
-        .then(res => res.json())
-        .then(json => action(json["status"]));
+        .then((res) => res.json())
+        .then((json) => action(json["status"]));
 }
 
 module.exports = {

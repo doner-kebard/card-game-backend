@@ -3,4 +3,4 @@ module.exports = {
         backend: "fake",
         frontend: "potatoes",
     }
-}
+};

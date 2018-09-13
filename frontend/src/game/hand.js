@@ -29,7 +29,7 @@ module.exports = {
             newCard.setAttribute("add-power", cardInHand["add-power"]);
             newCard.innerHTML += showAddPower(cardInHand["add-power"]);
             newCard.setAttribute("index", index);
-            newCard.addEventListener('click', function(){play.clickCard(newCard)});
+            newCard.addEventListener('click', function(){play.clickCard(newCard);});
 
             hand.appendChild(newCard);
         });

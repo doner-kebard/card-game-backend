@@ -1,11 +1,11 @@
 "use strict";
 
-const config = require('config/config.js');
+const config = require("config/config.js");
 const backend = config.servers["backend"];
 
-var board = require('game/board/board.js');
-var hand = require('game/hand.js');
-var updateGame = require('game/update.js');
+var board = require("game/board/board.js");
+var hand = require("game/hand.js");
+var updateGame = require("game/update.js");
 
 board.buildRows();
 updateGame();

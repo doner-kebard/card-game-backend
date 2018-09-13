@@ -1,8 +1,10 @@
 const config = require("./data/config.yml");
 
+var servers;
+
 // Load server data with defaults if file doesn't exist
 try {
-    const servers = require("./data/servers.yml");
+    servers = require("./data/servers.yml");
 } catch(error) {
 
     // Don't want to silently catch other errors

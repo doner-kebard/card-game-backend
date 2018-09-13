@@ -1,8 +1,8 @@
 "use strict";
 
-const play = require('game/play/play.js');
+const play = require("game/play/play.js");
 
-test('Playing cards changes background as intended', () => {
+test("Playing cards changes background as intended", () => {
     var card = document.createElement("div");
     var mockedStatus = document.createElement("div");
     mockedStatus.setAttribute("id", "game-status");

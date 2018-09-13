@@ -4,15 +4,15 @@ module.exports = {
             {
                 test: /\.pug$/,
                 use: {
-                    loader: 'pug-loader',
+                    loader: "pug-loader",
                     options: {}
                 }
             },
             {
                 test: /\.yml$/,
                 use: [
-                    { loader: 'json-loader' },
-                    { loader: 'yaml-loader' }
+                    { loader: "json-loader" },
+                    { loader: "yaml-loader" }
                 ]
             }
         ]

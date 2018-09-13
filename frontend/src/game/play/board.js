@@ -1,8 +1,8 @@
 "use strict";
-const config = require('config/config.js');
+const config = require("config/config.js");
 
-var status = require('game/status.js');
-var play = require('game/play/play.js');
+var status = require("game/status.js");
+var play = require("game/play/play.js");
 
 module.exports = {
     clickRow(event) {
@@ -19,9 +19,9 @@ module.exports = {
     },
     dropOnRow(event) {
         event.preventDefault();
-        var card = document.querySelector('.card[index="'+
+        var card = document.querySelector(".card[index=\""+
             event.dataTransfer.getData("handIndex")+
-            '"]');
+            "\"]");
         card.setAttribute("row-played",
             event.target.getAttribute("rownum"));
 
@@ -29,6 +29,6 @@ module.exports = {
             if (status === config.messages["play"]) {
                 play.playCard(card);
             }
-        })
+        });
     }
 };
