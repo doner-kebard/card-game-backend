@@ -12,9 +12,10 @@ jobs:
         - stage: Clean Code
           script:
               - docker-compose run backend lein yagni
+              - docker-compose run backend lein eastwood
         - stage: Code Coverage
           script:
-              - docker-compose run backend lein cloverage -e persistence.persistence -e api.handler --fail-threshold 95
+              - docker-compose run backend lein cloverage
         - stage: End-to-End Tests
           if: branch = master
           script:

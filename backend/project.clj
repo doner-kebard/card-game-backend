@@ -15,7 +15,10 @@
             [lein-expectations "0.0.8"]
             [lein-ring "0.12.1"]
             [lein-cloverage "1.0.13"]
+            [jonase/eastwood "0.2.9"]
             [venantius/yagni "0.1.4"]]
+  :cloverage {:ns-exclude-regex [#"persistence.*" #"api\.handler"]
+              :fail-threshold 95}
   :ring {:handler api.handler/entry}
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
