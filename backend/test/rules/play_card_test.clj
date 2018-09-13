@@ -107,6 +107,12 @@
     (play-card/play-card {:next-play {}
                           :rows [{}]
                           :cards [{:add-power 1 :owner "dumb"}]} "dumb" 0 0))
+
+  (expect
+    {:error messages/invalid-target}
+    (play-card/play-card {:next-play {}
+                          :rows [{}]
+                          :cards [{:add-power -1 :owner "McCheaty"}{:location ["nowhere"]}]} "McCheaty" 0 0 1))
   
   ; Saves next-play
   (expect
@@ -121,7 +127,7 @@
     (:next-play
       (play-card/play-card {:next-play {}
                             :rows [{}{}{}{}]
-                            :cards [{}{}{:owner "p" :add-power 1}]} "p" 2 3 0)))
+                            :cards [{:location [:row 0]}{}{:owner "p" :add-power 1}]} "p" 2 3 0)))
 
   (expect
     [{:owner "p"}]

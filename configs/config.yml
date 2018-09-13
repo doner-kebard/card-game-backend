@@ -7,6 +7,7 @@ messages:
     row-limit: "Can't play on this row"
     too-many-players: "Too many players"
     need-target: "A target is needed"
+    invalid-target: "That's an invalid target"
     not-owned-card: "You don't own this card"
     no-row: "This row doesn't exist"
     invalid-id: "Wrong id"

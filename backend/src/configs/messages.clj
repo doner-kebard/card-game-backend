@@ -18,6 +18,8 @@
 
 (def need-target (get-in config-file [:messages :need-target]))
 
+(def invalid-target (get-in config-file [:messages :invalid-target]))
+
 (def not-owned-card (get-in config-file [:messages :not-owned-card]))
 
 (def no-row (get-in config-file [:messages :no-row]))
