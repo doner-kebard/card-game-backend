@@ -8,7 +8,7 @@
   ; Gives cards as seen by a player
   (expect
     [{:location [:hand] :owner "opp"}
-     {:location [:row 0] :owner "opp"}
+     {:power -1 :location [:row 0] :owner "opp"}
      {:power 1 :attr "kill" :location [:hand] :owner "me"}
      {:power 100 :location [:row 1] :owner "me"}]
     (functions/get-cards {:cards [{:power 99 :location [:hand] :owner "opp_name"}

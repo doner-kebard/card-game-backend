@@ -6,10 +6,18 @@
   "Returns cards as seen by a player"
   [game-state player-id]
   (vec (map
-         #(if (= (:owner %) player-id)
-            (assoc % :owner "me")
-            {:location (:location %)
-             :owner "opp"})
+         #(cond
+           (= (:owner %) player-id)
+           (assoc % :owner "me")
+
+           (= (get-in % [:location 0]) :row)
+           {:power (:power %)
+            :location (:location %)
+            :owner "opp"}
+
+           :else
+           {:location (:location %)
+            :owner "opp"})
          (:cards game-state))))
 
 (defn get-rows

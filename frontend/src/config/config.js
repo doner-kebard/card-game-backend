@@ -18,7 +18,7 @@ try {
             frontend: "frontend:8880",
             backend: "backend:3000"
         }
-    }
+    };
 }
 
 module.exports = Object.assign(config, servers);
