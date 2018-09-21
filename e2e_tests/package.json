@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "delay": "^2.0.0",
-    "js-yaml": "^3.11.0",
-    "node-fetch": "^2.1.1"
-  }
-}
