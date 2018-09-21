@@ -116,6 +116,7 @@ We will value the following things on your contribution *in this order*:
 4. The code is readable
 5. The code is well-organized
 6. The code works and fixes the issue
+7. Any rule changed or included is also on the [Manual](https://github.com/kenan-rhoton/card-game/wiki/0.-Troll:-Card-Game-Rules)
 
 If at any point you have a question, please ask it if possible through a comment so others may benefit from the answer.
 
