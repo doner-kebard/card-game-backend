@@ -14,5 +14,13 @@
   (expect
     -10
     (get-in ((ability/add-power -13) {:cards [{}{:power 3}]} 1)
-            [:cards 1 :power])))
+            [:cards 1 :power]))
 
+  ; Returns info
+  (expect
+    {:ability "Enhance 99" :target 1}
+    ((ability/add-power 99)))
+
+   expect
+    {:description "Enhance -1" :target 1}
+    ((ability/add-power -1)))
