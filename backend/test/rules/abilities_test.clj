@@ -18,7 +18,7 @@
 
   ; Returns info
   (expect
-    {:ability "Enhance 99" :target 1}
+    {:description "Enhance 99" :target 1}
     ((ability/add-power 99)))
 
    (expect

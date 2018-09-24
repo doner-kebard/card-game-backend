@@ -1,6 +1,7 @@
 (ns api.player-view-functions-test
   (:require [expectations.clojure.test :refer :all]
             [api.player-view-functions :as functions]
+            [rules.abilities :as ability]
             [configs.messages :as messages]))
 
 (defexpect get-cards
@@ -9,13 +10,27 @@
   (expect
     [{:location [:hand] :owner "opp"}
      {:power -1 :location [:row 0] :owner "opp"}
-     {:power 1 :attr "kill" :location [:hand] :owner "me"}
+     {:power 1 :location [:hand] :owner "me"}
      {:power 100 :location [:row 1] :owner "me"}]
     (functions/get-cards {:cards [{:power 99 :location [:hand] :owner "opp_name"}
                                   {:power -1 :location [:row 0] :owner "opp_name" :secret-attr "who knows?"}
-                                  {:power 1 :attr "kill" :location [:hand] :owner "me_name"}
+                                  {:power 1 :internal-attr "kill" :location [:hand] :owner "me_name"}
                                   {:power 100 :location [:row 1] :owner "me_name"}]}
-                        "me_name")))
+                        "me_name"))
+
+  ; Correctly returns cards with abilities
+  (expect
+    [{:power 1 :location [:hand] :owner "me" :description "Enhance 100" :target 1}
+     {:power 17 :location [:hand] :owner "me" :description "Enhance -1" :target 1}
+     {:location [:hand] :owner "opp"}
+     {:power -20 :location [:row 0] :owner "me"}
+     {:power 999 :location [:row 1] :owner "opp"}]
+    (functions/get-cards {:cards [{:power 1 :location [:hand] :owner "I" :ability (ability/add-power 100)}
+                                  {:power 17 :location [:hand] :owner "I" :ability (ability/add-power -1)}
+                                  {:power 17 :location [:hand] :owner "U" :ability (ability/add-power -1)}
+                                  {:power -20 :location [:row 0] :owner "I" :ability (ability/add-power 76)}
+                                  {:power 999 :location [:row 1] :owner "U" :ability (ability/add-power 22)}]}
+                        "I")))
 
 (defexpect get-rows
 
