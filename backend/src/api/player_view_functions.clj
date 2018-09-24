@@ -8,7 +8,7 @@
   (vec (map
          #(if (= (:owner %) player-id)
 
-            (if (and (contains? % :ability) (= (get-in % [:location 0]) :row))
+            (if (and (contains? % :ability) (= (get-in % [:location 0]) :hand))
               (merge 
                 {:power (:power %)
                  :location (:location %)
