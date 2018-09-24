@@ -11,5 +11,5 @@
        game-state
        [:cards target :power]
        #(+ % increase)))
-     ([])
-      {:description (str "Enhance " increase) :target 1}))
+     ([]
+      {:description (str "Enhance " increase) :target 1})))
