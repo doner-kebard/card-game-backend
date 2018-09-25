@@ -2,4 +2,8 @@
 
 
 (def default-rows
-  (vec (repeat 5 {:limit 4})))
+  [{:limit 4}
+   {:limit 4}
+   {:limit 4 :type "overpower"}
+   {:limit 4}
+   {:limit 4}])
