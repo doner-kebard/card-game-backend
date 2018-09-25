@@ -19,9 +19,6 @@
       :cards (let [hands (:hands ini-config hands/default-hands)]
                (vec (concat (locate-in-hand (first hands) (first player-ids))
                             (locate-in-hand (second hands) (second player-ids)))))
-      :rows (vec (reduce
-                   #(concat %1 [{:limit %2}])
-                   []
-                   (:limits ini-config rows/default-limits)))
+      :rows (:rows ini-config rows/default-rows)
       :next-play {} 
    })))

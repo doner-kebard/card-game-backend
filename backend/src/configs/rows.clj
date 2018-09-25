@@ -1,5 +1,5 @@
 (ns configs.rows)
 
 
-(def default-limits
-  (vec (repeat 5 4)))
+(def default-rows
+  (vec (repeat 5 {:limit 4})))

@@ -22,13 +22,13 @@
   ; Gives rows with scores
   (expect
     [{:limit 1 :scores [0 0]}
-     {:limit 4 :scores [1 2]}
+     {:limit 4 :type "annoyer" :scores [1 2]}
      {:scores [12 0]}]
     (functions/get-rows {:cards [{:power 1 :location [:row 1] :owner "I"}
                                  {:power 2 :location [:row 1] :owner "U"}
                                  {:power 4 :location [:row 2] :owner "I"}
                                  {:power 8 :location [:row 2] :owner "I"}]
-                         :rows [{:limit 1}{:limit 4}{}]
+                         :rows [{:limit 1}{:limit 4 :type "annoyer"}{}]
                          :player-ids ["I" "U"]}
                         "I")))
 
