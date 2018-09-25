@@ -6,8 +6,8 @@
   (fn    
 ;    "Alters a cards' power, by adding the a defined value to it.
 ;    This power may be negative, resulting in a decrease"
-    [game-state target]
+    [game-state play]
     (update-in
       game-state
-      [:cards target :power]
+      [:cards (:target play) :power]
       #(+ % increase))))
