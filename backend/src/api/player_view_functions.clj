@@ -2,31 +2,31 @@
   (:require [rules.victory-conditions :as victory]
             [configs.messages :as messages]))
 
+(defn ^:private partial-card
+  "Returns only certain keys of a card and change the :owner"
+  [card wanted-keys owner]
+  (assoc (select-keys card wanted-keys)
+         :owner owner))
+
 (defn get-cards
   "Returns cards as seen by a player"
   [game-state player-id]
   (vec (map
-         #(if (= (:owner %) player-id)
+         #(cond
+            (and (and (= (:owner %) player-id)
+                      (contains? % :ability))
+                      (= (get-in % [:location 0]) :hand))
+            (merge (partial-card % [:power :location] "me")
+                   ((:ability %)))
 
-            (if (and (contains? % :ability) (= (get-in % [:location 0]) :hand))
-              (merge 
-                {:power (:power %)
-                 :location (:location %)
-                 :owner "me"}
-                ((:ability %)))
+            (= (:owner %) player-id)
+            (partial-card % [:power :location] "me")
 
-              {:power (:power %)
-               :location (:location %)
-               :owner "me"})
+            (= (get-in % [:location 0]) :row)
+            (partial-card % [:power :location] "opp")
 
-            (if (= (get-in % [:location 0]) :row)
-              {:power (:power %)
-               :location (:location %)
-               :owner "opp"}
-
-              {:location (:location %)
-               :owner "opp"}))
-
+            :else
+            (partial-card % [:location] "opp"))
          (:cards game-state))))
 
 (defn get-rows
