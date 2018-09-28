@@ -22,5 +22,5 @@
     ((ability/add-power 99)))
 
    (expect
-    {:description "Enhance -1" :target 1}
+    {:description "Weaken 1" :target 1}
     ((ability/add-power -1))))

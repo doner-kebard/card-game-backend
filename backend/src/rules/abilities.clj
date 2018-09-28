@@ -12,4 +12,7 @@
        [:cards target :power]
        #(+ % increase)))
      ([]
-      {:description (str "Enhance " increase) :target 1})))
+      {:description (if (neg? increase)
+                      (str "Weaken " (- increase))
+                      (str "Enhance " increase))
+       :target 1})))

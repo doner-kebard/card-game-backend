@@ -21,7 +21,7 @@
   ; Correctly returns cards with abilities
   (expect
     [{:power 1 :location [:hand] :owner "me" :description "Enhance 100" :target 1}
-     {:power 17 :location [:hand] :owner "me" :description "Enhance -1" :target 1}
+     {:power 17 :location [:hand] :owner "me" :description "Weaken 1" :target 1}
      {:location [:hand] :owner "opp"}
      {:power -20 :location [:row 0] :owner "me"}
      {:power 999 :location [:row 1] :owner "opp"}]
