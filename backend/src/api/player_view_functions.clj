@@ -13,9 +13,9 @@
   [game-state player-id]
   (vec (map
          #(cond
-            (and (and (= (:owner %) player-id)
-                      (contains? % :ability))
-                      (= (get-in % [:location 0]) :hand))
+            (and (= (:owner %) player-id)
+                 (contains? % :ability)
+                 (= (get-in % [:location 0]) :hand))
             (merge (partial-card % [:power :location] "me")
                    ((:ability %)))
 
