@@ -37,7 +37,8 @@
 
 (defn ^:private requires-target?
   [game-state card-id]
-  (some? (get-in game-state [:cards card-id :ability])))
+  (contains? ((get-in game-state [:cards card-id :ability]))
+             :target))
 
 (defn play-card
   "Takes a playing of a card from hand onto a game row and makes it wait until both players had played"
