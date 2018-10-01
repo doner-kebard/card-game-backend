@@ -25,11 +25,11 @@
      {:location [:hand] :owner "opp"}
      {:power -20 :location [:row 0] :owner "me"}
      {:power 999 :location [:row 1] :owner "opp"}]
-    (functions/get-cards {:cards [{:power 1 :location [:hand] :owner "I" :ability (ability/add-power 100)}
-                                  {:power 17 :location [:hand] :owner "I" :ability (ability/add-power -1)}
-                                  {:power 17 :location [:hand] :owner "U" :ability (ability/add-power -1)}
-                                  {:power -20 :location [:row 0] :owner "I" :ability (ability/add-power 76)}
-                                  {:power 999 :location [:row 1] :owner "U" :ability (ability/add-power 22)}]}
+    (functions/get-cards {:cards [(merge {:power 1 :location [:hand] :owner "I"} (ability/add-power 100))
+                                  (merge {:power 17 :location [:hand] :owner "I"} (ability/add-power -1))
+                                  (merge {:power 17 :location [:hand] :owner "U"} (ability/add-power -1))
+                                  (merge {:power -20 :location [:row 0] :owner "I"} (ability/add-power 76))
+                                  (merge {:power 999 :location [:row 1] :owner "U"} (ability/add-power 22))]}
                         "I")))
 
 (defexpect get-rows

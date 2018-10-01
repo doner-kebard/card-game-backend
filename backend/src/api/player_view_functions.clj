@@ -14,10 +14,8 @@
   (vec (map
          #(cond
             (and (= (:owner %) player-id)
-                 (contains? % :ability)
                  (= (get-in % [:location 0]) :hand))
-            (merge (partial-card % [:power :location] "me")
-                   ((:ability %)))
+            (partial-card % [:power :location :description :target] "me")
 
             (= (:owner %) player-id)
             (partial-card % [:power :location] "me")
