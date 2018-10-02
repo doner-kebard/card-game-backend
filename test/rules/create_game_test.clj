@@ -49,8 +49,8 @@
     (:cards (create-game/new-game {:hands [[{:p 0}][{:attr 12 :sometext ""}]]})))
   
   (expect
-     [{:limit 0} {:limit 3}]
-    (:rows (create-game/new-game {:limits [0 3]})))
+    [{:limit 92} {} {:type "yabidi"}]
+    (:rows (create-game/new-game {:rows [{:limit 92} {} {:type "yabidi"}]})))
   
   ; Game uses default config
   (expect
@@ -58,8 +58,8 @@
     (map #(apply dissoc % [:location :owner]) (:cards (create-game/new-game))))
   
   (expect
-    rows/default-limits
-    (vec (map :limit (:rows (create-game/new-game)))))
+    rows/default-rows
+    (:rows (create-game/new-game)))
   
   (expect
     player-ids/default-player-ids

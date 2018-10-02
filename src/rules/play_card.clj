@@ -12,7 +12,7 @@
   [game-state play]
   (let [ability (get-in game-state [:cards (:card-id play) :ability])]
     (if (some? ability)
-      (ability game-state (:target play))
+      (ability game-state play)
       game-state)))
 
 (defn ^:private apply-all-plays
@@ -37,7 +37,7 @@
 
 (defn ^:private requires-target?
   [game-state card-id]
-  (some? (get-in game-state [:cards card-id :ability])))
+  (contains? (get-in game-state [:cards card-id]) :target))
 
 (defn play-card
   "Takes a playing of a card from hand onto a game row and makes it wait until both players had played"

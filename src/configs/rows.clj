@@ -1,5 +1,9 @@
 (ns configs.rows)
 
 
-(def default-limits
-  (vec (repeat 5 4)))
+(def default-rows
+  [{:limit 3 :type "overpower"}
+   {:limit 3}
+   {:limit 3}
+   {:limit 3}
+   {:limit 3}])
