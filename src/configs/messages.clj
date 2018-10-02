@@ -1,29 +1,25 @@
-(ns configs.messages
-  (:require [yaml.core :as yaml]))
+(ns configs.messages)
 
-(def ^:private config-file
-  (yaml/from-file "../configs/config.yml" true))
+(def out-of-turn "Out of turn play")
 
-(def out-of-turn (get-in config-file [:messages :out-of-turn]))
+(def no-opp "Waiting for an opponent")
 
-(def no-opp (get-in config-file [:messages :no-opp]))
+(def play "Playing")
 
-(def play (get-in config-file [:messages :play]))
+(def wait "Waiting for an opponent's play")
 
-(def wait (get-in config-file [:messages :wait]))
+(def row-limit "Can't play on this row")
 
-(def row-limit (get-in config-file [:messages :row-limit]))
+(def too-many-players "Too many players")
 
-(def too-many-players (get-in config-file [:messages :too-many-players]))
+(def need-target "A target is needed")
 
-(def need-target (get-in config-file [:messages :need-target]))
+(def invalid-target "That's an invalid target")
 
-(def invalid-target (get-in config-file [:messages :invalid-target]))
+(def not-owned-card "You don't own this card")
 
-(def not-owned-card (get-in config-file [:messages :not-owned-card]))
+(def no-row "This row doesn't exist")
 
-(def no-row (get-in config-file [:messages :no-row]))
+(def lobby-not-created "Lobby was not created")
 
-(def lobby-not-created (get-in config-file [:messages :no-lobby-not-created]))
-
-(def invalid-id (get-in config-file [:messages :invalid-id]))
+(def invalid-id "Wrong id")
