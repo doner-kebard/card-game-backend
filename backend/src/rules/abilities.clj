@@ -17,7 +17,7 @@
                     (str "Enhance " increase))
    :target 1})
 
-(defn type-add-power
+(defn add-power-on-row-type
   "Creates the ability function"
   [row-type increase]
   {:ability

@@ -5,8 +5,8 @@
   "Default hand (can't be empty)"
   [{:power 8}
    {:power 7}
-   (merge {:power 6} (ability/type-add-power "overpower" 1))
-   (merge {:power 5} (ability/type-add-power "overpower" 3))
+   (merge {:power 6} (ability/add-power-on-row-type "overpower" 1))
+   (merge {:power 5} (ability/add-power-on-row-type "overpower" 3))
    (merge {:power 6} (ability/add-power 1))
    (merge {:power 6} (ability/add-power -1))
    (merge {:power 4} (ability/add-power 2))
