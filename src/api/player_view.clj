@@ -11,5 +11,5 @@
    :cards (functions/get-cards game-state player-id)
    :rows (functions/get-rows game-state player-id)
    :scores (functions/get-scores game-state player-id)
-   :status (functions/get-status game-state player-id)
+   :game-status (functions/get-game-status game-state player-id)
    :winner (functions/get-winner game-state player-id)})

@@ -71,10 +71,10 @@
           :else
           winner)))
 
-(defn get-status
+(defn get-game-status
   "Returns the status of the game from a player's perspective"
   [game-state player-id]
-  (:status game-state
+  (:game-status game-state
            (if (nil? (get-in game-state [:next-play (keyword player-id)]))
              messages/play
              messages/wait)))

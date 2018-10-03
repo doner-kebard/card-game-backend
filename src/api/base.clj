@@ -18,7 +18,7 @@
     (if (and (= game-id (:game-id game-state))
           (or (= player-id (first (:player-ids game-state)))
             (= player-id (second (:player-ids game-state)))))
-      (if (= (:status (get-game game-id player-id)) messages/play)
+      (if (= (:game-status (get-game game-id player-id)) messages/play)
           (let [new-game-state (play-card/play-card game-state player-id card-id row-id (first target))]
             (if (contains? new-game-state :error)
               new-game-state
@@ -33,7 +33,7 @@
   [ini-config]
   (let [game-id (persistence/next-id)]
     (persistence/save-game
-      {:status messages/no-opp
+      {:game-status messages/no-opp
        :game-id game-id
        :player-ids [(generators/player-uuid {})]})))
 
