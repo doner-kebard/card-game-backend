@@ -9,7 +9,7 @@
             [compojure.coercions :as coerce]))
 
 (defn ^:private parse-int [number-string]
-  (try (Integer/parseInt number-string)
+  (try (Long/parseLong number-string)
        (catch Exception e nil)))
 
 (defn ^:private play-action
