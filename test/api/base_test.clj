@@ -13,7 +13,7 @@
   (expect false (=
                  (:game-id (base/create-game))
                  (:game-id (base/create-game))))
-  (expect messages/no-opp (:status (base/create-game)))
+  (expect messages/no-opp (:game-status (base/create-game)))
   (expect nil (:player-ids (base/create-game)))
   (expect true (contains? (base/create-game) :player-id)))
 
@@ -65,13 +65,13 @@
             (base/play-card-as-player game-id p2 0 0))
     
     (expect messages/wait
-            (:status (base/play-card-as-player game-id p1 1 0)))
+            (:game-status (base/play-card-as-player game-id p1 1 0)))
 
     (expect {:error messages/out-of-turn}
             (base/play-card-as-player game-id p1 1 0))
 
     (expect messages/play
-            (:status (base/play-card-as-player game-id p2 11 2)))
+            (:game-status (base/play-card-as-player game-id p2 11 2)))
 
     (expect messages/wait
-            (:status (base/play-card-as-player game-id p2 11 1)))))
+            (:game-status (base/play-card-as-player game-id p2 11 1)))))

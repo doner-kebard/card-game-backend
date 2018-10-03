@@ -90,17 +90,17 @@
                            :player-ids ["winner" "someone"]}
                           "someone")))
 
-(defexpect get-status
+(defexpect get-game-status
   
   ; Status are as intended
   (expect
     messages/play
-    (functions/get-status {:next-play {}} "player"))
+    (functions/get-game-status {:next-play {}} "player"))
   
   (expect
     messages/play
-    (functions/get-status {:next-play {:quick {}}} "slow"))
+    (functions/get-game-status {:next-play {:quick {}}} "slow"))
   
   (expect
     messages/wait
-    (functions/get-status {:next-play {:waiter {}}} "waiter")))
+    (functions/get-game-status {:next-play {:waiter {}}} "waiter")))
