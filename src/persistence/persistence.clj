@@ -3,7 +3,9 @@
 
 ; See `wcar` docstring for opts
 (def server1-conn
-  {:pool {} :spec {:uri "redis://redis"}})
+  {:pool {} :spec {:uri (or
+                          (System/getenv "CARD_GAME_DB")
+                          "redis://localhost")}})
 
 (defmacro wcar*
   [& body] 
