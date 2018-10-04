@@ -60,7 +60,7 @@
     {:error messages/row-limit}
 
     (and (requires-target? game-state card-id)
-         (nil? target))
+         (nil? (first target)))
     {:error messages/need-target}
 
     (and (requires-target? game-state card-id)
