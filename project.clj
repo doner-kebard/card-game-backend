@@ -38,7 +38,11 @@
               
               :has-pact-with {
                   :cli {
-                     :pact-file "file:///home/kenan/dev/doner-kebard/card-game-backend/pacts/cli-lobby.json"
+                     :pact-file ~(str
+                                  "file://"
+                                  (.getAbsolutePath
+                                  (clojure.java.io/file
+                                    "pacts/cli-lobby.json")))
                      }
                   }
               }
