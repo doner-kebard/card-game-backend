@@ -65,6 +65,7 @@
       #(+ % increase))))
 
 (defn ^:private weaken
+  "Same as strengthen but negative"
   [decrease]
   (strengthen (- decrease)))
 
