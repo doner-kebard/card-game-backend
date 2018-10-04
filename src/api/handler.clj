@@ -22,7 +22,7 @@
 
 (def^:private app-routes
   (compojure/routes
-    (compojure/POST "/games" [] (api/create-game))
+    (compojure/POST "/lobby" [] (api/create-game))
     (compojure/POST "/games/:id{[0-9]+}"
                     [id]
                     (api/add-player (parse-int id)))
