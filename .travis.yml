@@ -1,4 +1,6 @@
 language: clojure
+services:
+    - redis-server
 script:
     - lein test
     - lein yagni
