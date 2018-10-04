@@ -1,5 +1,6 @@
 (ns api.player-view-functions
   (:require [rules.victory-conditions :as victory]
+            [rules.abilities :as abilities]
             [configs.messages :as messages]))
 
 (defn ^:private partial-card
@@ -15,13 +16,14 @@
          #(cond
             (and (= (:owner %) player-id)
                  (= (get-in % [:location 0]) :hand))
-            (partial-card % [:power :location :description :target] "me")
+            (assoc (partial-card % [:power :location :card-name :abilities] "me")
+                   :target (abilities/required-targets (:abilities % [nil])))
 
             (= (:owner %) player-id)
-            (partial-card % [:power :location] "me")
+            (partial-card % [:power :location :card-name] "me")
 
             (= (get-in % [:location 0]) :row)
-            (partial-card % [:power :location] "opp")
+            (partial-card % [:power :location :card-name] "opp")
 
             :else
             (partial-card % [:location] "opp"))

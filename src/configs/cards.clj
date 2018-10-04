@@ -1,5 +1,4 @@
-(ns configs.cards
-  (:require [rules.abilities :as ability]))
+(ns configs.cards)
 
 (def card-map
   "All possible cards"
