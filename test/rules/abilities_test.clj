@@ -2,6 +2,17 @@
   (:require [expectations.clojure.test :refer :all]
             [rules.abilities :as ability]))
 
+(defexpect required-targets
+  (expect
+    1
+    (ability/required-targets [:strengthen 1]))
+  (expect
+    1
+    (ability/required-targets [:weaken 1]))
+  (expect
+    0
+    (ability/required-targets [:row-affinity "" 1])))
+
 (defexpect strengthen-and-weaken
 
   ; Adds power

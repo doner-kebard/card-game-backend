@@ -74,3 +74,10 @@
   (let [ability-generator (ns-resolve 'rules.abilities (symbol (name (first ability-description))))
         args (vec (rest ability-description))]
     (apply ability-generator args)))
+
+(defn required-targets
+  "Counts the required targets"
+  [ability-description]
+  (if (contains? (set '(:strengthen :weaken)) (first ability-description))
+    1
+    0))
