@@ -4,6 +4,8 @@ script:
     - lein yagni
     - lein eastwood
     - lein cloverage
+    - lein ring server-headless &
+    - sleep 10
     - lein with-profile pact pact-verify
 notifications:
   email: false
