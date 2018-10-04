@@ -4,5 +4,6 @@ script:
     - lein yagni
     - lein eastwood
     - lein cloverage
+    - lein with-profile pact pact-verify
 notifications:
   email: false

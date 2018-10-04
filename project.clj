@@ -20,4 +20,28 @@
               :fail-threshold 95}
   :ring {:handler api.handler/entry}
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {
+             :uberjar {:aot :all}
+             :pact {
+                    :plugins [[au.com.dius/pact-jvm-provider-lein_2.11 "3.2.11" :exclusions [commons-logging]]]
+                    :dependencies [[ch.qos.logback/logback-core "1.1.3"]
+                                   [ch.qos.logback/logback-classic "1.1.3"]
+                                   [org.apache.httpcomponents/httpclient "4.4.1"]]
+                    }}
+  :pact {
+      :service-providers {
+          :lobby {
+              :protocol "http"
+              :host "localhost"
+              :port 3000
+              :path "/"
+              
+              :has-pact-with {
+                  :cli {
+                     :pact-file "file:///home/kenan/dev/doner-kebard/card-game-backend/pacts/cli-lobby.json"
+                     }
+                  }
+              }
+          }
+      }
+  )

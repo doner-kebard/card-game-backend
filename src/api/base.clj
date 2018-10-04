@@ -33,7 +33,7 @@
   [ini-config]
   (let [game-id (persistence/next-id)]
     (persistence/save-game
-      {:game-status messages/no-opp
+      {:lobby-status messages/no-opp
        :game-id game-id
        :player-ids [(generators/player-uuid {})]})))
 
