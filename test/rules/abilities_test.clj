@@ -7,7 +7,7 @@
   ; Adds power
   (expect
     7
-    (get-in ((:ability (ability/add-power 5)) {:cards [{:power 2}]} {:target 0})
+    (get-in ((:ability (ability/generate-ability-fn [:add-power 5])) {:cards [{:power 2}]} {:target 0})
             [:cards 0 :power]))
 
   ; Removes power

@@ -37,3 +37,10 @@
    :description (if (neg? increase)
                     (str "Weaken " (- increase) " on " row-type)
                     (str "Enhance " increase " on " row-type))})
+
+(defn generate-ability-fn
+  "Creates an ability function from its description"
+  [ability-description]
+  (let [ability-generator (ns-resolve 'rules.abilities (symbol (name (first ability-description))))
+        args (vec (rest ability-description))]
+    (apply ability-generator args)))
