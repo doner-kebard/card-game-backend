@@ -1,7 +1,6 @@
 (ns api.player-view-functions-test
   (:require [expectations.clojure.test :refer :all]
             [api.player-view-functions :as functions]
-            [rules.abilities :as ability]
             [configs.messages :as messages]))
 
 (defexpect get-cards
@@ -9,27 +8,27 @@
   ; Gives cards as seen by a player
   (expect
     [{:location [:hand] :owner "opp"}
-     {:power -1 :location [:row 0] :owner "opp"}
-     {:power 1 :location [:hand] :owner "me"}
-     {:power 100 :location [:row 1] :owner "me"}]
-    (functions/get-cards {:cards [{:power 99 :location [:hand] :owner "opp_name"}
-                                  {:power -1 :location [:row 0] :owner "opp_name" :secret-attr "who knows?"}
-                                  {:power 1 :internal-attr "kill" :location [:hand] :owner "me_name"}
-                                  {:power 100 :location [:row 1] :owner "me_name"}]}
+     {:card-name "second" :power -1 :location [:row 0] :owner "opp"}
+     {:card-name "third" :power 1 :location [:hand] :owner "me" :target 0}
+     {:card-name "fourth" :power 100 :location [:row 1] :owner "me"}]
+    (functions/get-cards {:cards [{:card-name "first" :power 99 :location [:hand] :owner "opp_name"}
+                                  {:card-name "second" :power -1 :location [:row 0] :owner "opp_name" :secret-attr "who knows?"}
+                                  {:card-name "third" :power 1 :internal-attr "kill" :location [:hand] :owner "me_name"}
+                                  {:card-name "fourth" :power 100 :location [:row 1] :owner "me_name"}]}
                         "me_name"))
 
   ; Correctly returns cards with abilities
   (expect
-    [{:power 1 :location [:hand] :owner "me" :description "Enhance 100" :target 1}
-     {:power 17 :location [:hand] :owner "me" :description "Weaken 1" :target 1}
+    [{:card-name "c1" :power 1 :location [:hand] :owner "me" :abilities [:strengthen 100] :target 1}
+     {:card-name "c2" :power 17 :location [:hand] :owner "me" :abilities [:weaken 1] :target 1}
      {:location [:hand] :owner "opp"}
-     {:power -20 :location [:row 0] :owner "me"}
-     {:power 999 :location [:row 1] :owner "opp"}]
-    (functions/get-cards {:cards [(merge {:power 1 :location [:hand] :owner "I"} (ability/add-power 100))
-                                  (merge {:power 17 :location [:hand] :owner "I"} (ability/add-power -1))
-                                  (merge {:power 17 :location [:hand] :owner "U"} (ability/add-power -1))
-                                  (merge {:power -20 :location [:row 0] :owner "I"} (ability/add-power 76))
-                                  (merge {:power 999 :location [:row 1] :owner "U"} (ability/add-power 22))]}
+     {:card-name "c4" :power -20 :location [:row 0] :owner "me"}
+     {:card-name "c5" :power 999 :location [:row 1] :owner "opp"}]
+    (functions/get-cards {:cards [{:card-name "c1" :power 1 :location [:hand] :owner "I" :abilities [:strengthen 100]}
+                                  {:card-name "c2" :power 17 :location [:hand] :owner "I" :abilities [:weaken 1]}
+                                  {:card-name "c3" :power 17 :location [:hand] :owner "U" :abilities [:weaken 1]}
+                                  {:card-name "c4" :power -20 :location [:row 0] :owner "I" :abilities [:strengthen 76]}
+                                  {:card-name "c5" :power 999 :location [:row 1] :owner "U" :abilities [:strengthen 22]}]}
                         "I")))
 
 (defexpect get-rows

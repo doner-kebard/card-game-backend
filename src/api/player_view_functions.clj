@@ -1,12 +1,13 @@
 (ns api.player-view-functions
   (:require [rules.victory-conditions :as victory]
+            [rules.abilities :as abilities]
             [configs.messages :as messages]))
 
-(defn ^:private partial-card
-  "Returns only certain keys of a card and change the :owner"
-  [card wanted-keys owner]
-  (assoc (select-keys card wanted-keys)
-         :owner owner))
+(defn ^:private select-and-merge
+  "Select some keys from a map and merges it with another one"
+  [my-map wanted-keys merging-map]
+  (merge (select-keys my-map wanted-keys)
+         merging-map))
 
 (defn get-cards
   "Returns cards as seen by a player"
@@ -15,16 +16,21 @@
          #(cond
             (and (= (:owner %) player-id)
                  (= (get-in % [:location 0]) :hand))
-            (partial-card % [:power :location :description :target] "me")
+            (select-and-merge % [:power :location :card-name :abilities]
+                            {:owner "me"
+                             :target (abilities/required-targets (:abilities % [nil]))})
 
             (= (:owner %) player-id)
-            (partial-card % [:power :location] "me")
+            (select-and-merge % [:power :location :card-name]
+                            {:owner "me"})
 
             (= (get-in % [:location 0]) :row)
-            (partial-card % [:power :location] "opp")
+            (select-and-merge % [:power :location :card-name]
+                            {:owner "opp"})
 
             :else
-            (partial-card % [:location] "opp"))
+            (select-and-merge % [:location] 
+                            {:owner "opp"}))
          (:cards game-state))))
 
 (defn get-rows

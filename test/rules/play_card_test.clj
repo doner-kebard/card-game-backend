@@ -1,12 +1,11 @@
 (ns rules.play-card-test
   (:require [expectations.clojure.test :refer :all]
             [rules.play-card :as play-card]
-            [rules.abilities :as ability]
             [configs.messages :as messages]))
 
   (def game-state {:cards [{:power 0 :location [:hand]}
-                           (merge {:power 10} (ability/add-power -1))
-                           (merge {:power 100} (ability/add-power -100))]
+                           {:power 10 :abilities [:strengthen 1]}
+                           {:power 100 :abilities [:weaken 100]}]
                    :rows [{}{}{}{}]
                    :next-play {:p0 {:card-id 0 :row-id 0} :p1 {:card-id 1 :row-id 3 :target 2}}
                    :player-ids ["p0" "p1"]})
@@ -33,7 +32,7 @@
   
   ; Changes power
   (expect
-    99
+    101
     (get-in (play-card/apply-ability game-state {:card-id 1 :target 2})
             [:cards 2 :power]))
   
@@ -87,13 +86,13 @@
     {:error messages/need-target}
     (play-card/play-card {:next-play {}
                           :rows [{}]
-                          :cards [{:target 1 :owner "dumb"}]} "dumb" 0 0))
+                          :cards [{:abilities [:strengthen 9000] :owner "dumb"}]} "dumb" 0 0))
 
   (expect
     {:error messages/invalid-target}
     (play-card/play-card {:next-play {}
                           :rows [{}]
-                          :cards [{:target 1 :owner "McCheaty"}{:location ["nowhere"]}]} "McCheaty" 0 0 1))
+                          :cards [{:abilities [:weaken 1] :owner "McCheaty"}{:location ["nowhere"]}]} "McCheaty" 0 0 1))
   
   ; Saves next-play
   (expect
@@ -121,8 +120,8 @@
   (let [new-game-state
         (play-card/play-card 
           {:cards [{:power 0 :location [:hand] :owner "p0"}
-                   (merge {:power 10 :owner "p1"} (ability/add-power -1))
-                   (merge {:power 100} (ability/add-power -100))]
+                   {:power 10 :owner "p1" :abilities [:strengthen 1]}
+                   {:power 100 :abilities [:weaken 100]}]
            :rows [{}{}{}{}{}]
            :next-play {:p1 {:card-id 1 :row-id 3 :target 2}}}
           "p0" 0 0)]
@@ -135,5 +134,5 @@
       (get-in new-game-state [:cards 1 :location]))
 
     (expect
-      99
+      101
       (get-in new-game-state [:cards 2 :power]))))

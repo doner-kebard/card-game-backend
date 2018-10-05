@@ -1,12 +1,14 @@
 (ns rules.create-game
   (:require [configs.hands :as hands]
+            [configs.cards :as cards]
             [configs.rows :as rows]
             [configs.player-ids :as player-ids]))
 
-(defn locate-in-hand
+(defn ^:private locate-in-hand
   "Creates location for a vec of cards on player's hand"
   [hand player]
-  (vec (map #(assoc % :location [:hand] :owner player)
+  (vec (map #(merge (% cards/card-map)
+                    {:card-name (name %) :location [:hand] :owner player})
             hand))) 
 
 (defn new-game

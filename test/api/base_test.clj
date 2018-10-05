@@ -63,6 +63,12 @@
     
     (expect {:error messages/not-owned-card}
             (base/play-card-as-player game-id p2 0 0))
+
+    (expect {:error messages/need-target}
+            (base/play-card-as-player game-id p1 4 0))
+
+    (expect {:error messages/invalid-target}
+            (base/play-card-as-player game-id p1 4 0 4))
     
     (expect messages/wait
             (:game-status (base/play-card-as-player game-id p1 1 0)))

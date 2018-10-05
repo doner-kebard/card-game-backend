@@ -1,5 +1,6 @@
 (ns rules.play-card
   (:require [configs.messages :as messages]
+            [rules.abilities :as abilities]
             [rules.count-cards :as count-cards]))
 
 (defn move-card-to-row
@@ -10,9 +11,10 @@
 (defn apply-ability
   "Apply the ability of a play, if it exists"
   [game-state play]
-  (let [ability (get-in game-state [:cards (:card-id play) :ability])]
-    (if (some? ability)
-      (ability game-state play)
+  (let [card (get-in game-state [:cards (:card-id play)])]
+    (if (contains? card :abilities)
+      (let [ability (abilities/generate-ability-fn (:abilities card))]
+        (ability game-state play))
       game-state)))
 
 (defn ^:private apply-all-plays
@@ -37,7 +39,8 @@
 
 (defn ^:private requires-target?
   [game-state card-id]
-  (contains? (get-in game-state [:cards card-id]) :target))
+  (= (abilities/required-targets (:abilities (get-in game-state [:cards card-id])))
+     1))
 
 (defn play-card
   "Takes a playing of a card from hand onto a game row and makes it wait until both players had played"
@@ -57,7 +60,7 @@
     {:error messages/row-limit}
 
     (and (requires-target? game-state card-id)
-         (nil? target))
+         (nil? (first target)))
     {:error messages/need-target}
 
     (and (requires-target? game-state card-id)
