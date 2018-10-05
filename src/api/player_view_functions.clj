@@ -3,8 +3,8 @@
             [rules.abilities :as abilities]
             [configs.messages :as messages]))
 
-(defn ^:private modified-map
-  "Gets some keys from a map and merges it with another one"
+(defn ^:private select-and-merge
+  "Select some keys from a map and merges it with another one"
   [my-map wanted-keys merging-map]
   (merge (select-keys my-map wanted-keys)
          merging-map))
@@ -16,20 +16,20 @@
          #(cond
             (and (= (:owner %) player-id)
                  (= (get-in % [:location 0]) :hand))
-            (modified-map % [:power :location :card-name :abilities]
+            (select-and-merge % [:power :location :card-name :abilities]
                             {:owner "me"
                              :target (abilities/required-targets (:abilities % [nil]))})
 
             (= (:owner %) player-id)
-            (modified-map % [:power :location :card-name]
+            (select-and-merge % [:power :location :card-name]
                             {:owner "me"})
 
             (= (get-in % [:location 0]) :row)
-            (modified-map % [:power :location :card-name]
+            (select-and-merge % [:power :location :card-name]
                             {:owner "opp"})
 
             :else
-            (modified-map % [:location] 
+            (select-and-merge % [:location] 
                             {:owner "opp"}))
          (:cards game-state))))
 
