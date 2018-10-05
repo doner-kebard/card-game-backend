@@ -31,10 +31,15 @@
   [decrease]
   (strengthen (- decrease)))
 
+(def ^:private ability-list
+  {:row-affinity row-affinity
+   :strengthen strengthen
+   :weaken weaken})
+
 (defn generate-ability-fn
   "Creates an ability function from its description"
   [ability-description]
-  (let [ability-generator (ns-resolve 'rules.abilities (symbol (name (first ability-description))))
+  (let [ability-generator ((first ability-description) ability-list)
         args (vec (rest ability-description))]
     (apply ability-generator args)))
 
