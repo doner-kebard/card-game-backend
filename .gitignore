@@ -3,6 +3,7 @@
 target
 classes
 checkouts
+.eastwood
 .lein-failures
 .lein-repl-history
 .nrepl-port
