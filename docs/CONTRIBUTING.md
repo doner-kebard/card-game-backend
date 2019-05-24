@@ -44,7 +44,7 @@ We use [Clojure](https://www.braveclojure.com) as the backend language for prett
 
 The backend also uses [Redis](https://redis.io) as a key-value storage mechanism for any persistent information necessary (such as the state of a game) since we will *always* know exactly what key we're searching for (we'll know the game ID, player ID, etc.).
 
-Finally, the backend uses [Compojure](https://github.com/weavejester/compojure) to define it's [REST API](http://www.restapitutorial.com), which is the way the *frontend* will communicate with it.
+Finally, the backend uses [Compojure](https://github.com/weavejester/compojure) to define it's [REST API](http://www.restapitutorial.com), which is the way any *frontend* will communicate with it.
 
 ## Project structure
 
