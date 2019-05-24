@@ -8,7 +8,7 @@
                  [cheshire "5.8.1"]
                  [javax.servlet/servlet-api "2.5"]
                  [ring/ring-json "0.4.0"]
-                 [com.taoensso/carmine "2.19.1"]
+                 [com.taoensso/nippy "2.14.0"]
                  [expectations "2.2.0-rc3" :scope "test"]]
   :plugins [[com.jakemccrary/lein-test-refresh "0.22.0"]
             [lein-expectations "0.0.8"]
