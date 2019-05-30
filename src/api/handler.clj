@@ -1,12 +1,8 @@
 (ns api.handler
   (:require [api.base :as api])
-  (:require [compojure.handler :as handler]
+  (:require [compojure.core :as compojure]
             [compojure.route :as route]
-            [compojure.core :as compojure]
-            [cheshire.core :as cheshire]
-            [ring.util.response :as response]
-            [ring.middleware.json :as middleware]
-            [compojure.coercions :as coerce]))
+            [ring.middleware.json :as middleware]))
 
 (defn ^:private parse-int [number-string]
   (try (Long/parseLong number-string)
@@ -34,19 +30,9 @@
                     (play-action (parse-int id) player body))
     (route/not-found "<h1>Page not found</h1>")))
 
-(def ^:private cors-headers 
-  { "Access-Control-Allow-Origin" "*"
-   "Access-Control-Allow-Headers" "Content-Type"
-   "Access-Control-Allow-Methods" "OPTIONS"})
-
-(defn ^:private responsify
-  [handler]
-  (fn [request]
-    (update-in (response/response (handler request))
-               [:headers]
-               merge cors-headers)))
+(defn ^:private handler
+  [request]
+  {:body (app-routes request)})
 
 (def entry
-  (-> (responsify app-routes)
-      (middleware/wrap-json-body {:keywords? true})
-      (middleware/wrap-json-response)))
+  (middleware/wrap-json-response handler))
