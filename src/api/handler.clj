@@ -32,7 +32,10 @@
 
 (defn ^:private handler
   [request]
-  (app-routes request))
+  (let [response (app-routes request)]
+    (if (contains? (:body response) :error)
+      (assoc response :status 400)
+      response)))
 
 (def entry
   (middleware/wrap-json-response handler))
