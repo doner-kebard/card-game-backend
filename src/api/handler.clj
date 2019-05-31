@@ -28,14 +28,16 @@
     (compojure/POST "/games/:id{[0-9]+}/player/:player"
                     [id player :as {body :body}]
                     {:body (play-action (parse-int id) player body)})
-    (route/not-found "<h1>Page not found</h1>")))
+    (route/not-found {:body {:error "Page not found"}})))
 
 (defn ^:private handler
   [request]
-  (let [response (app-routes request)]
-    (if (contains? (:body response) :error)
-      (assoc response :status 400)
-      response)))
+  (try
+    (let [response (app-routes request)]
+      (if (contains? (:body response) :error)
+          (assoc response :status 400)
+          response))
+    (catch Exception e (prn e){:status 500 :headers {}})))
 
 (def entry
   (middleware/wrap-json-response handler))
