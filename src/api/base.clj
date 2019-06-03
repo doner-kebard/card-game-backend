@@ -6,18 +6,32 @@
             [api.generators :as generators]
             [configs.messages :as messages]))
 
-(defn get-game
-  "Fetches a game from an ID and returns the visible part as a player"
+(defn ^:private valid-game-state
+  "Returns game-state if valid ids. Returns an error otherwise."
   [game-id player-id]
-  (player-view/get-game-as-player (persistence/fetch-game game-id) player-id))
+  (let [game-state (persistence/fetch-game game-id)]
+    (cond (nil? game-state)
+          {:error messages/invalid-id}
+          (not (or (= player-id (first (:player-ids game-state)))
+                   (= player-id (second (:player-ids game-state)))))
+          {:error messages/invalid-id}
+          :else
+          game-state)))
+
+(defn get-game
+  "Fetches a game from an ID and returns the visible part as a player if appropiate"
+  [game-id player-id]
+  (let [game-state (valid-game-state game-id player-id)]
+    (if (contains? game-state :error)
+        game-state
+        (player-view/get-game-as-player game-state player-id))))
 
 (defn play-card-as-player
   "Plays a card give and returns the game sate as seen by the player"
   [game-id player-id card-id row-id & target]
-  (let [game-state (persistence/fetch-game game-id)]
-    (if (and (= game-id (:game-id game-state))
-          (or (= player-id (first (:player-ids game-state)))
-            (= player-id (second (:player-ids game-state)))))
+  (let [game-state (valid-game-state game-id player-id)]
+    (if (contains? game-state :error)
+      game-state
       (if (= (:game-status (get-game game-id player-id)) messages/play)
           (let [new-game-state (play-card/play-card game-state player-id card-id row-id (first target))]
             (if (contains? new-game-state :error)
@@ -25,8 +39,7 @@
               (do
                 (persistence/save-game new-game-state)
                 (get-game game-id player-id))))
-          {:error messages/out-of-turn})
-    {:error messages/invalid-id})))
+          {:error messages/out-of-turn}))))
 
 (defn ^:private create-empty-game
   "Creates a new instance of a game lobby"

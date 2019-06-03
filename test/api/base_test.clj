@@ -15,7 +15,6 @@
   (expect true (contains? (base/create-game) :player-id)))
 
 (defexpect join-game
-
   (let [joined-game (-> (base/create-game) :game-id base/add-player)]
     (expect number? (:game-id joined-game))
     (expect (count hands/default-hand)
@@ -40,15 +39,17 @@
               (base/add-player -1))) ;since IDs start at 0, this lobby should never exist
 
 (defexpect play-card-messages
-
   (let [game (base/create-game)
         game-id (:game-id game)
         p1 (:player-id game)
         p2 (:player-id (base/add-player game-id))]
-    
+   
     (expect {:error messages/invalid-id}
             (base/play-card-as-player 9999999999 p1 0 0))
     
+    (expect {:error messages/invalid-id}
+            (base/get-game game-id "MrInvalid"))
+
     (expect {:error messages/invalid-id}
             (base/play-card-as-player game-id "MrInvalid" 0 0))
     
