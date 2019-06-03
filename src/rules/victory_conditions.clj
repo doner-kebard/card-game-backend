@@ -37,7 +37,8 @@
   (let [player-ids (:player-ids game-state)
         won-rows (map #(get-won-rows game-state %) player-ids)]
     (cond
-      (nil? player-ids) ""
+      (nil? player-ids) nil
+      (< (count player-ids) 2) nil
       (< (first won-rows) (second won-rows)) (second player-ids)
       (> (first won-rows) (second won-rows)) (first player-ids)
       :else "")))
