@@ -1,7 +1,7 @@
 # Contributing
 
 This document is intended to give guidelines for those who are willing to contribute in the development of the TCG backend.
-It is divided in three parts:
+It is divided in four parts:
 - **Installation and usage** (how to prepare your computer for locally running the game and tests)
 - **Project architecture** (which tools we use, and why)
 - **Project structure** (how is the project organized)
@@ -42,7 +42,7 @@ We use [Clojure](https://www.braveclojure.com) as the backend language for prett
 1. Because of the "everything is immutable" paradigm, it's very easy to reason about the logic of the code, which will probably get very complex as time goes on.
 2. Due to its functional nature, it is *very* easy to run tests on it and a strict [TDD](https://www.youtube.com/watch?v=qkblc5WRn-U) discipline.
 
-The backend also uses [Redis](https://redis.io) as a key-value storage mechanism for any persistent information necessary (such as the state of a game) since we will *always* know exactly what key we're searching for (we'll know the game ID, player ID, etc.).
+For persistence, we are currently using a simple file-storage, which should be more than enough and very simple to migrate if we decide to move to a database. We use a `data` folder which contains the `games`, with the `game-id` being the filename we use.
 
 Finally, the backend uses [Compojure](https://github.com/weavejester/compojure) to define it's [REST API](http://www.restapitutorial.com), which is the way any *frontend* will communicate with it.
 
@@ -51,7 +51,7 @@ Finally, the backend uses [Compojure](https://github.com/weavejester/compojure) 
 - **project.clj**: Defines the project dependencies and entry point
 - **test/**: Contains all the unit tests for the code, following the same structure as src/. Remember that a unit test must be done *before* the actual code.
 - **src/rules**: Contains the code that will run in production, the actual logic.
-- **src/persistence/persistence.clj**: This is the only file to interact directly with the database. All database calls *must* pass through here.
+- **src/persistence/persistence.clj**: This is the only file to interact directly with the persistent storage. All storage or retrieval calls *must* pass through here.
 - **src/api/handler.clj**: This is the only file to interact directly with frontend. Any actions to take as a response to a frontend call *must* be defined here.
 
 ## Development practices
