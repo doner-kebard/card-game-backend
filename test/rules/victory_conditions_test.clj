@@ -106,7 +106,13 @@
     ""
     (victory/most-won-rows {:cards [{:power 1 :owner "tier"}]
                             :rows [{}{}]
-                            :player-ids ["un-tier" "tier"]})))
+                            :player-ids ["un-tier" "tier"]}))
+  ; Nil when not enough players
+  (expect
+    nil
+    (victory/most-won-rows {:cards [{:power 1 :owner "mark"}]
+                            :rows [{}]
+                            :player-ids ["mark"]})))
 
 (defexpect winner
 
@@ -132,5 +138,5 @@
                      :player-ids ["noob" "champ"]}))
   
   (expect
-    ""
+    nil
     (victory/winner {:cards [{}]})))
