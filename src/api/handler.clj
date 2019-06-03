@@ -1,6 +1,6 @@
 (ns api.handler
-  (:require [api.base :as api])
-  (:require [compojure.core :as compojure]
+  (:require [api.base :as api]
+            [compojure.core :as compojure]
             [compojure.route :as route]
             [ring.middleware.json :as middleware]))
 

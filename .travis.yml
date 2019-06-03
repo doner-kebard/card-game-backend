@@ -2,7 +2,7 @@ language: clojure
 script:
     - lein test
     - lein yagni
-    - lein eastwood
+    - lein eastwood '{:exclude-namespaces [api.handler]}'
     - lein cloverage
 notifications:
   email: false

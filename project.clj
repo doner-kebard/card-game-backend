@@ -19,6 +19,7 @@
             [venantius/yagni "0.1.7"]]
   :cloverage {:ns-exclude-regex [#"api\.handler"]
               :fail-threshold 95}
+  :eastwood {:add-linters [:unused-fn-args :unused-locals :unused-namespaces :unused-private-vars]}
   :ring {:handler api.handler/entry}
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}}
