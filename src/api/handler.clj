@@ -1,12 +1,8 @@
 (ns api.handler
   (:require [api.base :as api])
-  (:require [compojure.handler :as handler]
+  (:require [compojure.core :as compojure]
             [compojure.route :as route]
-            [compojure.core :as compojure]
-            [cheshire.core :as cheshire]
-            [ring.util.response :as response]
-            [ring.middleware.json :as middleware]
-            [compojure.coercions :as coerce]))
+            [ring.middleware.json :as middleware]))
 
 (defn ^:private parse-int [number-string]
   (try (Long/parseLong number-string)
@@ -22,31 +18,33 @@
 
 (def^:private app-routes
   (compojure/routes
-    (compojure/POST "/lobby" [] (api/create-game))
+    (compojure/POST "/lobby" [] {:body (api/create-game)})
     (compojure/POST "/games/:id{[0-9]+}"
                     [id]
-                    (api/add-player (parse-int id)))
+                    {:body (api/add-player (parse-int id))})
     (compojure/GET "/games/:id{[0-9]+}/player/:player"
                    [id player]
-                   (api/get-game (parse-int id) player))
+                   {:body (api/get-game (parse-int id) player)})
     (compojure/POST "/games/:id{[0-9]+}/player/:player"
                     [id player :as {body :body}]
-                    (play-action (parse-int id) player body))
-    (route/not-found "<h1>Page not found</h1>")))
+                    {:body (play-action (parse-int id) player body)})
+    (route/not-found {:body {:error "Page not found"}})))
 
-(def ^:private cors-headers 
-  { "Access-Control-Allow-Origin" "*"
+(def ^:private cors-headers
+  {"Access-Control-Allow-Origin" "*"
    "Access-Control-Allow-Headers" "Content-Type"
    "Access-Control-Allow-Methods" "OPTIONS"})
 
-(defn ^:private responsify
-  [handler]
-  (fn [request]
-    (update-in (response/response (handler request))
-               [:headers]
-               merge cors-headers)))
+(defn handler
+  [request]
+  (try
+    (let [response (app-routes request)]
+      (assoc
+        (if (contains? (:body response) :error)
+          (assoc response :status 400)
+          response)
+        :headers cors-headers))
+    (catch Exception e (prn e){:status 500 :headers cors-headers})))
 
 (def entry
-  (-> (responsify app-routes)
-      (middleware/wrap-json-body {:keywords? true})
-      (middleware/wrap-json-response)))
+  (middleware/wrap-json-response handler))
