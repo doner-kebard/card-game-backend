@@ -21,32 +21,5 @@
               :fail-threshold 95}
   :ring {:handler api.handler/entry}
   :target-path "target/%s"
-  :profiles {
-             :uberjar {:aot :all}
-             :pact {
-                    :plugins [[au.com.dius/pact-jvm-provider-lein_2.11 "3.2.11" :exclusions [commons-logging]]]
-                    :dependencies [[ch.qos.logback/logback-core "1.2.3"]
-                                   [ch.qos.logback/logback-classic "1.2.3"]
-                                   [org.apache.httpcomponents/httpclient "4.5.8"]]
-                    }}
-  :pact {
-      :service-providers {
-          :lobby {
-              :protocol "http"
-              :host "localhost"
-              :port 3000
-              :path "/"
-              
-              :has-pact-with {
-                  :cli {
-                     :pact-file ~(str
-                                  "file://"
-                                  (.getAbsolutePath
-                                  (clojure.java.io/file
-                                    "pacts/cli-lobby.json")))
-                     }
-                  }
-              }
-          }
-      }
+  :profiles {:uberjar {:aot :all}}
   )
