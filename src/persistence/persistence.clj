@@ -16,7 +16,9 @@
     (spit target (slurp (nippy/freeze info)))))
 
 (defn ^:private get-id []
-  (try (get-persistent "next-game-id") (catch Exception e 0)))
+  (try 
+    (get-persistent "next-game-id")
+    (catch Exception e 0)))
 
 (defn ^:private set-game-id
   "Saves an ID and returns it for convenience"
@@ -38,4 +40,6 @@
   game)
 
 (defn fetch-game
-  [id] (get-persistent (str "games/" id)))
+  [id] (try
+         (get-persistent (str "games/" id))
+         (catch Exception e nil)))

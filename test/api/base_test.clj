@@ -1,12 +1,9 @@
 (ns api.base-test
   (:require [expectations.clojure.test :refer :all]
             [clojure.test :as ctest]
-            [mocking :as mocking]
             [api.base :as base]
             [configs.hands :as hands]
             [configs.messages :as messages]))
-
-(ctest/use-fixtures :each mocking/mock-persistence)
 
 (defexpect game-creation
   (expect number? (:game-id (base/create-game)))
@@ -40,7 +37,7 @@
 
 (defexpect join-empty
   (expect {:error messages/lobby-not-created}
-              (base/add-player 0)))
+              (base/add-player -1))) ;since IDs start at 0, this lobby should never exist
 
 (defexpect play-card-messages
 
