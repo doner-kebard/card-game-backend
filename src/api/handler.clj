@@ -35,7 +35,7 @@
    "Access-Control-Allow-Headers" "Content-Type"
    "Access-Control-Allow-Methods" "OPTIONS"})
 
-(defn ^:private handler
+(defn handler
   [request]
   (try
     (let [response (app-routes request)]
