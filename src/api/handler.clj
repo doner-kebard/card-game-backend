@@ -30,14 +30,21 @@
                     {:body (play-action (parse-int id) player body)})
     (route/not-found {:body {:error "Page not found"}})))
 
+(def ^:private cors-headers
+  {"Access-Control-Allow-Origin" "*"
+   "Access-Control-Allow-Headers" "Content-Type"
+   "Access-Control-Allow-Methods" "OPTIONS"})
+
 (defn ^:private handler
   [request]
   (try
     (let [response (app-routes request)]
-      (if (contains? (:body response) :error)
+      (assoc
+        (if (contains? (:body response) :error)
           (assoc response :status 400)
-          response))
-    (catch Exception e (prn e){:status 500 :headers {}})))
+          response)
+        :headers cors-headers))
+    (catch Exception e (prn e){:status 500 :headers cors-headers})))
 
 (def entry
   (middleware/wrap-json-response handler))
