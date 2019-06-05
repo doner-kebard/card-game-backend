@@ -1,5 +1,4 @@
-(ns configs.hands
-  (:require [rules.abilities :as ability]))
+(ns configs.hands)
 
 (def default-hand
   "Default hand (can't be empty)"

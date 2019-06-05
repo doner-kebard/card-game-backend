@@ -26,10 +26,9 @@
 (defn get-won-rows
   "Tells us how many rows a player is winning"
   [game-state player-id]
-  (let [row-num (count (:rows game-state))]
-    (count
-      (filter #(player-wins-row? game-state % player-id)
-              (range 0 (count (:rows game-state)))))))
+  (count
+     (filter #(player-wins-row? game-state % player-id)
+             (range 0 (count (:rows game-state))))))
 
 (defn most-won-rows
   "Which player is winning the most rows?"

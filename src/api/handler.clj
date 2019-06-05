@@ -1,6 +1,7 @@
 (ns api.handler
-  (:require [api.base :as api])
-  (:require [compojure.core :as compojure]
+  (:require [api.base :as api]
+            [compojure.core :as compojure]
+            [cheshire.core :as cheshire]
             [compojure.route :as route]
             [ring.middleware.json :as middleware]))
 
@@ -10,11 +11,12 @@
 
 (defn ^:private play-action
   [game-id player-id action]
-  (api/play-card-as-player
-    game-id
-    player-id
-    (parse-int (:index action))
-    (parse-int (:row action))))
+  (let [decoded-action (cheshire/parse-string (slurp action) true)]
+    (api/play-card-as-player
+      game-id
+      player-id
+      (:index decoded-action)
+      (:row decoded-action))))
 
 (def^:private app-routes
   (compojure/routes

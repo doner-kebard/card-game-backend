@@ -43,7 +43,7 @@
 
 (defn ^:private create-empty-game
   "Creates a new instance of a game lobby"
-  [ini-config]
+  []
   (let [game-id (persistence/next-id)]
     (persistence/save-game
       {:lobby-status messages/no-opp
@@ -69,9 +69,8 @@
 
 (defn create-game
   "Creates a new instance of a game with a player"
-  ([] (create-game {}))
-  ([ini-config]
-   (let [lobby (create-empty-game ini-config)]
-     (-> lobby
-         (assoc :player-id (first (:player-ids lobby)))
-         (dissoc :player-ids)))))
+  []
+  (let [lobby (create-empty-game)]
+    (-> lobby
+        (assoc :player-id (first (:player-ids lobby)))
+        (dissoc :player-ids))))

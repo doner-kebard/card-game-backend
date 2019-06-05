@@ -1,7 +1,5 @@
 (ns api.player-view
-  (:require [rules.victory-conditions :as victory]
-            [api.player-view-functions :as functions]
-            [configs.messages :as messages]))
+  (:require [api.player-view-functions :as functions]))
 
 (defn get-game-as-player
   "Returns the part of the game-state that ought to be visible to the player"
