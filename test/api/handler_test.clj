@@ -28,17 +28,19 @@
   (expect 200 (:status joined-game))
   (expect (:game-id (:body new-game)) (:game-id (:body new-game)))
   (expect [0 0] (:scores (:body joined-game)))
+  (expect messages/play (:game-status (:body joined-game)))
   (expect nil (:winner (:body joined-game)))
   (expect '(:game-id :player-id :cards :rows :scores :game-status :winner)
           (keys (:body joined-game))))
 
 (defexpect handler-get-games-request
-  (let [game (handler/handler (mock/request :get (string/join ["/games/" (:game-id (:body new-game)) "/player/" (:player-id (:body new-game))])))]
+  (let [game (handler/handler (mock/request :get (string/join ["/games/" (:game-id (:body joined-game)) "/player/" (:player-id (:body joined-game))])))]
     (expect cors-headers (:headers game))
     (expect 200 (:status game))
-    (expect (:game-id (:body new-game)) (:game-id (:body game)))
-    (expect (:player-id (:body new-game)) (:player-id (:body game)))
+    (expect (:game-id (:body joined-game)) (:game-id (:body game)))
+    (expect (:player-id (:body joined-game)) (:player-id (:body game)))
     (expect [0 0] (:scores (:body game)))
+    (expect messages/play (:game-status (:body game)))
     (expect nil (:winner (:body game)))
     (expect '(:game-id :player-id :cards :rows :scores :game-status :winner)
             (keys (:body game)))))
@@ -50,6 +52,7 @@
     (expect 200 (:status game))
     (expect (:game-id (:body new-game)) (:game-id (:body game)))
     (expect (:player-id (:body new-game)) (:player-id (:body game)))
+    (expect messages/wait (:game-status (:body game)))
     (expect '(:game-id :player-id :cards :rows :scores :game-status :winner)
             (keys (:body game)))))
 
