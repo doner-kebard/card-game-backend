@@ -2,10 +2,7 @@ language: clojure
 script:
     - lein test
     - lein yagni
-    - lein eastwood
+    - lein eastwood '{:exclude-namespaces [api.handler]}'
     - lein cloverage
-    - lein ring server-headless &
-    - sleep 10
-    - lein with-profile pact pact-verify
 notifications:
   email: false
