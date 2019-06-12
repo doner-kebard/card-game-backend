@@ -46,7 +46,7 @@
   []
   (let [game-id (persistence/next-id)]
     (persistence/save-game
-      {:lobby-status messages/no-opp
+      {:game-status messages/no-opp
        :game-id game-id
        :player-ids [(generators/player-uuid {})]})))
 

@@ -10,7 +10,7 @@
   (expect false (=
                  (:game-id (base/create-game))
                  (:game-id (base/create-game))))
-  (expect messages/no-opp (:lobby-status (base/create-game)))
+  (expect messages/no-opp (:game-status (base/create-game)))
   (expect nil (:player-ids (base/create-game)))
   (expect true (contains? (base/create-game) :player-id)))
 
