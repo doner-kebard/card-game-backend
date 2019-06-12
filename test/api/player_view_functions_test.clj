@@ -94,12 +94,16 @@
   ; Status are as intended
   (expect
     messages/play
-    (functions/get-game-status {:next-play {}} "player"))
+    (functions/get-game-status {:player-ids ["p1" "player"] :next-play {}} "player"))
   
   (expect
     messages/play
-    (functions/get-game-status {:next-play {:quick {}}} "slow"))
+    (functions/get-game-status {:player-ids ["jugador1" "slow"] :next-play {:quick {}}} "slow"))
   
   (expect
     messages/wait
-    (functions/get-game-status {:next-play {:waiter {}}} "waiter")))
+    (functions/get-game-status {:player-ids ["waiter" "12345"] :next-play {:waiter {}}} "waiter"))
+  
+  (expect
+    messages/no-opp
+    (functions/get-game-status {:player-ids ["lonelyplayer"] :next-play {}} "lonelyplayer")))
