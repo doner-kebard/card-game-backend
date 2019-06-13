@@ -39,13 +39,13 @@
 (defn generate-ability-fn
   "Creates an ability function from its description"
   [ability-description]
-  (let [ability-generator ((first ability-description) ability-list)
-        args (vec (rest ability-description))]
+  (let [ability-generator ((first (first ability-description)) ability-list)
+        args (vec (rest (first ability-description)))]
     (apply ability-generator args)))
 
 (defn required-targets
   "Counts the required targets"
   [ability-description]
-  (if (contains? (set '(:strengthen :weaken)) (first ability-description))
+  (if (contains? (set '(:strengthen :weaken)) (first (first ability-description)))
     1
     0))

@@ -4,8 +4,8 @@
             [configs.messages :as messages]))
 
   (def game-state {:cards [{:power 0 :location [:hand]}
-                           {:power 10 :abilities [:strengthen 1]}
-                           {:power 100 :abilities [:weaken 100]}]
+                           {:power 10 :abilities [[:strengthen 1]]}
+                           {:power 100 :abilities [[:weaken 100]]}]
                    :rows [{}{}{}{}]
                    :next-play {:p0 {:card-id 0 :row-id 0} :p1 {:card-id 1 :row-id 3 :target 2}}
                    :player-ids ["p0" "p1"]})
@@ -86,13 +86,13 @@
     {:error messages/need-target}
     (play-card/play-card {:next-play {}
                           :rows [{}]
-                          :cards [{:abilities [:strengthen 9000] :owner "dumb"}]} "dumb" 0 0))
+                          :cards [{:abilities [[:strengthen 9000]] :owner "dumb"}]} "dumb" 0 0))
 
   (expect
     {:error messages/invalid-target}
     (play-card/play-card {:next-play {}
                           :rows [{}]
-                          :cards [{:abilities [:weaken 1] :owner "McCheaty"}{:location ["nowhere"]}]} "McCheaty" 0 0 1))
+                          :cards [{:abilities [[:weaken 1]] :owner "McCheaty"}{:location ["nowhere"]}]} "McCheaty" 0 0 1))
   
   ; Saves next-play
   (expect
@@ -120,8 +120,8 @@
   (let [new-game-state
         (play-card/play-card 
           {:cards [{:power 0 :location [:hand] :owner "p0"}
-                   {:power 10 :owner "p1" :abilities [:strengthen 1]}
-                   {:power 100 :abilities [:weaken 100]}]
+                   {:power 10 :owner "p1" :abilities [[:strengthen 1]]}
+                   {:power 100 :abilities [[:weaken 100]]}]
            :rows [{}{}{}{}{}]
            :next-play {:p1 {:card-id 1 :row-id 3 :target 2}}}
           "p0" 0 0)]

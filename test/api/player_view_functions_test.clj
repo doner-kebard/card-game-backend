@@ -19,16 +19,16 @@
 
   ; Correctly returns cards with abilities
   (expect
-    [{:card-name "c1" :power 1 :location [:hand] :owner "me" :abilities [:strengthen 100] :target 1}
-     {:card-name "c2" :power 17 :location [:hand] :owner "me" :abilities [:weaken 1] :target 1}
+    [{:card-name "c1" :power 1 :location [:hand] :owner "me" :abilities [[:strengthen 100]] :target 1}
+     {:card-name "c2" :power 17 :location [:hand] :owner "me" :abilities [[:weaken 1]] :target 1}
      {:location [:hand] :owner "opp"}
      {:card-name "c4" :power -20 :location [:row 0] :owner "me"}
      {:card-name "c5" :power 999 :location [:row 1] :owner "opp"}]
-    (functions/get-cards {:cards [{:card-name "c1" :power 1 :location [:hand] :owner "I" :abilities [:strengthen 100]}
-                                  {:card-name "c2" :power 17 :location [:hand] :owner "I" :abilities [:weaken 1]}
-                                  {:card-name "c3" :power 17 :location [:hand] :owner "U" :abilities [:weaken 1]}
-                                  {:card-name "c4" :power -20 :location [:row 0] :owner "I" :abilities [:strengthen 76]}
-                                  {:card-name "c5" :power 999 :location [:row 1] :owner "U" :abilities [:strengthen 22]}]}
+    (functions/get-cards {:cards [{:card-name "c1" :power 1 :location [:hand] :owner "I" :abilities [[:strengthen 100]]}
+                                  {:card-name "c2" :power 17 :location [:hand] :owner "I" :abilities [[:weaken 1]]}
+                                  {:card-name "c3" :power 17 :location [:hand] :owner "U" :abilities [[:weaken 1]]}
+                                  {:card-name "c4" :power -20 :location [:row 0] :owner "I" :abilities [[:strengthen 76]]}
+                                  {:card-name "c5" :power 999 :location [:row 1] :owner "U" :abilities [[:strengthen 22]]}]}
                         "I")))
 
 (defexpect get-rows
