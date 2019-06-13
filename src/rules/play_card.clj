@@ -13,8 +13,7 @@
   [game-state play]
   (let [card (get-in game-state [:cards (:card-id play)])]
     (if (contains? card :abilities)
-      (let [ability (abilities/generate-ability-fn (:abilities card))]
-        (ability game-state play))
+      ((abilities/generate-abilities-fn (:abilities card)) game-state play)
       game-state)))
 
 (defn ^:private apply-all-plays

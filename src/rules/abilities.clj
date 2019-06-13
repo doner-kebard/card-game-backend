@@ -6,24 +6,24 @@
 ;   "When played in a row-type row,
 ;   alters a its power, by adding the a defined value to it.
 ;   This power may be negative, resulting in a decrease"
-    [game-state play]
-    (if (= (get-in game-state [:rows (:row-id play) :type])
+    [gsp]
+    (if (= (get-in gsp [:game-state :rows (:row-id (:play gsp)) :type])
            row-type)
       (update-in
-        game-state
-        [:cards (:card-id play) :power]
+        gsp
+        [:game-state :cards (:card-id (:play gsp)) :power]
         #(+ % increase))
-      game-state)))
+      gsp)))
 
 (defn ^:private strengthen
   [increase]
   (fn    
 ;   "Alters a cards' power, by adding the a defined value to it.
 ;   This power may be negative, resulting in a decrease"
-    [game-state play]
+    [gsp]
     (update-in
-      game-state
-      [:cards (:target play) :power]
+      gsp
+      [:game-state :cards (:target (:play gsp)) :power]
       #(+ % increase))))
 
 (defn ^:private weaken
@@ -36,12 +36,22 @@
    :strengthen strengthen
    :weaken weaken})
 
-(defn generate-ability-fn
+(defn ^:private generate-ability-fn
   "Creates an ability function from its description"
   [ability-description]
-  (let [ability-generator ((first (first ability-description)) ability-list)
-        args (vec (rest (first ability-description)))]
+  (let [ability-generator ((first ability-description) ability-list)
+        args (vec (rest ability-description))]
     (apply ability-generator args)))
+
+(defn ^:private generate-gsp
+  "Merges game-state and play into gsp (game-state-play)"
+  [game-state play]
+  {:game-state game-state :play play})
+
+(defn generate-abilities-fn
+  "Creates a function that collapses all ability functions"
+  [abilities-vector]
+  (comp :game-state (apply comp (map generate-ability-fn abilities-vector)) generate-gsp))
 
 (defn required-targets
   "Counts the required targets"
