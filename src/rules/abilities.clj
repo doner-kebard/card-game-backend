@@ -36,6 +36,9 @@
    :strengthen strengthen
    :weaken weaken})
 
+(def ^:private targeted-abilities
+  '(:strengthen :weaken))
+
 (defn ^:private generate-ability-fn
   "Creates an ability function from its description"
   [ability-description]
@@ -55,7 +58,13 @@
 
 (defn required-targets
   "Counts the required targets"
-  [ability-description]
-  (if (contains? (set '(:strengthen :weaken)) (first (first ability-description)))
-    1
-    0))
+  [abilities-vector]
+  (loop [abilities abilities-vector
+         needed-targets 0]
+    (if (empty? abilities)
+      needed-targets
+      (recur
+        (rest abilities)
+        (if (contains? (set targeted-abilities) (first (first abilities)))
+          (inc needed-targets)
+          needed-targets)))))

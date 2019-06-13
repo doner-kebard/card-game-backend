@@ -5,13 +5,16 @@
 (defexpect required-targets
   (expect
     1
-    (abilities/required-targets [[:strengthen 1]]))
+    (abilities/required-targets [[:notyetanability 1 2 3 4 5][:strengthen 1]]))
   (expect
     1
     (abilities/required-targets [[:weaken 1]]))
   (expect
     0
-    (abilities/required-targets [[:row-affinity "" 1]])))
+    (abilities/required-targets [[:row-affinity "" 1]]))
+  (expect
+    3
+    (abilities/required-targets [[:a][:weaken][:strengthen 1000][:kaboom][:strengthen 1]])))
 
 (defexpect strengthen-and-weaken
 
