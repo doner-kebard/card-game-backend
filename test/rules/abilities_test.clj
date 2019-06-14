@@ -67,4 +67,13 @@
     (get-in ((abilities/generate-abilities-fn [[:row-affinity "first-row" 10][:row-affinity "second-row" 100]])
              {:cards [{:power 1}] :rows [{:type "first-row"} {:type "second-row"}]}
              {:row-id 1 :card-id 0})
-            [:cards 0 :power])))
+            [:cards 0 :power]))
+  
+  (expect
+    100
+    (get-in ((abilities/generate-abilities-fn [[:row-affinity "somewhere" 1000][:strengthen 1]]) {:cards [{:power 99}]} {:target 0})
+            [:cards 0 :power]))
+
+  (expect
+    [{:power 101}{:power -98}]
+    (:cards ((abilities/generate-abilities-fn [[:strengthen 100][:weaken 100]]) {:cards [{:power 1}{:power 2}]} {:targets [0 1]}))))
