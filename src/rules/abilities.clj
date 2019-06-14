@@ -1,16 +1,5 @@
 (ns rules.abilities)
 
-(defn ^:private update-target
-  [gsp]
-  (if (contains? (:play gsp) :targets)
-    (assoc-in
-      (assoc-in gsp
-                [:play :target]
-                (last (:targets (:play gsp) )))
-      [:play :targets]
-      (butlast (:targets (:play gsp))))
-    gsp))
-
 (defn ^:private row-affinity
   [row-type increase]
   (fn
@@ -32,11 +21,13 @@
 ;   "Alters a cards' power, by adding the a defined value to it.
 ;   This power may be negative, resulting in a decrease"
     [gsp]
-    (let [gsp (update-target gsp)]
+    (update-in
       (update-in
         gsp
-        [:game-state :cards (:target (:play gsp)) :power]
-       #(+ % increase)))))
+        [:game-state :cards (last (:targets (:play gsp))) :power]
+       #(+ % increase))
+      [:play :targets]
+      butlast)))
 
 (defn ^:private weaken
   "Same as strengthen but negative"

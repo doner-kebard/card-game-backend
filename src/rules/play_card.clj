@@ -43,7 +43,7 @@
 
 (defn play-card
   "Takes a playing of a card from hand onto a game row and makes it wait until both players had played"
-  [game-state player-id card-id row-id & target]
+  [game-state player-id card-id row-id & targets]
   ; Uses stored :next-play to know who is supposed to play
   (cond 
     (some? (get-in game-state [:next-play (keyword player-id)]))
@@ -59,15 +59,15 @@
     {:error messages/row-limit}
 
     (and (requires-target? game-state card-id)
-         (nil? (first target)))
+         (nil? (first targets)))
     {:error messages/need-target}
 
     (and (requires-target? game-state card-id)
-         (not (identical? (get-in game-state [:cards (first target) :location 0]) :row)))
+         (not (identical? (get-in game-state [:cards (first targets) :location 0]) :row)))
     {:error messages/invalid-target}
 
     :else
-    (let [game-state (assoc-in game-state [:next-play (keyword player-id)] {:card-id card-id :row-id row-id :target (first target)})]
+    (let [game-state (assoc-in game-state [:next-play (keyword player-id)] {:card-id card-id :row-id row-id :targets (first targets)})]
       (if (= 2 (count (:next-play game-state)))
         (apply-all-plays game-state)
         game-state))))

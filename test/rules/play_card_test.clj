@@ -33,12 +33,12 @@
   ; Changes power
   (expect
     101
-    (get-in (play-card/apply-ability game-state {:card-id 1 :target 2})
+    (get-in (play-card/apply-ability game-state {:card-id 1 :targets [2]})
             [:cards 2 :power]))
   
   (expect
     -100
-    (get-in (play-card/apply-ability game-state {:card-id 2 :target 0})
+    (get-in (play-card/apply-ability game-state {:card-id 2 :targets [0]})
             [:cards 0 :power])))
 
 (defexpect crowded-row?
@@ -96,18 +96,18 @@
   
   ; Saves next-play
   (expect
-    {:saver {:card-id 0 :row-id 1 :target nil}}
+    {:saver {:card-id 0 :row-id 1 :targets nil}}
     (:next-play
       (play-card/play-card {:next-play {} 
                             :rows [{}{}{}]
                             :cards [{:owner "saver"}]} "saver" 0 1)))
   
   (expect
-    {:p {:card-id 2 :row-id 3 :target 0}}
+    {:p {:card-id 2 :row-id 3 :targets [0]}}
     (:next-play
       (play-card/play-card {:next-play {}
                             :rows [{}{}{}{}]
-                            :cards [{:location [:row 0]}{}{:owner "p" :target 1}]} "p" 2 3 0)))
+                            :cards [{:location [:row 0]}{}{:owner "p" :target 1}]} "p" 2 3 [0])))
 
   (expect
     [{:owner "p"}]
@@ -123,7 +123,7 @@
                    {:power 10 :owner "p1" :abilities [[:strengthen 1]]}
                    {:power 100 :abilities [[:weaken 100]]}]
            :rows [{}{}{}{}{}]
-           :next-play {:p1 {:card-id 1 :row-id 3 :target 2}}}
+           :next-play {:p1 {:card-id 1 :row-id 3 :targets [2]}}}
           "p0" 0 0)]
     (expect
       [:row 0]

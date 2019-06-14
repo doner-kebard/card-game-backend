@@ -21,13 +21,13 @@
   ; Adds power
   (expect
     7
-    (get-in ((abilities/generate-abilities-fn [[:strengthen 5]]) {:cards [{:power 2}]} {:target 0})
+    (get-in ((abilities/generate-abilities-fn [[:strengthen 5]]) {:cards [{:power 2}]} {:targets [0]})
             [:cards 0 :power]))
 
   ; Removes power
   (expect
     -10
-    (get-in ((abilities/generate-abilities-fn [[:weaken 13]]) {:cards [{}{:power 3}]} {:target 1 :card-id 91 :something-else "whatever"})
+    (get-in ((abilities/generate-abilities-fn [[:weaken 13]]) {:cards [{}{:power 3}]} {:targets [1] :card-id 91 :something-else "whatever"})
             [:cards 1 :power])))
 
 (defexpect row-affinity
@@ -71,7 +71,7 @@
   
   (expect
     100
-    (get-in ((abilities/generate-abilities-fn [[:row-affinity "somewhere" 1000][:strengthen 1]]) {:cards [{:power 99}]} {:target 0})
+    (get-in ((abilities/generate-abilities-fn [[:row-affinity "somewhere" 1000][:strengthen 1]]) {:cards [{:power 99}]} {:targets [0]})
             [:cards 0 :power]))
 
   (expect
