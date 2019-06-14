@@ -36,10 +36,9 @@
       (count-cards/count-cards game-state {:location [:row row-id]
                                            :owner player-id})))
 
-(defn ^:private requires-target?
+(defn ^:private required-targets
   [game-state card-id]
-  (= (abilities/required-targets (:abilities (get-in game-state [:cards card-id])))
-     1))
+  (abilities/required-targets (:abilities (get-in game-state [:cards card-id]))))
 
 (defn play-card
   "Takes a playing of a card from hand onto a game row and makes it wait until both players had played"
@@ -58,11 +57,11 @@
     (crowded-row? game-state row-id player-id)
     {:error messages/row-limit}
 
-    (and (requires-target? game-state card-id)
-         (nil? (first targets)))
+    (and (nil? (first targets))
+         (not= 0 (required-targets game-state card-id)))
     {:error messages/need-target}
 
-    (and (requires-target? game-state card-id)
+    (and (> (required-targets game-state card-id) 0)
          (not (identical? (get-in game-state [:cards (first targets) :location 0]) :row)))
     {:error messages/invalid-target}
 

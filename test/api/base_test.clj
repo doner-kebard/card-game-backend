@@ -66,7 +66,7 @@
             (base/play-card-as-player game-id p1 4 0))
 
     (expect {:error messages/invalid-target}
-            (base/play-card-as-player game-id p1 4 0 4))
+            (base/play-card-as-player game-id p1 4 0 [4]))
     
     (expect messages/wait
             (:game-status (base/play-card-as-player game-id p1 1 0)))
