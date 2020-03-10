@@ -81,6 +81,10 @@
   "Returns the status of the game from a player's perspective"
   [game-state player-id]
   (:game-status game-state
-           (if (nil? (get-in game-state [:next-play (keyword player-id)]))
+           (cond
+             (= 1 (count (:player-ids game-state)))
+             messages/no-opp
+             (nil? (get-in game-state [:next-play (keyword player-id)]))
              messages/play
+             :else
              messages/wait)))
