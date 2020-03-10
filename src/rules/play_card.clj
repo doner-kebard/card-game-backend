@@ -13,8 +13,7 @@
   [game-state play]
   (let [card (get-in game-state [:cards (:card-id play)])]
     (if (contains? card :abilities)
-      (let [ability (abilities/generate-ability-fn (:abilities card))]
-        (ability game-state play))
+      ((abilities/generate-abilities-fn (:abilities card)) game-state play)
       game-state)))
 
 (defn ^:private apply-all-plays
@@ -37,14 +36,13 @@
       (count-cards/count-cards game-state {:location [:row row-id]
                                            :owner player-id})))
 
-(defn ^:private requires-target?
+(defn ^:private required-targets
   [game-state card-id]
-  (= (abilities/required-targets (:abilities (get-in game-state [:cards card-id])))
-     1))
+  (abilities/required-targets (:abilities (get-in game-state [:cards card-id]))))
 
 (defn play-card
   "Takes a playing of a card from hand onto a game row and makes it wait until both players had played"
-  [game-state player-id card-id row-id & target]
+  [game-state player-id card-id row-id & targets]
   ; Uses stored :next-play to know who is supposed to play
   (cond 
     (some? (get-in game-state [:next-play (keyword player-id)]))
@@ -59,16 +57,16 @@
     (crowded-row? game-state row-id player-id)
     {:error messages/row-limit}
 
-    (and (requires-target? game-state card-id)
-         (nil? (first target)))
+    (and (nil? (first targets))
+         (not= 0 (required-targets game-state card-id)))
     {:error messages/need-target}
 
-    (and (requires-target? game-state card-id)
-         (not (identical? (get-in game-state [:cards (first target) :location 0]) :row)))
+    (and (> (required-targets game-state card-id) 0)
+         (not (identical? (get-in game-state [:cards (first targets) :location 0]) :row)))
     {:error messages/invalid-target}
 
     :else
-    (let [game-state (assoc-in game-state [:next-play (keyword player-id)] {:card-id card-id :row-id row-id :target (first target)})]
+    (let [game-state (assoc-in game-state [:next-play (keyword player-id)] {:card-id card-id :row-id row-id :targets (first targets)})]
       (if (= 2 (count (:next-play game-state)))
         (apply-all-plays game-state)
         game-state))))
